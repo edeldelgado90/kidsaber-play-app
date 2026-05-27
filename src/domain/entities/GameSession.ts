@@ -32,7 +32,7 @@ export const DEFAULT_QUESTION_COUNT = 10;
  */
 export function calculateStarEarned(correctCount: number, totalCount: number): boolean {
   if (totalCount === 0) return false;
-  return correctCount / totalCount > STAR_THRESHOLD;
+  return correctCount / totalCount >= STAR_THRESHOLD;
 }
 
 /**

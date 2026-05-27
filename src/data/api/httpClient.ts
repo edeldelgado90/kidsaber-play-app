@@ -5,6 +5,7 @@
  * Policy (per implementation-notes.md):
  * - Timeout: 10s per request
  * - Retries: up to 2 on 5xx or network errors, with 1s and 2s backoff
+ * - Retries: up to 2 on 429 (rate limit), with 4s backoff
  * - No HTTP fallback — HTTPS only (enforced by API_URL env var)
  */
 
@@ -51,6 +52,12 @@ async function fetchWithRetry(
       REQUEST_TIMEOUT_MS,
     );
 
+    // 429 Too Many Requests — retry with a longer delay (rate limit backoff)
+    if (response.status === 429 && retries > 0) {
+      await sleep(4000);
+      return fetchWithRetry(url, options, retries - 1);
+    }
+
     if (!response.ok && response.status >= 500 && retries > 0) {
       await sleep(retries === 2 ? 1000 : 2000);
       return fetchWithRetry(url, options, retries - 1);
@@ -76,17 +83,57 @@ async function fetchWithRetry(
   }
 }
 
-export interface HttpGetOptions {
+export interface HttpRequestOptions {
   headers?: Record<string, string>;
 }
+
+// ---------------------------------------------------------------------------
+// Internal helpers
+// ---------------------------------------------------------------------------
+
+/**
+ * Tries to extract a human-readable message from a structured API error body.
+ * The API returns { "error": "short_code", "message": "human readable" }.
+ * Falls back to the supplied default if parsing fails or the field is absent.
+ */
+async function extractErrorMessage(response: Response, defaultMessage: string): Promise<string> {
+  try {
+    const body = (await response.clone().json()) as { message?: string };
+    if (typeof body?.message === 'string' && body.message.length > 0) {
+      return body.message;
+    }
+  } catch {
+    // Body is not JSON or is empty — keep the default
+  }
+  return defaultMessage;
+}
+
+async function throwApiError(response: Response): Promise<never> {
+  if (response.status === 429) {
+    throw new ApiError(
+      'Demasiadas peticiones. Espera un momento y vuelve a intentarlo.',
+      response.status,
+    );
+  }
+  const message = await extractErrorMessage(
+    response,
+    `Error del servidor (${response.status}). Inténtalo de nuevo.`,
+  );
+  throw new ApiError(message, response.status);
+}
+
+// ---------------------------------------------------------------------------
+// Public API
+// ---------------------------------------------------------------------------
 
 /**
  * Performs a typed GET request with retry and timeout.
  * Validates the response status before returning.
+ * On error responses, tries to extract a human-readable message from the API error body.
  */
 export async function httpGet<T>(
   url: string,
-  options?: HttpGetOptions,
+  options?: HttpRequestOptions,
 ): Promise<T> {
   const response = await fetchWithRetry(url, {
     method: 'GET',
@@ -98,12 +145,38 @@ export async function httpGet<T>(
   });
 
   if (!response.ok) {
-    // Only log status code in production — never the full body (PII risk)
-    throw new ApiError(
-      `Error del servidor (${response.status}). Inténtalo de nuevo.`,
-      response.status,
-    );
+    await throwApiError(response);
   }
 
   return response.json() as Promise<T>;
+}
+
+/**
+ * Performs a typed POST request with retry and timeout.
+ * Validates the response status before returning.
+ *
+ * Note: retries are safe here because all POST endpoints in this app are
+ * idempotent (e.g. token issuance by deviceId). Do not reuse for write
+ * endpoints that are not idempotent.
+ */
+export async function httpPost<TBody, TResponse>(
+  url: string,
+  body: TBody,
+  options?: HttpRequestOptions,
+): Promise<TResponse> {
+  const response = await fetchWithRetry(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      ...(options?.headers ?? {}),
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    await throwApiError(response);
+  }
+
+  return response.json() as Promise<TResponse>;
 }

@@ -3,6 +3,7 @@
  * Mocks fetch to avoid real network calls.
  */
 import { QuestionsApiService } from '../../src/data/services/QuestionsApiService';
+import { type ITokenProvider } from '../../src/domain/ports/ITokenProvider';
 
 const mockQuestion = {
   id: 'q1',
@@ -25,6 +26,22 @@ const mockQuestion = {
   },
 };
 
+const makeOkResponse = (body: unknown): Response =>
+  ({
+    ok: true,
+    status: 200,
+    json: async () => body,
+    clone: function () { return this; },
+  } as unknown as Response);
+
+const makeErrorResponse = (status: number): Response =>
+  ({
+    ok: false,
+    status,
+    json: async () => ({}),
+    clone: function () { return this; },
+  } as unknown as Response);
+
 describe('QuestionsApiService', () => {
   const BASE_URL = 'http://localhost:8080';
   let service: QuestionsApiService;
@@ -35,11 +52,7 @@ describe('QuestionsApiService', () => {
   });
 
   it('fetches questions and maps them to domain entities', async () => {
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => ({ questions: [mockQuestion] }),
-    } as unknown as Response);
+    global.fetch = jest.fn().mockResolvedValue(makeOkResponse({ questions: [mockQuestion] }));
 
     const questions = await service.fetchQuestions({
       subject: 'mathematics',
@@ -55,11 +68,7 @@ describe('QuestionsApiService', () => {
   });
 
   it('constructs the correct URL with query params', async () => {
-    const mockFetch = jest.fn().mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => ({ questions: [mockQuestion] }),
-    } as unknown as Response);
+    const mockFetch = jest.fn().mockResolvedValue(makeOkResponse({ questions: [mockQuestion] }));
     global.fetch = mockFetch;
 
     await service.fetchQuestions({
@@ -76,12 +85,46 @@ describe('QuestionsApiService', () => {
     expect(calledUrl).toContain('count=5');
   });
 
+  it('sends Authorization header when tokenProvider returns a token', async () => {
+    const mockFetch = jest.fn().mockResolvedValue(makeOkResponse({ questions: [mockQuestion] }));
+    global.fetch = mockFetch;
+
+    const tokenProvider: ITokenProvider = { getToken: async () => 'test-jwt-token' };
+    const serviceWithToken = new QuestionsApiService(BASE_URL, tokenProvider);
+
+    await serviceWithToken.fetchQuestions({ subject: 'mathematics', grade: 3, type: 'option_multiple' });
+
+    const calledOptions = mockFetch.mock.calls[0][1] as RequestInit;
+    expect((calledOptions.headers as Record<string, string>)['Authorization']).toBe(
+      'Bearer test-jwt-token',
+    );
+  });
+
+  it('sends no Authorization header when tokenProvider returns null', async () => {
+    const mockFetch = jest.fn().mockResolvedValue(makeOkResponse({ questions: [mockQuestion] }));
+    global.fetch = mockFetch;
+
+    const tokenProvider: ITokenProvider = { getToken: async () => null };
+    const serviceWithNoToken = new QuestionsApiService(BASE_URL, tokenProvider);
+
+    await serviceWithNoToken.fetchQuestions({ subject: 'mathematics', grade: 3, type: 'option_multiple' });
+
+    const calledOptions = mockFetch.mock.calls[0][1] as RequestInit;
+    expect((calledOptions.headers as Record<string, string>)['Authorization']).toBeUndefined();
+  });
+
+  it('sends no Authorization header when no tokenProvider is supplied', async () => {
+    const mockFetch = jest.fn().mockResolvedValue(makeOkResponse({ questions: [mockQuestion] }));
+    global.fetch = mockFetch;
+
+    await service.fetchQuestions({ subject: 'mathematics', grade: 3, type: 'option_multiple' });
+
+    const calledOptions = mockFetch.mock.calls[0][1] as RequestInit;
+    expect((calledOptions.headers as Record<string, string>)['Authorization']).toBeUndefined();
+  });
+
   it('throws when response is not ok (500)', async () => {
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: false,
-      status: 500,
-      json: async () => ({}),
-    } as unknown as Response);
+    global.fetch = jest.fn().mockResolvedValue(makeErrorResponse(500));
 
     await expect(
       service.fetchQuestions({ subject: 'mathematics', grade: 3, type: 'option_multiple' }),
@@ -89,11 +132,7 @@ describe('QuestionsApiService', () => {
   });
 
   it('throws when response has unexpected format', async () => {
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => ({ data: [] }), // missing 'questions' key
-    } as unknown as Response);
+    global.fetch = jest.fn().mockResolvedValue(makeOkResponse({ data: [] })); // missing 'questions' key
 
     await expect(
       service.fetchQuestions({ subject: 'mathematics', grade: 3, type: 'option_multiple' }),

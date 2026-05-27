@@ -13,6 +13,11 @@ if (!API_URL && process.env.NODE_ENV !== 'test') {
   );
 }
 
+// Enforce HTTPS in production to prevent transmitting bearer tokens over plain HTTP.
+if (API_URL && !API_URL.startsWith('https://') && process.env.NODE_ENV === 'production') {
+  throw new Error('[KidSaber] EXPO_PUBLIC_API_URL must use https:// in production.');
+}
+
 export const Config = {
   /** Base URL for the KidSaber questions API. Example: https://api.kidsaber.example.com */
   API_URL,

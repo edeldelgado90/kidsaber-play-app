@@ -11,9 +11,9 @@ describe('calculateStarEarned', () => {
     expect(calculateStarEarned(9, 10)).toBe(true);
   });
 
-  it('returns false when correctCount === 80% (strict >)', () => {
-    // 80% exactly is NOT > 0.8
-    expect(calculateStarEarned(8, 10)).toBe(false);
+  it('returns true when correctCount === 80% (threshold is inclusive >=)', () => {
+    // 80% exactly satisfies >= 0.8
+    expect(calculateStarEarned(8, 10)).toBe(true);
   });
 
   it('returns false when correctCount < 80%', () => {
