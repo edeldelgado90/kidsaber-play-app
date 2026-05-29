@@ -11,6 +11,7 @@ import { SubjectProgressRow } from '@/presentation/components/evolution/SubjectP
 import { Colors, Spacing, Radii, Typography } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useContentWidth, useHorizontalPadding } from '@/infrastructure/platform/useBreakpoint';
 
 const CAPYBARA_MUSCLE = require('../../../assets/brand/capybara-muscle.png');
 
@@ -34,6 +35,11 @@ export function EvolutionScreen() {
   const activeProfile = getActiveProfile();
   const totalStars = activeProfileId ? getTotalStars(activeProfileId) : 0;
 
+  const hPad = useHorizontalPadding();
+  const contentWidth = useContentWidth();
+  const capybaraWidth = Math.min(260, Math.round(contentWidth * 0.67));
+  const capybaraHeight = Math.round(capybaraWidth * (180 / 260));
+
   const handleBack = () => router.back();
 
   return (
@@ -44,7 +50,7 @@ export function EvolutionScreen() {
         {/* Capybara muscle bottom-right */}
         <Image
           source={CAPYBARA_MUSCLE}
-          style={styles.capybara}
+          style={[styles.capybara, { width: capybaraWidth, height: capybaraHeight }]}
           resizeMode="contain"
           accessibilityElementsHidden
           importantForAccessibility="no"
@@ -52,7 +58,7 @@ export function EvolutionScreen() {
 
         <ScrollView
           style={styles.scroll}
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[styles.scrollContent, { paddingHorizontal: hPad }]}
           showsVerticalScrollIndicator={false}
         >
           {/* Profile card */}
@@ -116,17 +122,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: -20,
     bottom: -8,
-    width: 260,
-    height: 180,
     zIndex: 0,
   },
   scroll: {
     flex: 1,
   },
   scrollContent: {
-    padding: Spacing.lg,
-    gap: Spacing.lg,
+    paddingVertical: Spacing.lg,
     paddingBottom: Spacing['3xl'],
+    gap: Spacing.lg,
     zIndex: 2,
   },
   profileCard: {

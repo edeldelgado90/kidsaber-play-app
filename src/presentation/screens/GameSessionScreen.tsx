@@ -22,6 +22,7 @@ import { ErrorRetry } from '@/presentation/components/common/ErrorRetry';
 import { SkeletonList } from '@/presentation/components/common/SkeletonCard';
 import { Colors, Spacing, Radii, Typography } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
+import { useHorizontalPadding } from '@/infrastructure/platform/useBreakpoint';
 
 type AnswerState = 'idle' | 'selected' | 'revealed';
 
@@ -74,6 +75,7 @@ export function GameSessionScreen() {
 
   const subjectMeta = SUBJECT_META[subject];
   const gameTypeMeta = GAME_TYPE_META[gameType];
+  const hPad = useHorizontalPadding();
 
   const initSession = useCallback(async () => {
     if (!activeProfileId || !activeProfile) return;
@@ -221,7 +223,7 @@ export function GameSessionScreen() {
       {/* Question content */}
       <Animated.ScrollView
         style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[styles.scrollContent, { paddingHorizontal: hPad }]}
         showsVerticalScrollIndicator={false}
         scrollEnabled={!showFeedback}
       >
@@ -315,12 +317,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    padding: Spacing.lg,
-    gap: Spacing.xl,
+    paddingVertical: Spacing.lg,
     paddingBottom: Spacing['3xl'],
+    gap: Spacing.xl,
   },
   statement: {
-    fontSize: 22,
+    fontSize: Typography.scale.h2.size,
     fontFamily: nunitoFamily('700'),
     color: Colors.textPrimary,
     lineHeight: 30,

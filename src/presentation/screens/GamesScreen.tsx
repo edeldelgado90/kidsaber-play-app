@@ -14,6 +14,7 @@ import { AppHeader } from '@/presentation/components/common/AppHeader';
 import { GameTypeCard } from '@/presentation/components/game/GameTypeCard';
 import { Colors, Spacing, Radii, Typography } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
+import { useContentWidth, useHorizontalPadding } from '@/infrastructure/platform/useBreakpoint';
 
 const CAPYBARA_BRAIN = require('../../../assets/brand/capybara-brain.png');
 
@@ -43,6 +44,11 @@ export function GamesScreen() {
   const subjectMeta = SUBJECT_META[subject];
   const subjectStars = activeProfileId ? getStarsForSubject(activeProfileId, subject) : 0;
 
+  const hPad = useHorizontalPadding();
+  const contentWidth = useContentWidth();
+  const capybaraWidth = Math.min(290, Math.round(contentWidth * 0.74));
+  const capybaraHeight = Math.round(capybaraWidth * (200 / 290));
+
   const handleGameTypePress = (gameType: GameType) => {
     router.push(`/(main)/play/${subject}/${gameType}`);
   };
@@ -68,7 +74,7 @@ export function GamesScreen() {
         {/* Capybara brain centered bottom */}
         <Image
           source={CAPYBARA_BRAIN}
-          style={styles.capybara}
+          style={[styles.capybara, { width: capybaraWidth, height: capybaraHeight }]}
           resizeMode="contain"
           accessibilityElementsHidden
           importantForAccessibility="no"
@@ -76,7 +82,7 @@ export function GamesScreen() {
 
         <ScrollView
           style={styles.scroll}
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[styles.scrollContent, { paddingHorizontal: hPad }]}
           showsVerticalScrollIndicator={false}
         >
           {/* Page header text */}
@@ -130,18 +136,16 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -6,
     alignSelf: 'center',
-    width: 290,
-    height: 200,
     zIndex: 0,
   },
   scroll: {
     flex: 1,
   },
   scrollContent: {
-    padding: Spacing.lg,
+    paddingVertical: Spacing.lg,
     paddingTop: Spacing.md,
-    gap: Spacing.lg,
     paddingBottom: Spacing['3xl'],
+    gap: Spacing.lg,
     zIndex: 2,
   },
   pageHeader: {

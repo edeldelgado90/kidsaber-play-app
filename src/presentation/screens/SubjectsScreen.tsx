@@ -10,6 +10,7 @@ import { SubjectCard } from '@/presentation/components/subject/SubjectCard';
 import { ProfileChip } from '@/presentation/components/profile/ProfileChip';
 import { Colors, Spacing, Radii, Typography } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
+import { useContentWidth, useHorizontalPadding } from '@/infrastructure/platform/useBreakpoint';
 
 const CAPYBARA_MATE = require('../../../assets/brand/capybara-mate.png');
 
@@ -26,6 +27,11 @@ export function SubjectsScreen() {
   const { getActiveProfile, profiles } = useProfileStore();
   const getStarsForSubject = useProgressStore(s => s.getStarsForSubject);
   const getTotalStars = useProgressStore(s => s.getTotalStars);
+
+  const hPad = useHorizontalPadding();
+  const contentWidth = useContentWidth();
+  const capybaraWidth = Math.min(320, Math.round(contentWidth * 0.82));
+  const capybaraHeight = Math.round(capybaraWidth * (220 / 320));
 
   const activeProfile = getActiveProfile();
   const activeProfileId = useProfileStore(s => s.activeProfileId);
@@ -66,7 +72,7 @@ export function SubjectsScreen() {
         {/* Capybara (behind content, z-index 0) */}
         <Image
           source={CAPYBARA_MATE}
-          style={styles.capybara}
+          style={[styles.capybara, { width: capybaraWidth, height: capybaraHeight }]}
           resizeMode="contain"
           accessibilityElementsHidden
           importantForAccessibility="no"
@@ -74,7 +80,7 @@ export function SubjectsScreen() {
 
         <ScrollView
           style={styles.scroll}
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[styles.scrollContent, { paddingHorizontal: hPad }]}
           showsVerticalScrollIndicator={false}
         >
           {/* Greeting card */}
@@ -135,17 +141,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: -20,
     bottom: -10,
-    width: 320,
-    height: 220,
     zIndex: 0,
   },
   scroll: {
     flex: 1,
   },
   scrollContent: {
-    padding: Spacing.lg,
-    gap: Spacing.md,
+    paddingVertical: Spacing.lg,
     paddingBottom: Spacing['3xl'],
+    gap: Spacing.md,
     zIndex: 1,
   },
   greetingCard: {

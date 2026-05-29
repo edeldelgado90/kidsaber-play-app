@@ -18,6 +18,7 @@ import { AppHeader } from '@/presentation/components/common/AppHeader';
 import { ProfileRow } from '@/presentation/components/profile/ProfileRow';
 import { Colors, Spacing, Radii, Typography } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
+import { useHorizontalPadding } from '@/infrastructure/platform/useBreakpoint';
 
 type Mode = 'list' | 'add' | 'edit';
 
@@ -123,6 +124,7 @@ export function ProfilesScreen() {
 
   const isFormMode = mode === 'add' || mode === 'edit';
   const canSubmit = name.trim().length >= 2 && grade !== null;
+  const hPad = useHorizontalPadding();
 
   return (
     <KeyboardAvoidingView
@@ -143,7 +145,7 @@ export function ProfilesScreen() {
 
       <ScrollView
         style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[styles.scrollContent, { paddingHorizontal: hPad }]}
         keyboardShouldPersistTaps="handled"
       >
         {isFormMode ? (
@@ -251,7 +253,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    padding: Spacing.lg,
+    paddingVertical: Spacing.lg,
     gap: Spacing.md,
     flexGrow: 1,
   },

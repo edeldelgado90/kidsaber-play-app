@@ -1,8 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
-import Svg, { Circle, Line, Defs, RadialGradient, Stop, Rect } from 'react-native-svg';
-
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+import { View, StyleSheet } from 'react-native';
+import Svg, { Circle, Line } from 'react-native-svg';
 
 /**
  * The "sun + green floor" background pattern.
@@ -52,7 +50,7 @@ function SunSvg() {
   });
 
   return (
-    <Svg width={SCREEN_WIDTH} height={160} viewBox={`0 0 390 160`}>
+    <Svg width="100%" height={160} viewBox="0 0 390 160">
       {/* Outer halo (r=62, 22% opacity) */}
       <Circle cx={cx} cy={cy} r={62} fill="#f5c400" fillOpacity={0.22} />
       {/* Inner halo (r=46, 32% opacity) */}

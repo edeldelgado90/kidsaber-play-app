@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Text, Image, StyleSheet, Animated } from 'react-native';
 import { router } from 'expo-router';
-import { ProgressBar } from 'react-native-paper';
 import { useProfileStore } from '@/infrastructure/store/profileStore';
 import { useProgressStore } from '@/infrastructure/store/progressStore';
 import { Colors, Typography, Motion } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
+import { useContentWidth } from '@/infrastructure/platform/useBreakpoint';
 
 const LOGO = require('../../../assets/brand/logo-full.png');
 const MIN_SPLASH_DURATION = 1800;
@@ -24,6 +24,9 @@ export function LoadingScreen() {
   const loadProfiles = useProfileStore(s => s.loadProfiles);
   const loadProgress = useProgressStore(s => s.loadProgress);
   const profiles = useProfileStore(s => s.profiles);
+
+  const contentWidth = useContentWidth();
+  const logoSize = Math.min(160, Math.round(contentWidth * 0.42));
 
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const progressAnim = useRef(new Animated.Value(0)).current;
@@ -89,7 +92,7 @@ export function LoadingScreen() {
       <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
         <Image
           source={LOGO}
-          style={styles.logo}
+          style={[styles.logo, { width: logoSize, height: logoSize }]}
           resizeMode="contain"
           accessibilityLabel="KidSaber Play"
         />
@@ -123,8 +126,6 @@ const styles = StyleSheet.create({
     gap: 24,
   },
   logo: {
-    width: 160,
-    height: 160,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.25,

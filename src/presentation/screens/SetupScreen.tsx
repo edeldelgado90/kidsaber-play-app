@@ -13,10 +13,12 @@ import {
 } from 'react-native';
 import { Button } from 'react-native-paper';
 import { router } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useProfileStore } from '@/infrastructure/store/profileStore';
 import { ALL_GRADES, GRADE_SHORT_LABELS, validateProfileName, type Grade } from '@/domain/entities/Profile';
 import { Colors, Spacing, Radii, Typography } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
+import { useContentWidth } from '@/infrastructure/platform/useBreakpoint';
 
 const LOGO = require('../../../assets/brand/logo-full.png');
 
@@ -33,6 +35,10 @@ const LOGO = require('../../../assets/brand/logo-full.png');
 export function SetupScreen() {
   const addProfile = useProfileStore(s => s.addProfile);
   const isLoading = useProfileStore(s => s.isLoading);
+
+  const insets = useSafeAreaInsets();
+  const contentWidth = useContentWidth();
+  const logoSize = Math.min(150, Math.round(contentWidth * 0.38));
 
   const [name, setName] = useState('');
   const [grade, setGrade] = useState<Grade | null>(null);
@@ -112,7 +118,7 @@ export function SetupScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       {/* Blue header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top + Spacing.xl }]}>
         <Animated.View
           style={[
             styles.logoWrapper,
@@ -127,7 +133,7 @@ export function SetupScreen() {
         >
           <Image
             source={LOGO}
-            style={styles.logo}
+            style={[styles.logo, { width: logoSize, height: logoSize }]}
             resizeMode="contain"
             accessibilityLabel="KidSaber Play"
           />
@@ -233,7 +239,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.brandPrimary,
   },
   header: {
-    paddingTop: 54,
     paddingBottom: 44,
     paddingHorizontal: Spacing.xl,
     alignItems: 'center',
@@ -247,8 +252,7 @@ const styles = StyleSheet.create({
     shadowRadius: 16,
   },
   logo: {
-    width: 150,
-    height: 150,
+    // width/height applied dynamically via useContentWidth()
   },
   scrollView: {
     flex: 1,
