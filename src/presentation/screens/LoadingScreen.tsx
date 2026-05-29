@@ -27,6 +27,9 @@ export function LoadingScreen() {
   const contentWidth = useContentWidth();
   const logoSize = Math.min(160, Math.round(contentWidth * 0.42));
 
+  const contentWidth = useContentWidth();
+  const logoSize = Math.min(160, Math.round(contentWidth * 0.42));
+
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const progressAnim = useRef(new Animated.Value(0)).current;
   const isNavigated = useRef(false);

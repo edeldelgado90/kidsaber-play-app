@@ -222,12 +222,32 @@ export function SetupScreen() {
 }
 
 const styles = StyleSheet.create({
-  caption: {
-    color: Colors.textSecondary,
-    fontFamily: nunitoFamily('400'),
-    fontSize: Typography.scale.caption.size,
-    lineHeight: Typography.scale.caption.lineHeight,
-    textAlign: 'center',
+  root: {
+    flex: 1,
+    backgroundColor: Colors.brandPrimary,
+  },
+  header: {
+    paddingBottom: 44,
+    paddingHorizontal: Spacing.xl,
+    alignItems: 'center',
+    backgroundColor: Colors.brandPrimary,
+  },
+  logoWrapper: {
+    // shadow for logo
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.18,
+    shadowRadius: 16,
+  },
+  logo: {
+    // width/height applied dynamically via useContentWidth()
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingBottom: Spacing['3xl'],
   },
   card: {
     backgroundColor: Colors.surface,

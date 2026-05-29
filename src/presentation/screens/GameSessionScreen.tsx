@@ -364,11 +364,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    gap: Spacing.xl,
-    paddingBottom: Spacing['3xl'],
     paddingVertical: Spacing.lg,
+    paddingBottom: Spacing['3xl'],
+    gap: Spacing.xl,
   },
   statement: {
+    fontSize: Typography.scale.h2.size,
+    fontFamily: nunitoFamily('700'),
     color: Colors.textPrimary,
     fontFamily: nunitoFamily('700'),
     fontSize: Typography.scale.h2.size,

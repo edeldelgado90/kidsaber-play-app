@@ -124,6 +124,7 @@ const styles = StyleSheet.create({
     bottom: -8,
     position: 'absolute',
     right: -20,
+    bottom: -8,
     zIndex: 0,
   },
   divider: {
@@ -131,11 +132,11 @@ const styles = StyleSheet.create({
     height: 1,
     marginHorizontal: Spacing.lg,
   },
-  homeButton: {
-    alignItems: 'center',
-    height: 44,
-    justifyContent: 'center',
-    width: 44,
+  scrollContent: {
+    paddingVertical: Spacing.lg,
+    paddingBottom: Spacing['3xl'],
+    gap: Spacing.lg,
+    zIndex: 2,
   },
   profileCard: {
     alignItems: 'center',

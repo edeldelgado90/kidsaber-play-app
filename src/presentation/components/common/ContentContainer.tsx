@@ -17,7 +17,17 @@ export function ContentContainer({ children, style }: ContentContainerProps) {
   const bp = useBreakpoint();
   const isWide = bp !== 'phone';
 
-  return <View style={[styles.base, isWide && styles.wide, style]}>{children}</View>;
+  return (
+    <View
+      style={[
+        { flex: 1 },
+        isWide && { maxWidth: APP_MAX_WIDTH, alignSelf: 'center', width: '100%' },
+        style,
+      ]}
+    >
+      {children}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({

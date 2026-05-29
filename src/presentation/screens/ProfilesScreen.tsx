@@ -243,10 +243,10 @@ const styles = StyleSheet.create({
   addButtonContent: {
     paddingVertical: 6,
   },
-  addButtonLabel: {
-    color: Colors.brandPrimary,
-    fontFamily: nunitoFamily('700'),
-    fontSize: Typography.scale.button.size,
+  scrollContent: {
+    paddingVertical: Spacing.lg,
+    gap: Spacing.md,
+    flexGrow: 1,
   },
   errorText: {
     color: Colors.error,
