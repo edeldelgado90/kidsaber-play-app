@@ -108,7 +108,9 @@ describe('FirebaseTokenService.getToken()', () => {
 
   it('calls getIdToken on each invocation so Firebase can auto-refresh the token', async () => {
     const mockUser = makeMockUser();
-    mockUser.getIdToken.mockResolvedValueOnce('token-v1').mockResolvedValueOnce('token-v2');
+    mockUser.getIdToken
+      .mockResolvedValueOnce('token-v1')
+      .mockResolvedValueOnce('token-v2');
     const mockAuth = makeMockAuth(mockUser);
     const service = new FirebaseTokenService(mockAuth);
 

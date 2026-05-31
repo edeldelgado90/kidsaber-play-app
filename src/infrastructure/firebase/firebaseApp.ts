@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
-import { initializeAuth, getAuth, inMemoryPersistence, type Auth } from 'firebase/auth';
+import { initializeAuth, getAuth, inMemoryPersistence } from 'firebase/auth';
 import { Config } from '../config/env';
 
 const isFirebaseConfigured =
@@ -28,6 +28,7 @@ export const firebaseAuth: Auth | null = (() => {
   // inMemoryPersistence is intentional: anonymous auth is only used to issue
   // bearer tokens. All user profile/progress state lives in AsyncStorage, so
   // the Firebase UID does not need to survive process restarts.
+export const firebaseAuth = (() => {
   try {
     return initializeAuth(app, { persistence: inMemoryPersistence });
   } catch {
