@@ -6,16 +6,17 @@
 
 import { LocalProfileRepository } from '../../data/repositories/LocalProfileRepository';
 import { LocalProgressRepository } from '../../data/repositories/LocalProgressRepository';
-import { DeviceTokenService } from '../../data/services/DeviceTokenService';
+import { FirebaseTokenService } from '../../data/services/FirebaseTokenService';
 import { QuestionsApiService } from '../../data/services/QuestionsApiService';
+import { firebaseAuth } from '../firebase/firebaseApp';
 import { Config } from '../config/env';
 
 // Repositories (singletons — shared across the app)
 export const profileRepository = new LocalProfileRepository();
 export const progressRepository = new LocalProgressRepository();
 
-// Auth (singleton — owns the in-memory token cache and deviceId lifecycle)
-export const tokenProvider = new DeviceTokenService(Config.API_URL);
+// Auth (singleton — signs in anonymously via Firebase and provides ID tokens)
+export const tokenProvider = new FirebaseTokenService(firebaseAuth);
 
 // Services (singletons)
 export const questionsService = new QuestionsApiService(Config.API_URL, tokenProvider);
