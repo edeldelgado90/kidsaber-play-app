@@ -15,12 +15,7 @@ interface SubjectProgressRowProps {
 /**
  * A single row in the Evolution screen showing stars per subject.
  */
-export function SubjectProgressRow({
-  subject,
-  stars,
-  maxStars = 5,
-  onPress,
-}: SubjectProgressRowProps) {
+export function SubjectProgressRow({ subject, stars, maxStars = 5, onPress }: SubjectProgressRowProps) {
   const meta = SUBJECT_META[subject];
   const displayStars = Math.min(stars, 99); // cap display
 
@@ -68,7 +63,24 @@ export function SubjectProgressRow({
 }
 
 const styles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: Spacing.lg,
+    gap: Spacing.md,
+  },
+  rowPressed: {
+    backgroundColor: Colors.borderSubtle,
+  },
   chevron: {
+    flexShrink: 0,
+  },
+  iconCircle: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
     flexShrink: 0,
   },
   content: {

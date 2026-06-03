@@ -96,7 +96,9 @@ export function EvolutionScreen() {
               <View key={subject}>
                 <SubjectProgressRow
                   subject={subject}
-                  stars={activeProfileId ? getStarsForSubject(activeProfileId, subject) : 0}
+                  stars={
+                    activeProfileId ? getStarsForSubject(activeProfileId, subject) : 0
+                  }
                   onPress={() => router.push(`/(main)/games/${subject}`)}
                 />
                 {index < SUBJECTS_ORDER.length - 1 && <View style={styles.divider} />}
@@ -120,6 +122,16 @@ export function EvolutionScreen() {
 }
 
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: Colors.brandPrimary,
+  },
+  homeButton: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   capybara: {
     bottom: -8,
     position: 'absolute',

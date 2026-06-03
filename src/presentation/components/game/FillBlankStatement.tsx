@@ -67,17 +67,36 @@ export function FillBlankStatement({
 }
 
 const styles = StyleSheet.create({
+  container: {
+    gap: Spacing.xl,
+  },
+  statementContainer: {
+    paddingHorizontal: Spacing.lg,
+  },
+  statementText: {
+    fontSize: Typography.scale.h2.size,
+    fontFamily: nunitoFamily('700'),
+    color: Colors.textPrimary,
+    lineHeight: Typography.scale.h2.lineHeight,
+    flexWrap: 'wrap',
+  },
   blankFilled: {
-    color: Colors.brandPrimary,
     fontFamily: nunitoFamily('800'),
-    textDecorationColor: Colors.brandPrimary,
+    color: Colors.brandPrimary,
     textDecorationLine: 'underline',
+    textDecorationColor: Colors.brandPrimary,
   },
   blankPlaceholder: {
-    color: Colors.textDisabled,
     fontFamily: nunitoFamily('700'),
-    textDecorationColor: Colors.borderSubtle,
+    color: Colors.textDisabled,
     textDecorationLine: 'underline',
+    textDecorationColor: Colors.borderSubtle,
+  },
+  optionsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.sm,
+    paddingHorizontal: Spacing.lg,
   },
   chip: {
     backgroundColor: Colors.surfaceMuted,
