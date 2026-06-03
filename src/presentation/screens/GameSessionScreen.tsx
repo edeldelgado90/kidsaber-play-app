@@ -1,16 +1,16 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Animated,
-} from 'react-native';
+import { View, Text, StyleSheet, Animated } from 'react-native';
 import { Button } from 'react-native-paper';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useGameSession } from '@/presentation/hooks/useGameSession';
 import { type SessionStatus } from '@/infrastructure/store/sessionStore';
 import { useProfileStore } from '@/infrastructure/store/profileStore';
-import { type Subject, type GameType, SUBJECT_META, GAME_TYPE_META } from '@/domain/entities/Question';
+import {
+  type Subject,
+  type GameType,
+  SUBJECT_META,
+  GAME_TYPE_META,
+} from '@/domain/entities/Question';
 import { type MatchingAnswer } from '@/domain/entities/Question';
 import { AppHeader } from '@/presentation/components/common/AppHeader';
 import { QuestionProgressBar } from '@/presentation/components/game/QuestionProgressBar';
@@ -39,8 +39,10 @@ type AnswerState = 'idle' | 'selected' | 'revealed';
  * - After last question: navigate to evolution
  */
 export function GameSessionScreen() {
-  const { subject: subjectParam, gameType: gameTypeParam } =
-    useLocalSearchParams<{ subject: string; gameType: string }>();
+  const { subject: subjectParam, gameType: gameTypeParam } = useLocalSearchParams<{
+    subject: string;
+    gameType: string;
+  }>();
 
   const subject = subjectParam as Subject;
   const gameType = gameTypeParam as GameType;
@@ -176,7 +178,7 @@ export function GameSessionScreen() {
     if (answerState === 'revealed') {
       const isCorrect =
         Array.isArray(currentQuestion?.correctAnswers) &&
-        currentQuestion!.correctAnswers.includes(optionId as never);
+        currentQuestion?.correctAnswers.includes(optionId as never);
 
       if (selectedOptionId === optionId) {
         return isCorrect ? 'correct' : 'incorrect';
@@ -239,10 +241,7 @@ export function GameSessionScreen() {
           title={`${subjectMeta?.label ?? ''} · ${gameTypeMeta?.label ?? ''}`}
           onBack={handleBack}
         />
-        <QuestionProgressBar
-          current={currentIndex + 1}
-          total={questions.length}
-        />
+        <QuestionProgressBar current={currentIndex + 1} total={questions.length} />
       </View>
 
       {/* Question content */}
@@ -323,60 +322,57 @@ export function GameSessionScreen() {
       />
 
       {/* Star celebration shown when the session ends with a star earned */}
-      <StarCelebrationOverlay
-        visible={showStarCelebration}
-        onHide={handleStarCelebrationHide}
-      />
+      <StarCelebrationOverlay visible={showStarCelebration} onHide={handleStarCelebrationHide} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: Colors.surface,
-  },
-  header: {
-    backgroundColor: Colors.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.borderSubtle,
-  },
-  loadingContainer: {
-    padding: Spacing.lg,
-    gap: Spacing.sm,
-  },
-  scroll: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingVertical: Spacing.lg,
-    paddingBottom: Spacing['3xl'],
-    gap: Spacing.xl,
-  },
-  statement: {
-    fontSize: Typography.scale.h2.size,
-    fontFamily: nunitoFamily('700'),
-    color: Colors.textPrimary,
-    lineHeight: 30,
-    marginBottom: Spacing.xl,
-  },
-  optionList: {
-    gap: Spacing.sm,
-  },
-  footer: {
-    padding: Spacing.lg,
-    borderTopWidth: 1,
-    borderTopColor: Colors.borderSubtle,
-    backgroundColor: Colors.surface,
-  },
   checkButton: {
     borderRadius: Radii.md,
+  },
+  checkButtonContent: {
+    paddingVertical: 6,
   },
   checkButtonLabel: {
     fontFamily: nunitoFamily('700'),
     fontSize: Typography.scale.button.size,
   },
-  checkButtonContent: {
-    paddingVertical: 6,
+  footer: {
+    backgroundColor: Colors.surface,
+    borderTopColor: Colors.borderSubtle,
+    borderTopWidth: 1,
+    padding: Spacing.lg,
+  },
+  header: {
+    backgroundColor: Colors.surface,
+    borderBottomColor: Colors.borderSubtle,
+    borderBottomWidth: 1,
+  },
+  loadingContainer: {
+    gap: Spacing.sm,
+    padding: Spacing.lg,
+  },
+  optionList: {
+    gap: Spacing.sm,
+  },
+  root: {
+    backgroundColor: Colors.surface,
+    flex: 1,
+  },
+  scroll: {
+    flex: 1,
+  },
+  scrollContent: {
+    gap: Spacing.xl,
+    paddingBottom: Spacing['3xl'],
+    paddingVertical: Spacing.lg,
+  },
+  statement: {
+    color: Colors.textPrimary,
+    fontFamily: nunitoFamily('700'),
+    fontSize: Typography.scale.h2.size,
+    lineHeight: 30,
+    marginBottom: Spacing.xl,
   },
 });

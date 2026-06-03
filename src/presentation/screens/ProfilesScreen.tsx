@@ -13,7 +13,13 @@ import {
 import { Button } from 'react-native-paper';
 import { router } from 'expo-router';
 import { useProfileStore } from '@/infrastructure/store/profileStore';
-import { ALL_GRADES, GRADE_SHORT_LABELS, validateProfileName, type Grade, type Profile } from '@/domain/entities/Profile';
+import {
+  ALL_GRADES,
+  GRADE_SHORT_LABELS,
+  validateProfileName,
+  type Grade,
+  type Profile,
+} from '@/domain/entities/Profile';
 import { AppHeader } from '@/presentation/components/common/AppHeader';
 import { ProfileRow } from '@/presentation/components/profile/ProfileRow';
 import { Colors, Spacing, Radii, Typography } from '@/presentation/theme/tokens';
@@ -95,11 +101,9 @@ export function ProfilesScreen() {
 
   const handleDelete = (profile: Profile) => {
     if (profiles.length <= 1) {
-      Alert.alert(
-        'No se puede eliminar',
-        'Debe existir al menos un perfil.',
-        [{ text: 'Entendido' }],
-      );
+      Alert.alert('No se puede eliminar', 'Debe existir al menos un perfil.', [
+        { text: 'Entendido' },
+      ]);
       return;
     }
 
@@ -132,13 +136,7 @@ export function ProfilesScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <AppHeader
-        title={
-          mode === 'add'
-            ? 'Nuevo perfil'
-            : mode === 'edit'
-            ? 'Editar perfil'
-            : 'Perfiles'
-        }
+        title={mode === 'add' ? 'Nuevo perfil' : mode === 'edit' ? 'Editar perfil' : 'Perfiles'}
         onBack={handleBack}
         backgroundColor={Colors.brandPrimary}
       />
@@ -166,9 +164,7 @@ export function ProfilesScreen() {
                 returnKeyType="done"
                 accessibilityLabel="Nombre"
               />
-              {nameError ? (
-                <Text style={styles.errorText}>{nameError}</Text>
-              ) : null}
+              {nameError ? <Text style={styles.errorText}>{nameError}</Text> : null}
             </View>
 
             <View style={styles.fieldGroup}>
@@ -177,20 +173,14 @@ export function ProfilesScreen() {
                 {ALL_GRADES.map(g => (
                   <TouchableOpacity
                     key={g}
-                    style={[
-                      styles.gradeChip,
-                      grade === g && styles.gradeChipSelected,
-                    ]}
+                    style={[styles.gradeChip, grade === g && styles.gradeChipSelected]}
                     onPress={() => setGrade(g)}
                     accessibilityRole="button"
                     accessibilityState={{ selected: grade === g }}
                     accessibilityLabel={`${GRADE_SHORT_LABELS[g]} de Primaria`}
                   >
                     <Text
-                      style={[
-                        styles.gradeChipText,
-                        grade === g && styles.gradeChipTextSelected,
-                      ]}
+                      style={[styles.gradeChipText, grade === g && styles.gradeChipTextSelected]}
                     >
                       {GRADE_SHORT_LABELS[g]}
                     </Text>
@@ -245,106 +235,106 @@ export function ProfilesScreen() {
 }
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: Colors.background,
+  addButton: {
+    borderColor: Colors.brandPrimary,
+    borderRadius: Radii.md,
+    marginTop: Spacing.sm,
   },
-  scroll: {
-    flex: 1,
+  addButtonContent: {
+    paddingVertical: 6,
   },
-  scrollContent: {
-    paddingVertical: Spacing.lg,
-    gap: Spacing.md,
-    flexGrow: 1,
+  addButtonLabel: {
+    color: Colors.brandPrimary,
+    fontFamily: nunitoFamily('700'),
+    fontSize: Typography.scale.button.size,
   },
-  listContainer: {
-    gap: Spacing.md,
-  },
-  form: {
-    gap: Spacing.xl,
-    backgroundColor: Colors.surface,
-    borderRadius: Radii.lg,
-    padding: Spacing.xl,
+  errorText: {
+    color: Colors.error,
+    fontFamily: nunitoFamily('400'),
+    fontSize: Typography.scale.caption.size,
   },
   fieldGroup: {
     gap: Spacing.sm,
   },
   fieldLabel: {
-    fontSize: Typography.scale.bodyStrong.size,
+    color: Colors.textPrimary,
     fontFamily: nunitoFamily('700'),
-    color: Colors.textPrimary,
+    fontSize: Typography.scale.bodyStrong.size,
   },
-  input: {
-    fontSize: Typography.scale.body.size,
-    fontFamily: nunitoFamily('400'),
-    color: Colors.textPrimary,
-    borderWidth: 2,
-    borderColor: Colors.borderSubtle,
-    borderRadius: Radii.md,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: 14,
+  form: {
+    backgroundColor: Colors.surface,
+    borderRadius: Radii.lg,
+    gap: Spacing.xl,
+    padding: Spacing.xl,
+  },
+  gradeChip: {
+    alignItems: 'center',
     backgroundColor: Colors.surfaceMuted,
-    minHeight: 52,
+    borderColor: Colors.borderSubtle,
+    borderRadius: Radii.full,
+    borderWidth: 2,
+    justifyContent: 'center',
+    minHeight: 44,
+    minWidth: 64,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
   },
-  inputError: {
-    borderColor: Colors.error,
+  gradeChipSelected: {
+    backgroundColor: Colors.surfaceHighlight,
+    borderColor: Colors.brandPrimary,
   },
-  errorText: {
-    fontSize: Typography.scale.caption.size,
-    fontFamily: nunitoFamily('400'),
-    color: Colors.error,
+  gradeChipText: {
+    color: Colors.textPrimary,
+    fontFamily: nunitoFamily('700'),
+    fontSize: Typography.scale.bodyStrong.size,
+  },
+  gradeChipTextSelected: {
+    color: Colors.brandPrimary,
   },
   gradeGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: Spacing.sm,
   },
-  gradeChip: {
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-    borderRadius: Radii.full,
-    borderWidth: 2,
-    borderColor: Colors.borderSubtle,
+  input: {
     backgroundColor: Colors.surfaceMuted,
-    minWidth: 64,
-    alignItems: 'center',
-    minHeight: 44,
-    justifyContent: 'center',
-  },
-  gradeChipSelected: {
-    borderColor: Colors.brandPrimary,
-    backgroundColor: Colors.surfaceHighlight,
-  },
-  gradeChipText: {
-    fontSize: Typography.scale.bodyStrong.size,
-    fontFamily: nunitoFamily('700'),
+    borderColor: Colors.borderSubtle,
+    borderRadius: Radii.md,
+    borderWidth: 2,
     color: Colors.textPrimary,
+    fontFamily: nunitoFamily('400'),
+    fontSize: Typography.scale.body.size,
+    minHeight: 52,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: 14,
   },
-  gradeChipTextSelected: {
-    color: Colors.brandPrimary,
+  inputError: {
+    borderColor: Colors.error,
+  },
+  listContainer: {
+    gap: Spacing.md,
+  },
+  root: {
+    backgroundColor: Colors.background,
+    flex: 1,
   },
   saveButton: {
     borderRadius: Radii.md,
     marginTop: Spacing.sm,
   },
+  saveButtonContent: {
+    paddingVertical: 6,
+  },
   saveButtonLabel: {
     fontFamily: nunitoFamily('700'),
     fontSize: Typography.scale.button.size,
   },
-  saveButtonContent: {
-    paddingVertical: 6,
+  scroll: {
+    flex: 1,
   },
-  addButton: {
-    borderRadius: Radii.md,
-    borderColor: Colors.brandPrimary,
-    marginTop: Spacing.sm,
-  },
-  addButtonLabel: {
-    fontFamily: nunitoFamily('700'),
-    fontSize: Typography.scale.button.size,
-    color: Colors.brandPrimary,
-  },
-  addButtonContent: {
-    paddingVertical: 6,
+  scrollContent: {
+    flexGrow: 1,
+    gap: Spacing.md,
+    paddingVertical: Spacing.lg,
   },
 });

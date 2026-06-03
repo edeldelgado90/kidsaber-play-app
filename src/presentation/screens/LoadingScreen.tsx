@@ -7,7 +7,7 @@ import { Colors } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
 import { useContentWidth } from '@/infrastructure/platform/useBreakpoint';
 
-const LOGO = require('../../../assets/brand/logo-full.png');
+import LOGO from '../../../assets/brand/logo-full.png';
 const MIN_SPLASH_DURATION = 1800;
 
 /**
@@ -117,12 +117,18 @@ export function LoadingScreen() {
 }
 
 const styles = StyleSheet.create({
+  appName: {
+    color: Colors.textOnPrimary,
+    fontFamily: nunitoFamily('800'),
+    fontSize: 28,
+    letterSpacing: -0.28,
+  },
   container: {
-    flex: 1,
-    backgroundColor: Colors.brandPrimary,
     alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: Colors.brandPrimary,
+    flex: 1,
     gap: 24,
+    justifyContent: 'center',
   },
   logo: {
     shadowColor: '#000',
@@ -130,23 +136,17 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 24,
   },
-  appName: {
-    fontSize: 28,
-    fontFamily: nunitoFamily('800'),
-    color: Colors.textOnPrimary,
-    letterSpacing: -0.28,
-  },
-  progressContainer: {
-    width: 200,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: 'rgba(255,255,255,0.3)',
-    overflow: 'hidden',
-    marginTop: 8,
-  },
   progressBar: {
-    height: 6,
     backgroundColor: Colors.brandSecondary,
     borderRadius: 3,
+    height: 6,
+  },
+  progressContainer: {
+    backgroundColor: 'rgba(255,255,255,0.3)',
+    borderRadius: 3,
+    height: 6,
+    marginTop: 8,
+    overflow: 'hidden',
+    width: 200,
   },
 });

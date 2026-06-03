@@ -1,5 +1,9 @@
 import { create } from 'zustand';
-import { type Progress, createEmptyProfileProgress, type ProfileProgress } from '../../domain/entities/Progress';
+import {
+  type Progress,
+  createEmptyProfileProgress,
+  type ProfileProgress,
+} from '../../domain/entities/Progress';
 import { type Subject, type GameType } from '../../domain/entities/Question';
 import { progressRepository } from '../di/container';
 

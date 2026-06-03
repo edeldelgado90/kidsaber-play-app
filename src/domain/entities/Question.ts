@@ -8,11 +8,7 @@
 
 export type Subject = 'mathematics' | 'language' | 'english' | 'science';
 
-export type GameType =
-  | 'option_multiple'
-  | 'fill_in_the_blanks'
-  | 'matching'
-  | 'quick_calculation';
+export type GameType = 'option_multiple' | 'fill_in_the_blanks' | 'matching' | 'quick_calculation';
 
 export interface QuestionOption {
   id: string;
@@ -149,7 +145,7 @@ export const GAME_TYPES_ORDER: GameType[] = [
 
 export const SUBJECT_GAME_TYPES: Record<Subject, GameType[]> = {
   mathematics: ['option_multiple', 'fill_in_the_blanks', 'matching', 'quick_calculation'],
-  language:    ['option_multiple', 'fill_in_the_blanks', 'matching'],
-  english:     ['option_multiple', 'fill_in_the_blanks', 'matching'],
-  science:     ['option_multiple', 'fill_in_the_blanks', 'matching'],
+  language: ['option_multiple', 'fill_in_the_blanks', 'matching'],
+  english: ['option_multiple', 'fill_in_the_blanks', 'matching'],
+  science: ['option_multiple', 'fill_in_the_blanks', 'matching'],
 };

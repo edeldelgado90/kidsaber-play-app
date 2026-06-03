@@ -43,10 +43,7 @@ export function AppHeader({
 
   return (
     <View
-      style={[
-        styles.container,
-        { backgroundColor: bgColor, paddingTop: insets.top + Spacing.sm },
-      ]}
+      style={[styles.container, { backgroundColor: bgColor, paddingTop: insets.top + Spacing.sm }]}
     >
       {/* Left slot — back button or custom content */}
       <View style={styles.side}>
@@ -108,12 +105,17 @@ export function AppHeader({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
+  center: {
     alignItems: 'center',
-    paddingHorizontal: Spacing.md,
-    paddingBottom: Spacing.md,
+    flex: 1,
+    paddingHorizontal: Spacing.sm,
+  },
+  container: {
+    alignItems: 'center',
+    flexDirection: 'row',
     minHeight: 56,
+    paddingBottom: Spacing.md,
+    paddingHorizontal: Spacing.md,
     ...Platform.select({
       web: { boxShadow: '0 1px 3px rgba(0,0,0,0.12)' } as Record<string, unknown>,
       default: {
@@ -125,28 +127,23 @@ const styles = StyleSheet.create({
       },
     }),
   },
-  side: {
-    flexDirection: 'row',
+  iconButton: {
     alignItems: 'center',
-    minWidth: 44,
+    height: 44,
+    justifyContent: 'center',
+    width: 44,
   },
   rightSide: {
     justifyContent: 'flex-end',
   },
-  center: {
-    flex: 1,
+  side: {
     alignItems: 'center',
-    paddingHorizontal: Spacing.sm,
+    flexDirection: 'row',
+    minWidth: 44,
   },
   title: {
-    fontSize: Typography.scale.h3.size,
     fontFamily: nunitoFamily('700'),
+    fontSize: Typography.scale.h3.size,
     lineHeight: Typography.scale.h3.lineHeight,
-  },
-  iconButton: {
-    width: 44,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });

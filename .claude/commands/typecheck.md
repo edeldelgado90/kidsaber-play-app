@@ -7,6 +7,7 @@ cd /Users/edelgado/Projects/kidsaber-play-app && npx tsc --noEmit
 ```
 
 After running, report:
+
 - Total number of type errors
 - List each error with file path, line number, and message
 - Suggest fixes for each error

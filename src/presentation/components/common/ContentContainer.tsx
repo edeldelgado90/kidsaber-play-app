@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, type StyleProp, type ViewStyle } from 'react-native';
+import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { useBreakpoint, APP_MAX_WIDTH } from '@/infrastructure/platform/useBreakpoint';
 
 interface ContentContainerProps {
@@ -17,15 +17,10 @@ export function ContentContainer({ children, style }: ContentContainerProps) {
   const bp = useBreakpoint();
   const isWide = bp !== 'phone';
 
-  return (
-    <View
-      style={[
-        { flex: 1 },
-        isWide && { maxWidth: APP_MAX_WIDTH, alignSelf: 'center', width: '100%' },
-        style,
-      ]}
-    >
-      {children}
-    </View>
-  );
+  return <View style={[styles.base, isWide && styles.wide, style]}>{children}</View>;
 }
+
+const styles = StyleSheet.create({
+  base: { flex: 1 },
+  wide: { alignSelf: 'center', maxWidth: APP_MAX_WIDTH, width: '100%' },
+});

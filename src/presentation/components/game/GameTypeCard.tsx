@@ -49,9 +49,7 @@ export function GameTypeCard({ gameType, stars, onPress }: GameTypeCardProps) {
         <Text style={styles.description} numberOfLines={1}>
           {meta.description}
         </Text>
-        {stars > 0 && (
-          <Text style={styles.stars}>{'⭐'.repeat(Math.min(stars, 5))}</Text>
-        )}
+        {stars > 0 && <Text style={styles.stars}>{'⭐'.repeat(Math.min(stars, 5))}</Text>}
       </View>
 
       {/* Chevron */}
@@ -60,7 +58,7 @@ export function GameTypeCard({ gameType, stars, onPress }: GameTypeCardProps) {
           name="chevron-right"
           size={22}
           color={meta.accent}
-          style={{ opacity: 0.85 }}
+          style={styles.chevronIcon}
         />
       </View>
     </TouchableOpacity>
@@ -68,15 +66,19 @@ export function GameTypeCard({ gameType, stars, onPress }: GameTypeCardProps) {
 }
 
 const styles = StyleSheet.create({
+  accentStripe: {
+    flexShrink: 0,
+    width: 4,
+  },
   card: {
-    flexDirection: 'row',
     alignItems: 'stretch',
-    minHeight: 84,
-    borderRadius: Radii.md,
     backgroundColor: Colors.surface,
-    overflow: 'hidden',
-    borderWidth: 1,
     borderColor: Colors.borderSubtle,
+    borderRadius: Radii.md,
+    borderWidth: 1,
+    flexDirection: 'row',
+    minHeight: 84,
+    overflow: 'hidden',
     ...Platform.select({
       ios: {
         ...Elevation.card,
@@ -89,49 +91,48 @@ const styles = StyleSheet.create({
       } as Record<string, unknown>,
     }),
   },
-  accentStripe: {
-    width: 4,
-    flexShrink: 0,
-  },
-  iconBlock: {
-    width: 60,
+  chevronContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    flexShrink: 0,
-    borderTopRightRadius: 45,
-    borderBottomRightRadius: 56,
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
+    paddingRight: 12,
+  },
+  chevronIcon: {
+    opacity: 0.85,
+  },
+  description: {
+    color: Colors.textSecondary,
+    fontFamily: nunitoFamily('400'),
+    fontSize: Typography.scale.caption.size,
+    lineHeight: 16,
   },
   emoji: {
     fontSize: 26,
     lineHeight: 34,
   },
-  textContent: {
-    flex: 1,
-    paddingLeft: Spacing.sm,
+  iconBlock: {
+    alignItems: 'center',
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 56,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 45,
+    flexShrink: 0,
     justifyContent: 'center',
-    gap: 1,
+    width: 60,
   },
   label: {
-    fontSize: Typography.scale.bodyStrong.size,
-    fontFamily: nunitoFamily('800'),
     color: Colors.textPrimary,
+    fontFamily: nunitoFamily('800'),
+    fontSize: Typography.scale.bodyStrong.size,
     lineHeight: 20,
-  },
-  description: {
-    fontSize: Typography.scale.caption.size,
-    fontFamily: nunitoFamily('400'),
-    color: Colors.textSecondary,
-    lineHeight: 16,
   },
   stars: {
     fontSize: 11,
     marginTop: 2,
   },
-  chevronContainer: {
-    paddingRight: 12,
-    alignItems: 'center',
+  textContent: {
+    flex: 1,
+    gap: 1,
     justifyContent: 'center',
+    paddingLeft: Spacing.sm,
   },
 });

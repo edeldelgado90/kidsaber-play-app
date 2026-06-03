@@ -21,7 +21,9 @@ export class FirebaseTokenService implements ITokenProvider {
       if (!this.auth.currentUser) {
         await signInAnonymously(this.auth);
       }
-      return await this.auth.currentUser!.getIdToken();
+      const user = this.auth.currentUser;
+      if (!user) return null;
+      return await user.getIdToken();
     } catch {
       return null;
     }

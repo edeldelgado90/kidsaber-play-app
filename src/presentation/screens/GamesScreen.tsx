@@ -16,7 +16,7 @@ import { Colors, Spacing, Radii, Typography } from '@/presentation/theme/tokens'
 import { nunitoFamily } from '@/presentation/theme/fonts';
 import { useContentWidth, useHorizontalPadding } from '@/infrastructure/platform/useBreakpoint';
 
-const CAPYBARA_BRAIN = require('../../../assets/brand/capybara-brain.png');
+import CAPYBARA_BRAIN from '../../../assets/brand/capybara-brain.png';
 
 /**
  * Game Type Selection screen.
@@ -118,7 +118,7 @@ export function GamesScreen() {
           </View>
 
           {/* Bottom padding for capybara */}
-          <View style={{ height: 70 }} />
+          <View style={styles.spacer} />
         </ScrollView>
       </SunBackground>
     </View>
@@ -126,53 +126,45 @@ export function GamesScreen() {
 }
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: Colors.brandPrimary,
-  },
   capybara: {
-    position: 'absolute',
-    bottom: -6,
     alignSelf: 'center',
+    bottom: -6,
+    position: 'absolute',
     zIndex: 0,
-  },
-  scroll: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingVertical: Spacing.lg,
-    paddingTop: Spacing.md,
-    paddingBottom: Spacing['3xl'],
-    gap: Spacing.lg,
-    zIndex: 2,
-  },
-  pageHeader: {
-    gap: Spacing.xs,
-    zIndex: 1,
-  },
-  pageTitle: {
-    fontSize: Typography.scale.h1.size,
-    fontFamily: nunitoFamily('800'),
-    color: Colors.textPrimary,
-    lineHeight: Typography.scale.h1.lineHeight,
-  },
-  pageSubtitle: {
-    fontSize: 15,
-    fontFamily: nunitoFamily('400'),
-    color: Colors.textSecondary,
-    lineHeight: 22,
   },
   gameList: {
     gap: Spacing.sm,
     zIndex: 1,
   },
+  pageHeader: {
+    gap: Spacing.xs,
+    zIndex: 1,
+  },
+  pageSubtitle: {
+    color: Colors.textSecondary,
+    fontFamily: nunitoFamily('400'),
+    fontSize: 15,
+    lineHeight: 22,
+  },
+  pageTitle: {
+    color: Colors.textPrimary,
+    fontFamily: nunitoFamily('800'),
+    fontSize: Typography.scale.h1.size,
+    lineHeight: Typography.scale.h1.lineHeight,
+  },
+  progressBar: {
+    backgroundColor: Colors.borderSubtle,
+    borderRadius: 4,
+    height: 8,
+    overflow: 'hidden',
+  },
   progressCard: {
     backgroundColor: Colors.surface,
-    borderRadius: Radii.lg,
-    padding: Spacing.lg,
-    gap: Spacing.sm,
-    borderWidth: 1,
     borderColor: '#eaf0f7',
+    borderRadius: Radii.lg,
+    borderWidth: 1,
+    gap: Spacing.sm,
+    padding: Spacing.lg,
     zIndex: 1,
     ...Platform.select({
       ios: {
@@ -185,25 +177,36 @@ const styles = StyleSheet.create({
       web: { boxShadow: '0 4px 12px rgba(0, 80, 180, 0.10)' } as Record<string, unknown>,
     }),
   },
-  progressTitle: {
-    fontSize: Typography.scale.bodyStrong.size,
-    fontFamily: nunitoFamily('700'),
-    color: Colors.textPrimary,
-  },
-  progressSubtitle: {
-    fontSize: Typography.scale.caption.size,
-    fontFamily: nunitoFamily('400'),
-    color: Colors.textSecondary,
-  },
-  progressBar: {
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.borderSubtle,
-    overflow: 'hidden',
-  },
   progressFill: {
-    height: 8,
     backgroundColor: Colors.brandSecondary,
     borderRadius: 4,
+    height: 8,
+  },
+  progressSubtitle: {
+    color: Colors.textSecondary,
+    fontFamily: nunitoFamily('400'),
+    fontSize: Typography.scale.caption.size,
+  },
+  progressTitle: {
+    color: Colors.textPrimary,
+    fontFamily: nunitoFamily('700'),
+    fontSize: Typography.scale.bodyStrong.size,
+  },
+  root: {
+    backgroundColor: Colors.brandPrimary,
+    flex: 1,
+  },
+  scroll: {
+    flex: 1,
+  },
+  scrollContent: {
+    gap: Spacing.lg,
+    paddingBottom: Spacing['3xl'],
+    paddingTop: Spacing.md,
+    paddingVertical: Spacing.lg,
+    zIndex: 2,
+  },
+  spacer: {
+    height: 70,
   },
 });

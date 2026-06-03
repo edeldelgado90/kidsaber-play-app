@@ -31,12 +31,14 @@ Report: total count by severity (critical / high / moderate / low), which packag
 Analyse these areas manually (read the relevant files):
 
 ### 2a. `EXPO_PUBLIC_*` variables embedded in the JS bundle
+
 - Read `src/infrastructure/config/env.ts` and `src/data/api/httpClient.ts`.
 - `EXPO_PUBLIC_API_KEY` is bundled into the JS bundle at build time and is **readable by anyone
   who extracts the APK/IPA**. Flag this with severity and propose mitigations
   (e.g. short-lived tokens, backend proxy, server-side auth).
 
 ### 2b. `.env` / `.env.local` committed by mistake
+
 ```bash
 cd /Users/edelgado/Projects/kidsaber-play-app && git log --all --oneline --diff-filter=A -- '.env' '.env.local' '.env.production'
 git grep -rn --include="*.ts" --include="*.tsx" --include="*.js" \
@@ -44,6 +46,7 @@ git grep -rn --include="*.ts" --include="*.tsx" --include="*.js" \
 ```
 
 ### 2c. Hard-coded secrets / tokens anywhere in source
+
 ```bash
 cd /Users/edelgado/Projects/kidsaber-play-app && grep -rn \
   --include="*.ts" --include="*.tsx" --include="*.js" --include="*.json" \
@@ -56,6 +59,7 @@ cd /Users/edelgado/Projects/kidsaber-play-app && grep -rn \
 ## 3 — Transport security (HTTPS enforcement)
 
 Read `src/infrastructure/config/env.ts` and evaluate:
+
 - The HTTPS guard throws only when `process.env.NODE_ENV === 'production'`. In Expo, `NODE_ENV`
   can be `'development'` even in a release build if the env is not configured correctly.
   Confirm whether this guard is reliable or whether it should use `__DEV__` or `expo-constants`
@@ -88,6 +92,7 @@ cd /Users/edelgado/Projects/kidsaber-play-app && grep -rn \
 ```
 
 Also read `src/domain/usecases/profile/CreateProfile.ts` and `src/domain/usecases/profile/UpdateProfile.ts`:
+
 - Are profile names (user-supplied) length-limited and sanitised before storage?
 - Are numeric fields (grade, age) range-validated?
 - Are question answers validated client-side against `correctAnswers` (array) — never a
@@ -98,6 +103,7 @@ Also read `src/domain/usecases/profile/CreateProfile.ts` and `src/domain/usecase
 ## 6 — API request security
 
 Read `src/data/api/httpClient.ts` and `src/data/api/questionsApi.ts`:
+
 - Is `Authorization: Bearer` header sent only when `API_KEY` is non-empty? Sending an empty
   `Bearer ` header may cause unintended 401s or expose the header unnecessarily.
 - Are query parameters for `subject`, `grade`, `type` sanitised / allow-listed before being
@@ -161,6 +167,7 @@ cd /Users/edelgado/Projects/kidsaber-play-app && \
 ```
 
 Check for:
+
 - `expo.android.package` / `expo.ios.bundleIdentifier` set to production values.
 - `expo.updates.enabled` — if OTA updates are on, confirm code-signing is configured to prevent
   malicious OTA injection.

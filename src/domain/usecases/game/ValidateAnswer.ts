@@ -1,8 +1,4 @@
-import {
-  type Question,
-  type CorrectAnswers,
-  type MatchingAnswer,
-} from '../../entities/Question';
+import { type Question, type CorrectAnswers, type MatchingAnswer } from '../../entities/Question';
 
 /**
  * Validates the user's answer against the question's `correctAnswers` field.
@@ -57,7 +53,5 @@ function isMatchingAnswer(correctAnswers: CorrectAnswers, userAnswer: unknown): 
 
   if (user.length !== correct.length) return false;
 
-  return correct.every(ca =>
-    user.some(ua => ua.leftId === ca.leftId && ua.rightId === ca.rightId),
-  );
+  return correct.every(ca => user.some(ua => ua.leftId === ca.leftId && ua.rightId === ca.rightId));
 }

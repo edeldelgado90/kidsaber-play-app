@@ -15,7 +15,12 @@ interface SubjectProgressRowProps {
 /**
  * A single row in the Evolution screen showing stars per subject.
  */
-export function SubjectProgressRow({ subject, stars, maxStars = 5, onPress }: SubjectProgressRowProps) {
+export function SubjectProgressRow({
+  subject,
+  stars,
+  maxStars = 5,
+  onPress,
+}: SubjectProgressRowProps) {
   const meta = SUBJECT_META[subject];
   const displayStars = Math.min(stars, 99); // cap display
 
@@ -63,43 +68,46 @@ export function SubjectProgressRow({ subject, stars, maxStars = 5, onPress }: Su
 }
 
 const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: Spacing.lg,
-    gap: Spacing.md,
-  },
-  rowPressed: {
-    backgroundColor: Colors.borderSubtle,
-  },
   chevron: {
     flexShrink: 0,
-  },
-  iconCircle: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-  },
-  emoji: {
-    fontSize: 18,
-    lineHeight: 22,
   },
   content: {
     flex: 1,
     gap: 2,
   },
-  label: {
-    fontSize: Typography.scale.bodyStrong.size,
-    fontFamily: nunitoFamily('700'),
+  count: {
     color: Colors.textPrimary,
+    fontFamily: nunitoFamily('800'),
+    fontSize: Typography.scale.h3.size,
+    minWidth: 28,
+    textAlign: 'right',
+  },
+  emoji: {
+    fontSize: 18,
+    lineHeight: 22,
+  },
+  iconCircle: {
+    alignItems: 'center',
+    borderRadius: 18,
+    flexShrink: 0,
+    height: 36,
+    justifyContent: 'center',
+    width: 36,
+  },
+  label: {
+    color: Colors.textPrimary,
+    fontFamily: nunitoFamily('700'),
+    fontSize: Typography.scale.bodyStrong.size,
     lineHeight: 20,
   },
-  starsRow: {
+  row: {
+    alignItems: 'center',
     flexDirection: 'row',
-    gap: 2,
+    gap: Spacing.md,
+    padding: Spacing.lg,
+  },
+  rowPressed: {
+    backgroundColor: Colors.borderSubtle,
   },
   star: {
     fontSize: 14,
@@ -108,11 +116,8 @@ const styles = StyleSheet.create({
   starEmpty: {
     opacity: 0.3,
   },
-  count: {
-    fontSize: Typography.scale.h3.size,
-    fontFamily: nunitoFamily('800'),
-    color: Colors.textPrimary,
-    minWidth: 28,
-    textAlign: 'right',
+  starsRow: {
+    flexDirection: 'row',
+    gap: 2,
   },
 });

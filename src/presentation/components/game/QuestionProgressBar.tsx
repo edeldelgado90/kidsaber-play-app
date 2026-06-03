@@ -18,9 +18,7 @@ export function QuestionProgressBar({ current, total }: QuestionProgressBarProps
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>
-        {`Pregunta ${current}/${total}`}
-      </Text>
+      <Text style={styles.label}>{`Pregunta ${current}/${total}`}</Text>
       <ProgressBar
         progress={progress}
         color={Colors.brandPrimary}
@@ -32,20 +30,20 @@ export function QuestionProgressBar({ current, total }: QuestionProgressBarProps
 }
 
 const styles = StyleSheet.create({
+  bar: {
+    backgroundColor: Colors.borderSubtle,
+    borderRadius: 3,
+    height: 6,
+  },
   container: {
     gap: Spacing.xs,
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.sm,
   },
   label: {
-    fontSize: Typography.scale.caption.size,
-    fontFamily: nunitoFamily('700'),
     color: Colors.textSecondary,
+    fontFamily: nunitoFamily('700'),
+    fontSize: Typography.scale.caption.size,
     textAlign: 'center',
-  },
-  bar: {
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: Colors.borderSubtle,
   },
 });

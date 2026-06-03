@@ -7,6 +7,7 @@ cd /Users/edelgado/Projects/kidsaber-play-app && npm run lint && npm run format:
 ```
 
 After running, report:
+
 - Number of ESLint errors and warnings
 - Prettier formatting issues (files that need reformatting)
 - Specific violations with file paths and line numbers

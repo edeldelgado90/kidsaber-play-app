@@ -78,21 +78,21 @@ const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
     alignItems: 'center',
-    justifyContent: 'center',
     gap: Spacing.lg,
+    justifyContent: 'center',
     zIndex: 150,
   },
-  text: {
-    fontSize: Typography.scale.h1.size,
-    fontFamily: nunitoFamily('800'),
-    color: 'white',
+  subtext: {
+    color: 'rgba(255,255,255,0.9)',
+    fontFamily: nunitoFamily('600'),
+    fontSize: Typography.scale.body.size,
+    paddingHorizontal: Spacing.xl,
     textAlign: 'center',
   },
-  subtext: {
-    fontSize: Typography.scale.body.size,
-    fontFamily: nunitoFamily('600'),
-    color: 'rgba(255,255,255,0.9)',
+  text: {
+    color: 'white',
+    fontFamily: nunitoFamily('800'),
+    fontSize: Typography.scale.h1.size,
     textAlign: 'center',
-    paddingHorizontal: Spacing.xl,
   },
 });

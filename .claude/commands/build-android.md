@@ -3,6 +3,7 @@
 Triggers an EAS build for Android using the preview profile (produces an APK for internal testing).
 
 Prerequisites:
+
 1. Be logged in to Expo: `npx eas login`
 2. Have `EXPO_PUBLIC_API_URL` set as an EAS secret: `npx eas secret:create --name EXPO_PUBLIC_API_URL --value <your-url>`
 
@@ -11,6 +12,7 @@ cd /Users/edelgado/Projects/kidsaber-play-app && npx eas build --platform androi
 ```
 
 Build profiles:
+
 - `preview` — APK for internal testing (no store submission)
 - `production` — AAB for Google Play submission
 

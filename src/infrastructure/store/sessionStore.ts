@@ -1,6 +1,10 @@
 import { create } from 'zustand';
 import { type Question, type Subject, type GameType } from '../../domain/entities/Question';
-import { type GameSessionAnswer, calculateStarEarned, countCorrectAnswers } from '../../domain/entities/GameSession';
+import {
+  type GameSessionAnswer,
+  calculateStarEarned,
+  countCorrectAnswers,
+} from '../../domain/entities/GameSession';
 import { validateAnswer } from '../../domain/usecases/game/ValidateAnswer';
 import { fetchQuestions } from '../../domain/usecases/game/FetchQuestions';
 import { saveSessionResult } from '../../domain/usecases/game/SaveSessionResult';
@@ -52,12 +56,7 @@ const initialState: SessionStoreState = {
 export const useSessionStore = create<SessionStore>((set, get) => ({
   ...initialState,
 
-  startSession: async (
-    _profileId: string,
-    subject: Subject,
-    gameType: GameType,
-    grade: number,
-  ) => {
+  startSession: async (_profileId: string, subject: Subject, gameType: GameType, grade: number) => {
     set({ ...initialState, status: 'loading', subject, gameType, grade });
 
     try {
@@ -68,8 +67,7 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
       });
       set({ questions, status: 'playing', currentIndex: 0, answers: [] });
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : 'Error al cargar las preguntas.';
+      const message = err instanceof Error ? err.message : 'Error al cargar las preguntas.';
       set({ status: 'error', error: message });
     }
   },

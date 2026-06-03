@@ -67,30 +67,46 @@ export function FillBlankStatement({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    gap: Spacing.xl,
-  },
-  statementContainer: {
-    paddingHorizontal: Spacing.lg,
-  },
-  statementText: {
-    fontSize: Typography.scale.h2.size,
-    fontFamily: nunitoFamily('700'),
-    color: Colors.textPrimary,
-    lineHeight: Typography.scale.h2.lineHeight,
-    flexWrap: 'wrap',
-  },
   blankFilled: {
-    fontFamily: nunitoFamily('800'),
     color: Colors.brandPrimary,
-    textDecorationLine: 'underline',
+    fontFamily: nunitoFamily('800'),
     textDecorationColor: Colors.brandPrimary,
+    textDecorationLine: 'underline',
   },
   blankPlaceholder: {
-    fontFamily: nunitoFamily('700'),
     color: Colors.textDisabled,
-    textDecorationLine: 'underline',
+    fontFamily: nunitoFamily('700'),
     textDecorationColor: Colors.borderSubtle,
+    textDecorationLine: 'underline',
+  },
+  chip: {
+    backgroundColor: Colors.surfaceMuted,
+    borderColor: Colors.borderSubtle,
+    borderRadius: Radii.full,
+    borderWidth: 1.5,
+    justifyContent: 'center',
+    minHeight: 44,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+  },
+  chipDisabled: {
+    opacity: 0.6,
+  },
+  chipSelected: {
+    backgroundColor: Colors.surfaceHighlight,
+    borderColor: Colors.brandPrimary,
+  },
+  chipText: {
+    color: Colors.textPrimary,
+    fontFamily: nunitoFamily('600'),
+    fontSize: Typography.scale.bodyStrong.size,
+  },
+  chipTextSelected: {
+    color: Colors.brandPrimary,
+    fontFamily: nunitoFamily('700'),
+  },
+  container: {
+    gap: Spacing.xl,
   },
   optionsGrid: {
     flexDirection: 'row',
@@ -98,30 +114,14 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
     paddingHorizontal: Spacing.lg,
   },
-  chip: {
+  statementContainer: {
     paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-    borderRadius: Radii.full,
-    backgroundColor: Colors.surfaceMuted,
-    borderWidth: 1.5,
-    borderColor: Colors.borderSubtle,
-    minHeight: 44,
-    justifyContent: 'center',
   },
-  chipSelected: {
-    backgroundColor: Colors.surfaceHighlight,
-    borderColor: Colors.brandPrimary,
-  },
-  chipDisabled: {
-    opacity: 0.6,
-  },
-  chipText: {
-    fontSize: Typography.scale.bodyStrong.size,
-    fontFamily: nunitoFamily('600'),
+  statementText: {
     color: Colors.textPrimary,
-  },
-  chipTextSelected: {
-    color: Colors.brandPrimary,
+    flexWrap: 'wrap',
     fontFamily: nunitoFamily('700'),
+    fontSize: Typography.scale.h2.size,
+    lineHeight: Typography.scale.h2.lineHeight,
   },
 });

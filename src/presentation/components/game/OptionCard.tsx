@@ -46,11 +46,7 @@ export function OptionCard({ label, text, state, onPress }: OptionCardProps) {
   return (
     <Animated.View style={{ transform: [{ translateX: shakeAnim }] }}>
       <TouchableOpacity
-        style={[
-          styles.card,
-          stateStyles.card,
-          state === 'disabled' && styles.cardDisabled,
-        ]}
+        style={[styles.card, stateStyles.card, state === 'disabled' && styles.cardDisabled]}
         onPress={onPress}
         disabled={isDisabled || !onPress}
         accessibilityLabel={`Opción ${label}: ${text}`}
@@ -85,14 +81,22 @@ function getStateStyles(state: OptionState): StateStyle {
   switch (state) {
     case 'selected':
       return {
-        card: { backgroundColor: Colors.surfaceHighlight, borderColor: Colors.brandPrimary, borderWidth: 2 },
+        card: {
+          backgroundColor: Colors.surfaceHighlight,
+          borderColor: Colors.brandPrimary,
+          borderWidth: 2,
+        },
         badge: { backgroundColor: Colors.brandPrimary },
         badgeText: { color: Colors.textOnPrimary },
         text: { color: Colors.brandPrimary },
       };
     case 'correct':
       return {
-        card: { backgroundColor: Colors.successSurface, borderColor: Colors.success, borderWidth: 2 },
+        card: {
+          backgroundColor: Colors.successSurface,
+          borderColor: Colors.success,
+          borderWidth: 2,
+        },
         badge: { backgroundColor: Colors.success },
         badgeText: { color: Colors.textOnPrimary },
         text: { color: Colors.textPrimary },
@@ -115,16 +119,29 @@ function getStateStyles(state: OptionState): StateStyle {
 }
 
 const styles = StyleSheet.create({
-  card: {
-    flexDirection: 'row',
+  badge: {
     alignItems: 'center',
-    gap: Spacing.md,
-    padding: Spacing.md,
-    borderRadius: Radii.md,
+    borderRadius: Radii.sm,
+    flexShrink: 0,
+    height: 36,
+    justifyContent: 'center',
+    width: 36,
+  },
+  badgeText: {
+    fontFamily: nunitoFamily('800'),
+    fontSize: Typography.scale.button.size,
+    lineHeight: 20,
+  },
+  card: {
+    alignItems: 'center',
     backgroundColor: Colors.surface,
-    borderWidth: 1.5,
     borderColor: Colors.borderSubtle,
+    borderRadius: Radii.md,
+    borderWidth: 1.5,
+    flexDirection: 'row',
+    gap: Spacing.md,
     minHeight: 64,
+    padding: Spacing.md,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -141,23 +158,10 @@ const styles = StyleSheet.create({
   cardDisabled: {
     opacity: 0.6,
   },
-  badge: {
-    width: 36,
-    height: 36,
-    borderRadius: Radii.sm,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-  },
-  badgeText: {
-    fontSize: Typography.scale.button.size,
-    fontFamily: nunitoFamily('800'),
-    lineHeight: 20,
-  },
   optionText: {
     flex: 1,
-    fontSize: Typography.scale.body.size,
     fontFamily: nunitoFamily('400'),
+    fontSize: Typography.scale.body.size,
     lineHeight: Typography.scale.body.lineHeight,
   },
   textDisabled: {

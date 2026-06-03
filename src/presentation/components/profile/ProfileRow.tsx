@@ -40,9 +40,7 @@ export function ProfileRow({
       />
 
       <View style={styles.info}>
-        <Text style={[styles.name, isActive && styles.nameActive]}>
-          {profile.name}
-        </Text>
+        <Text style={[styles.name, isActive && styles.nameActive]}>{profile.name}</Text>
         <Text style={styles.grade}>{GRADE_LABELS[profile.grade]}</Text>
       </View>
 
@@ -75,47 +73,47 @@ export function ProfileRow({
 }
 
 const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
+  actionButton: {
     alignItems: 'center',
-    padding: Spacing.lg,
-    gap: Spacing.md,
-    backgroundColor: Colors.surface,
-    borderRadius: Radii.md,
-    borderWidth: 1,
-    borderColor: Colors.borderSubtle,
-  },
-  rowActive: {
-    borderColor: Colors.brandPrimary,
-    backgroundColor: Colors.surfaceHighlight,
-  },
-  info: {
-    flex: 1,
-  },
-  name: {
-    fontSize: Typography.scale.bodyStrong.size,
-    fontFamily: nunitoFamily('700'),
-    color: Colors.textPrimary,
-    lineHeight: Typography.scale.bodyStrong.lineHeight,
-  },
-  nameActive: {
-    color: Colors.brandPrimary,
-  },
-  grade: {
-    fontSize: Typography.scale.caption.size,
-    fontFamily: nunitoFamily('400'),
-    color: Colors.textSecondary,
-    lineHeight: Typography.scale.caption.lineHeight,
-    marginTop: 2,
+    height: 44,
+    justifyContent: 'center',
+    width: 44,
   },
   actions: {
     flexDirection: 'row',
     gap: Spacing.sm,
   },
-  actionButton: {
-    width: 44,
-    height: 44,
+  grade: {
+    color: Colors.textSecondary,
+    fontFamily: nunitoFamily('400'),
+    fontSize: Typography.scale.caption.size,
+    lineHeight: Typography.scale.caption.lineHeight,
+    marginTop: 2,
+  },
+  info: {
+    flex: 1,
+  },
+  name: {
+    color: Colors.textPrimary,
+    fontFamily: nunitoFamily('700'),
+    fontSize: Typography.scale.bodyStrong.size,
+    lineHeight: Typography.scale.bodyStrong.lineHeight,
+  },
+  nameActive: {
+    color: Colors.brandPrimary,
+  },
+  row: {
     alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: Colors.surface,
+    borderColor: Colors.borderSubtle,
+    borderRadius: Radii.md,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: Spacing.md,
+    padding: Spacing.lg,
+  },
+  rowActive: {
+    backgroundColor: Colors.surfaceHighlight,
+    borderColor: Colors.brandPrimary,
   },
 });

@@ -18,6 +18,7 @@ interface ProfileChipProps {
 export function ProfileChip({ profile, onPress, inverted = true }: ProfileChipProps) {
   const textColor = inverted ? Colors.textOnPrimary : Colors.textPrimary;
   const bgColor = inverted ? 'rgba(255,255,255,0.2)' : Colors.surfaceMuted;
+  const gradeDimStyle = { color: textColor, opacity: 0.8 };
 
   return (
     <TouchableOpacity
@@ -26,18 +27,12 @@ export function ProfileChip({ profile, onPress, inverted = true }: ProfileChipPr
       accessibilityLabel={`Perfil activo: ${profile.name}, ${GRADE_SHORT_LABELS[profile.grade]}`}
       accessibilityRole="button"
     >
-      <MaterialCommunityIcons
-        name="account-circle"
-        size={20}
-        color={textColor}
-      />
+      <MaterialCommunityIcons name="account-circle" size={20} color={textColor} />
       <View style={styles.textContainer}>
         <Text style={[styles.name, { color: textColor }]} numberOfLines={1}>
           {profile.name}
         </Text>
-        <Text style={[styles.grade, { color: textColor, opacity: 0.8 }]}>
-          {GRADE_SHORT_LABELS[profile.grade]}
-        </Text>
+        <Text style={[styles.grade, gradeDimStyle]}>{GRADE_SHORT_LABELS[profile.grade]}</Text>
       </View>
       <MaterialCommunityIcons name="chevron-down" size={14} color={textColor} />
     </TouchableOpacity>
@@ -46,25 +41,25 @@ export function ProfileChip({ profile, onPress, inverted = true }: ProfileChipPr
 
 const styles = StyleSheet.create({
   chip: {
-    flexDirection: 'row',
     alignItems: 'center',
+    borderRadius: Radii.full,
+    flexDirection: 'row',
     gap: Spacing.xs,
+    maxWidth: 140,
     paddingHorizontal: Spacing.sm,
     paddingVertical: Spacing.xs,
-    borderRadius: Radii.full,
-    maxWidth: 140,
+  },
+  grade: {
+    fontFamily: nunitoFamily('400'),
+    fontSize: 11,
+    lineHeight: 14,
+  },
+  name: {
+    fontFamily: nunitoFamily('700'),
+    fontSize: 13,
+    lineHeight: 16,
   },
   textContainer: {
     flex: 1,
-  },
-  name: {
-    fontSize: 13,
-    fontFamily: nunitoFamily('700'),
-    lineHeight: 16,
-  },
-  grade: {
-    fontSize: 11,
-    fontFamily: nunitoFamily('400'),
-    lineHeight: 14,
   },
 });

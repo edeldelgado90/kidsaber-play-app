@@ -33,9 +33,7 @@ export function PetScreen() {
             color={Colors.brandPrimary}
           />
           <Text style={styles.title}>{'¡Próximamente!'}</Text>
-          <Text style={styles.subtitle}>
-            {'Gana estrellas para desbloquear tu mascota.'}
-          </Text>
+          <Text style={styles.subtitle}>{'Gana estrellas para desbloquear tu mascota.'}</Text>
         </View>
       </SunBackground>
     </View>
@@ -43,30 +41,30 @@ export function PetScreen() {
 }
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: Colors.brandPrimary,
-  },
   content: {
-    flex: 1,
     alignItems: 'center',
+    flex: 1,
+    gap: Spacing.lg,
     justifyContent: 'center',
     padding: Spacing['2xl'],
-    gap: Spacing.lg,
     zIndex: 1,
   },
-  title: {
-    fontSize: Typography.scale.h2.size,
-    fontFamily: nunitoFamily('800'),
-    color: Colors.textPrimary,
-    textAlign: 'center',
-    lineHeight: Typography.scale.h2.lineHeight,
+  root: {
+    backgroundColor: Colors.brandPrimary,
+    flex: 1,
   },
   subtitle: {
-    fontSize: Typography.scale.body.size,
-    fontFamily: nunitoFamily('400'),
     color: Colors.textSecondary,
-    textAlign: 'center',
+    fontFamily: nunitoFamily('400'),
+    fontSize: Typography.scale.body.size,
     lineHeight: Typography.scale.body.lineHeight,
+    textAlign: 'center',
+  },
+  title: {
+    color: Colors.textPrimary,
+    fontFamily: nunitoFamily('800'),
+    fontSize: Typography.scale.h2.size,
+    lineHeight: Typography.scale.h2.lineHeight,
+    textAlign: 'center',
   },
 });

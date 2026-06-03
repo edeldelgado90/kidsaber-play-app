@@ -1,4 +1,7 @@
-import { type IQuestionsService, type FetchQuestionsParams } from '../../domain/ports/IQuestionsService';
+import {
+  type IQuestionsService,
+  type FetchQuestionsParams,
+} from '../../domain/ports/IQuestionsService';
 import { type ITokenProvider } from '../../domain/ports/ITokenProvider';
 import { type Question } from '../../domain/entities/Question';
 import { fetchQuestionsFromApi } from '../api/questionsApi';
