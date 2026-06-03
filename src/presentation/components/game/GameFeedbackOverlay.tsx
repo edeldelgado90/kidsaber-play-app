@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, View, Text, StyleSheet } from 'react-native';
+import { Animated, Text, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colors, Spacing, Typography, Motion } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
@@ -26,25 +26,25 @@ export function GameFeedbackOverlay({
   const duration = isCorrect ? 1100 : 1600;
 
   useEffect(() => {
-    if (visible) {
-      // Fade in
+    if (!visible) return;
+
+    // Fade in
+    Animated.timing(opacity, {
+      toValue: 0.95,
+      duration: Motion.durationFast,
+      useNativeDriver: true,
+    }).start();
+
+    // Auto-hide after duration
+    const timer = setTimeout(() => {
       Animated.timing(opacity, {
-        toValue: 0.95,
+        toValue: 0,
         duration: Motion.durationFast,
         useNativeDriver: true,
-      }).start();
+      }).start(() => onHide());
+    }, duration - Motion.durationFast);
 
-      // Auto-hide after duration
-      const timer = setTimeout(() => {
-        Animated.timing(opacity, {
-          toValue: 0,
-          duration: Motion.durationFast,
-          useNativeDriver: true,
-        }).start(() => onHide());
-      }, duration - Motion.durationFast);
-
-      return () => clearTimeout(timer);
-    }
+    return () => clearTimeout(timer);
   }, [visible, isCorrect, duration, opacity, onHide]);
 
   if (!visible) return null;

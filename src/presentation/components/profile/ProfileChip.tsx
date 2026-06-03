@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { type Profile, GRADE_SHORT_LABELS } from '@/domain/entities/Profile';
-import { Colors, Spacing, Radii, Typography } from '@/presentation/theme/tokens';
+import { Colors, Spacing, Radii } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
 
 interface ProfileChipProps {

@@ -27,19 +27,15 @@ export function FillBlankStatement({
 
   return (
     <View style={styles.container}>
-      {/* Statement with blank slot */}
+      {/* Statement with inline blank slot */}
       <View style={styles.statementContainer}>
         <Text style={styles.statementText}>
           {parts[0]}
-          <View style={styles.blankSlot}>
-            {selectedId ? (
-              <Text style={styles.blankFilled}>
-                {options.find(o => o.id === selectedId)?.text ?? '___'}
-              </Text>
-            ) : (
-              <Text style={styles.blankPlaceholder}>{'___'}</Text>
-            )}
-          </View>
+          <Text style={selectedId ? styles.blankFilled : styles.blankPlaceholder}>
+            {selectedId
+              ? ` ${options.find(o => o.id === selectedId)?.text ?? '___'} `
+              : ' _______ '}
+          </Text>
           {parts[1] ?? ''}
         </Text>
       </View>
@@ -84,21 +80,17 @@ const styles = StyleSheet.create({
     lineHeight: Typography.scale.h2.lineHeight,
     flexWrap: 'wrap',
   },
-  blankSlot: {
-    borderBottomWidth: 2,
-    borderColor: Colors.brandPrimary,
-    minWidth: 80,
-    display: 'flex',
-  },
   blankFilled: {
-    fontSize: Typography.scale.h2.size,
     fontFamily: nunitoFamily('800'),
     color: Colors.brandPrimary,
+    textDecorationLine: 'underline',
+    textDecorationColor: Colors.brandPrimary,
   },
   blankPlaceholder: {
-    fontSize: Typography.scale.h2.size,
     fontFamily: nunitoFamily('700'),
     color: Colors.textDisabled,
+    textDecorationLine: 'underline',
+    textDecorationColor: Colors.borderSubtle,
   },
   optionsGrid: {
     flexDirection: 'row',

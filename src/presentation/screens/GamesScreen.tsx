@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, Platform } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, Platform } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useProfileStore } from '@/infrastructure/store/profileStore';
 import { useProgressStore } from '@/infrastructure/store/progressStore';
 import {
   type Subject,
   type GameType,
-  GAME_TYPES_ORDER,
+  SUBJECT_GAME_TYPES,
   SUBJECT_META,
 } from '@/domain/entities/Question';
 import { SunBackground } from '@/presentation/components/common/SunBackground';
@@ -32,7 +32,6 @@ export function GamesScreen() {
   const subject = subjectParam as Subject;
 
   const activeProfileId = useProfileStore(s => s.activeProfileId);
-  const getActiveProfile = useProfileStore(s => s.getActiveProfile);
   const getStarsForSubject = useProgressStore(s => s.getStarsForSubject);
   const getStarsForGameType = (gameType: GameType) => {
     const p = useProgressStore.getState();
@@ -40,7 +39,6 @@ export function GamesScreen() {
     return p.getProfileProgress(activeProfileId).starsByGameType?.[gameType] ?? 0;
   };
 
-  const activeProfile = getActiveProfile();
   const subjectMeta = SUBJECT_META[subject];
   const subjectStars = activeProfileId ? getStarsForSubject(activeProfileId, subject) : 0;
 
@@ -93,7 +91,7 @@ export function GamesScreen() {
 
           {/* Game type cards */}
           <View style={styles.gameList}>
-            {GAME_TYPES_ORDER.map(gameType => (
+            {SUBJECT_GAME_TYPES[subject].map(gameType => (
               <GameTypeCard
                 key={gameType}
                 gameType={gameType}

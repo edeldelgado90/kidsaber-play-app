@@ -28,6 +28,7 @@ interface SessionStoreActions {
     grade: number,
   ) => Promise<void>;
   submitAnswer: (userAnswer: unknown) => boolean;
+  advanceQuestion: () => void;
   finishSession: (profileId: string) => Promise<void>;
   resetSession: () => void;
   getCurrentQuestion: () => Question | null;
@@ -79,35 +80,25 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
     if (!question) return false;
 
     const isCorrect = validateAnswer(question, userAnswer);
-
-    const newAnswer: GameSessionAnswer = {
-      questionId: question.id,
-      isCorrect,
-    };
-
-    const newAnswers = [...answers, newAnswer];
-    const isLastQuestion = currentIndex >= questions.length - 1;
-
-    if (isLastQuestion) {
-      const correctCount = countCorrectAnswers(newAnswers);
-      const starEarned = calculateStarEarned(correctCount, newAnswers.length);
-      set({
-        answers: newAnswers,
-        status: 'finished',
-        starEarned,
-      });
-    } else {
-      set({
-        answers: newAnswers,
-        currentIndex: currentIndex + 1,
-      });
-    }
-
+    set({ answers: [...answers, { questionId: question.id, isCorrect }] });
     return isCorrect;
   },
 
+  advanceQuestion: () => {
+    const { questions, currentIndex, answers } = get();
+    const isLastQuestion = currentIndex >= questions.length - 1;
+
+    if (isLastQuestion) {
+      const correctCount = countCorrectAnswers(answers);
+      const starEarned = calculateStarEarned(correctCount, answers.length);
+      set({ status: 'finished', starEarned });
+    } else {
+      set({ currentIndex: currentIndex + 1 });
+    }
+  },
+
   finishSession: async (profileId: string) => {
-    const { subject, gameType, answers, starEarned } = get();
+    const { subject, gameType, starEarned } = get();
     if (!subject || !gameType) return;
 
     await saveSessionResult(progressRepository, {

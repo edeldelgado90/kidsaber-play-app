@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from 'react';
 import { Animated, Text, StyleSheet } from 'react-native';
-import { Colors, Motion } from '@/presentation/theme/tokens';
 
 interface StarBadgeProps {
   earned: boolean;

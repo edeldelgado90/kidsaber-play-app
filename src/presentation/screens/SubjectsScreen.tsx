@@ -24,7 +24,7 @@ const CAPYBARA_MATE = require('../../../assets/brand/capybara-mate.png');
  * - Greeting card + subject list (4 cards) + total stars card
  */
 export function SubjectsScreen() {
-  const { getActiveProfile, profiles } = useProfileStore();
+  const { getActiveProfile } = useProfileStore();
   const getStarsForSubject = useProgressStore(s => s.getStarsForSubject);
   const getTotalStars = useProgressStore(s => s.getTotalStars);
 

@@ -6,7 +6,6 @@ import { nunitoFamily } from '@/presentation/theme/fonts';
 export type OptionState = 'idle' | 'selected' | 'correct' | 'incorrect' | 'disabled';
 
 interface OptionCardProps {
-  optionId: string;
   label: string; // "A", "B", "C", "D"
   text: string;
   state: OptionState;
@@ -23,7 +22,7 @@ interface OptionCardProps {
  * - incorrect: error-surface background, error 2px border + shake animation
  * - disabled: opacity 0.6
  */
-export function OptionCard({ optionId, label, text, state, onPress }: OptionCardProps) {
+export function OptionCard({ label, text, state, onPress }: OptionCardProps) {
   const shakeAnim = useRef(new Animated.Value(0)).current;
 
   // Shake animation on incorrect answer

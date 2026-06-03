@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
   },
   itemText: {
     flex: 1,
-    fontSize: Typography.scale.caption.size + 2,
+    fontSize: Typography.scale.body.size,
     fontFamily: nunitoFamily('600'),
     color: Colors.textPrimary,
   },

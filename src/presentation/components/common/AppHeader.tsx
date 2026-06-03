@@ -97,7 +97,7 @@ export function AppHeader({
                 accessibilityRole="button"
                 hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               >
-                <MaterialCommunityIcons name="home-outline" size={24} color={iconColor} />
+                <MaterialCommunityIcons name="paw" size={24} color={iconColor} />
               </TouchableOpacity>
             )}
           </>

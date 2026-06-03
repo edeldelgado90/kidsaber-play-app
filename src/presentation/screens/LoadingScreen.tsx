@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, Animated } from 'react-native';
 import { router } from 'expo-router';
 import { useProfileStore } from '@/infrastructure/store/profileStore';
 import { useProgressStore } from '@/infrastructure/store/progressStore';
-import { Colors, Typography, Motion } from '@/presentation/theme/tokens';
+import { Colors } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
 import { useContentWidth } from '@/infrastructure/platform/useBreakpoint';
 
@@ -23,7 +23,6 @@ const MIN_SPLASH_DURATION = 1800;
 export function LoadingScreen() {
   const loadProfiles = useProfileStore(s => s.loadProfiles);
   const loadProgress = useProgressStore(s => s.loadProgress);
-  const profiles = useProfileStore(s => s.profiles);
 
   const contentWidth = useContentWidth();
   const logoSize = Math.min(160, Math.round(contentWidth * 0.42));

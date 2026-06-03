@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, Image } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import { useProfileStore } from '@/infrastructure/store/profileStore';
 import { useProgressStore } from '@/infrastructure/store/progressStore';
@@ -41,10 +41,25 @@ export function EvolutionScreen() {
   const capybaraHeight = Math.round(capybaraWidth * (180 / 260));
 
   const handleBack = () => router.back();
+  const handleHome = () => router.replace('/(main)/subjects');
 
   return (
     <View style={styles.root}>
-      <AppHeader title="Mi progreso" onBack={handleBack} />
+      <AppHeader
+        title="Mi progreso"
+        onBack={handleBack}
+        rightSlot={
+          <TouchableOpacity
+            onPress={handleHome}
+            style={styles.homeButton}
+            accessibilityLabel="Ir a inicio"
+            accessibilityRole="button"
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            <MaterialCommunityIcons name="home-outline" size={24} color={Colors.textOnPrimary} />
+          </TouchableOpacity>
+        }
+      />
 
       <SunBackground>
         {/* Capybara muscle bottom-right */}
@@ -90,6 +105,7 @@ export function EvolutionScreen() {
                   stars={
                     activeProfileId ? getStarsForSubject(activeProfileId, subject) : 0
                   }
+                  onPress={() => router.push(`/(main)/games/${subject}`)}
                 />
                 {index < SUBJECTS_ORDER.length - 1 && (
                   <View style={styles.divider} />
@@ -117,6 +133,12 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: Colors.brandPrimary,
+  },
+  homeButton: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   capybara: {
     position: 'absolute',

@@ -1,24 +1,32 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { type Subject, SUBJECT_META } from '@/domain/entities/Question';
-import { Colors, Spacing, Radii, Typography } from '@/presentation/theme/tokens';
+import { Colors, Spacing, Typography } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
 
 interface SubjectProgressRowProps {
   subject: Subject;
   stars: number;
   maxStars?: number;
+  onPress?: () => void;
 }
 
 /**
  * A single row in the Evolution screen showing stars per subject.
  */
-export function SubjectProgressRow({ subject, stars, maxStars = 5 }: SubjectProgressRowProps) {
+export function SubjectProgressRow({ subject, stars, maxStars = 5, onPress }: SubjectProgressRowProps) {
   const meta = SUBJECT_META[subject];
   const displayStars = Math.min(stars, 99); // cap display
 
   return (
-    <View style={styles.row}>
+    <Pressable
+      style={({ pressed }) => [styles.row, pressed && onPress && styles.rowPressed]}
+      onPress={onPress}
+      disabled={!onPress}
+      accessibilityRole={onPress ? 'button' : 'none'}
+      accessibilityLabel={onPress ? `Jugar ${meta.label}` : undefined}
+    >
       {/* Subject icon circle */}
       <View style={[styles.iconCircle, { backgroundColor: meta.pastel }]}>
         <Text style={styles.emoji} accessibilityElementsHidden>
@@ -40,7 +48,17 @@ export function SubjectProgressRow({ subject, stars, maxStars = 5 }: SubjectProg
 
       {/* Star count */}
       <Text style={styles.count}>{displayStars}</Text>
-    </View>
+
+      {/* Navigation affordance */}
+      {onPress && (
+        <MaterialCommunityIcons
+          name="chevron-right"
+          size={22}
+          color={Colors.textSecondary}
+          style={styles.chevron}
+        />
+      )}
+    </Pressable>
   );
 }
 
@@ -50,6 +68,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: Spacing.lg,
     gap: Spacing.md,
+  },
+  rowPressed: {
+    backgroundColor: Colors.borderSubtle,
+  },
+  chevron: {
+    flexShrink: 0,
   },
   iconCircle: {
     width: 36,
