@@ -1,4 +1,8 @@
-import { type Progress, type ProfileProgress, createEmptyProfileProgress } from '../../entities/Progress';
+import {
+  type Progress,
+  type ProfileProgress,
+  createEmptyProfileProgress,
+} from '../../entities/Progress';
 import { type IProgressRepository } from '../../ports/IProgressRepository';
 
 /**

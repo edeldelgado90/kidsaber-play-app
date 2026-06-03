@@ -36,12 +36,7 @@ export function SubjectCard({ subject, stars, onPress }: SubjectCardProps) {
       <View style={[styles.accentStripe, { backgroundColor: meta.accent }]} />
 
       {/* Icon block with asymmetric border radius */}
-      <View
-        style={[
-          styles.iconBlock,
-          { backgroundColor: meta.pastel },
-        ]}
-      >
+      <View style={[styles.iconBlock, { backgroundColor: meta.pastel }]}>
         <Text style={styles.emoji} accessibilityElementsHidden>
           {meta.emoji}
         </Text>
@@ -50,7 +45,9 @@ export function SubjectCard({ subject, stars, onPress }: SubjectCardProps) {
       {/* Text content */}
       <View style={styles.textContent}>
         <Text style={styles.label}>{meta.label}</Text>
-        <Text style={styles.stars}>{'⭐'.repeat(Math.min(stars, 5))} {stars > 0 ? `${stars}` : 'Sin estrellas'}</Text>
+        <Text style={styles.stars}>
+          {'⭐'.repeat(Math.min(stars, 5))} {stars > 0 ? `${stars}` : 'Sin estrellas'}
+        </Text>
       </View>
 
       {/* Chevron */}
@@ -59,7 +56,7 @@ export function SubjectCard({ subject, stars, onPress }: SubjectCardProps) {
           name="chevron-right"
           size={24}
           color={meta.accent}
-          style={{ opacity: 0.85 }}
+          style={styles.chevronIcon}
         />
       </View>
     </TouchableOpacity>
@@ -67,15 +64,19 @@ export function SubjectCard({ subject, stars, onPress }: SubjectCardProps) {
 }
 
 const styles = StyleSheet.create({
+  accentStripe: {
+    flexShrink: 0,
+    width: 5,
+  },
   card: {
-    flexDirection: 'row',
     alignItems: 'stretch',
-    minHeight: 88,
-    borderRadius: Radii.md,
     backgroundColor: Colors.surface,
-    overflow: 'hidden',
-    borderWidth: 1,
     borderColor: Colors.borderSubtle,
+    borderRadius: Radii.md,
+    borderWidth: 1,
+    flexDirection: 'row',
+    minHeight: 88,
+    overflow: 'hidden',
     ...Platform.select({
       ios: {
         ...Elevation.card,
@@ -88,47 +89,46 @@ const styles = StyleSheet.create({
       } as Record<string, unknown>,
     }),
   },
-  accentStripe: {
-    width: 5,
-    flexShrink: 0,
-  },
-  iconBlock: {
-    width: 70,
+  chevronContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    flexShrink: 0,
-    // Asymmetric border radius: organic right edge
-    // CSS equivalent: borderRadius '0 65% 45% 0 / 0 55% 80% 0'
-    // In RN: approximate with per-corner radii
-    borderTopRightRadius: 45,
-    borderBottomRightRadius: 56,
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
+    paddingRight: 14,
+  },
+  chevronIcon: {
+    opacity: 0.85,
   },
   emoji: {
     fontSize: 32,
     lineHeight: 40,
   },
-  textContent: {
-    flex: 1,
-    paddingLeft: Spacing.sm,
+  iconBlock: {
+    alignItems: 'center',
+    // Asymmetric border radius: organic right edge
+    // CSS equivalent: borderRadius '0 65% 45% 0 / 0 55% 80% 0'
+    // In RN: approximate with per-corner radii
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 56,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 45,
+    flexShrink: 0,
     justifyContent: 'center',
-    gap: 2,
+    width: 70,
   },
   label: {
-    fontSize: Typography.scale.h3.size,
-    fontFamily: nunitoFamily('800'),
     color: Colors.textPrimary,
+    fontFamily: nunitoFamily('800'),
+    fontSize: Typography.scale.h3.size,
     lineHeight: Typography.scale.h3.lineHeight,
   },
   stars: {
-    fontSize: 12,
-    fontFamily: nunitoFamily('400'),
     color: Colors.textSecondary,
+    fontFamily: nunitoFamily('400'),
+    fontSize: 12,
   },
-  chevronContainer: {
-    paddingRight: 14,
-    alignItems: 'center',
+  textContent: {
+    flex: 1,
+    gap: 2,
     justifyContent: 'center',
+    paddingLeft: Spacing.sm,
   },
 });

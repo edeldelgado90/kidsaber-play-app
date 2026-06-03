@@ -36,21 +36,17 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   return Promise.race([
     promise,
     new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new NetworkError('La solicitud tardó demasiado. Comprueba tu red.')), ms),
+      setTimeout(
+        () => reject(new NetworkError('La solicitud tardó demasiado. Comprueba tu red.')),
+        ms,
+      ),
     ),
   ]);
 }
 
-async function fetchWithRetry(
-  url: string,
-  options: RequestInit,
-  retries = 2,
-): Promise<Response> {
+async function fetchWithRetry(url: string, options: RequestInit, retries = 2): Promise<Response> {
   try {
-    const response = await withTimeout(
-      fetch(url, options),
-      REQUEST_TIMEOUT_MS,
-    );
+    const response = await withTimeout(fetch(url, options), REQUEST_TIMEOUT_MS);
 
     // 429 Too Many Requests — retry with a longer delay (rate limit backoff)
     if (response.status === 429 && retries > 0) {
@@ -131,10 +127,7 @@ async function throwApiError(response: Response): Promise<never> {
  * Validates the response status before returning.
  * On error responses, tries to extract a human-readable message from the API error body.
  */
-export async function httpGet<T>(
-  url: string,
-  options?: HttpRequestOptions,
-): Promise<T> {
+export async function httpGet<T>(url: string, options?: HttpRequestOptions): Promise<T> {
   const response = await fetchWithRetry(url, {
     method: 'GET',
     headers: {

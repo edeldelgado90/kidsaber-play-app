@@ -23,8 +23,7 @@ export function useProgress(activeProfileId: string | null) {
 
   return {
     profileProgress: store.getProfileProgress(activeProfileId),
-    getStarsForSubject: (subject: Subject) =>
-      store.getStarsForSubject(activeProfileId, subject),
+    getStarsForSubject: (subject: Subject) => store.getStarsForSubject(activeProfileId, subject),
     getTotalStars: () => store.getTotalStars(activeProfileId),
     isLoading: store.isLoading,
   };

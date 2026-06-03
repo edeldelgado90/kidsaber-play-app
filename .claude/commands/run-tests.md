@@ -7,6 +7,7 @@ cd /Users/edelgado/Projects/kidsaber-play-app && npm run test -- --coverage --ve
 ```
 
 After running, report:
+
 - Number of test suites and tests that passed / failed
 - Overall coverage percentages (statements, branches, functions, lines)
 - Any failing tests with their error messages

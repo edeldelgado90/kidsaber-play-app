@@ -31,16 +31,20 @@ const makeOkResponse = (body: unknown): Response =>
     ok: true,
     status: 200,
     json: async () => body,
-    clone: function () { return this; },
-  } as unknown as Response);
+    clone: function () {
+      return this;
+    },
+  }) as unknown as Response;
 
 const makeErrorResponse = (status: number): Response =>
   ({
     ok: false,
     status,
     json: async () => ({}),
-    clone: function () { return this; },
-  } as unknown as Response);
+    clone: function () {
+      return this;
+    },
+  }) as unknown as Response;
 
 describe('QuestionsApiService', () => {
   const BASE_URL = 'http://localhost:8080';
@@ -92,7 +96,11 @@ describe('QuestionsApiService', () => {
     const tokenProvider: ITokenProvider = { getToken: async () => 'test-jwt-token' };
     const serviceWithToken = new QuestionsApiService(BASE_URL, tokenProvider);
 
-    await serviceWithToken.fetchQuestions({ subject: 'mathematics', grade: 3, type: 'option_multiple' });
+    await serviceWithToken.fetchQuestions({
+      subject: 'mathematics',
+      grade: 3,
+      type: 'option_multiple',
+    });
 
     const calledOptions = mockFetch.mock.calls[0][1] as RequestInit;
     expect((calledOptions.headers as Record<string, string>)['Authorization']).toBe(
@@ -107,7 +115,11 @@ describe('QuestionsApiService', () => {
     const tokenProvider: ITokenProvider = { getToken: async () => null };
     const serviceWithNoToken = new QuestionsApiService(BASE_URL, tokenProvider);
 
-    await serviceWithNoToken.fetchQuestions({ subject: 'mathematics', grade: 3, type: 'option_multiple' });
+    await serviceWithNoToken.fetchQuestions({
+      subject: 'mathematics',
+      grade: 3,
+      type: 'option_multiple',
+    });
 
     const calledOptions = mockFetch.mock.calls[0][1] as RequestInit;
     expect((calledOptions.headers as Record<string, string>)['Authorization']).toBeUndefined();

@@ -4,10 +4,7 @@ import { type IProfileRepository } from '../../ports/IProfileRepository';
  * Deletes a child profile.
  * Restriction: at least one profile must always exist.
  */
-export async function deleteProfile(
-  repository: IProfileRepository,
-  id: string,
-): Promise<void> {
+export async function deleteProfile(repository: IProfileRepository, id: string): Promise<void> {
   const all = await repository.getAll();
 
   if (all.length <= 1) {

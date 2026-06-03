@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Text, Image, StyleSheet, Animated } from 'react-native';
 import { router } from 'expo-router';
-import { ProgressBar } from 'react-native-paper';
 import { useProfileStore } from '@/infrastructure/store/profileStore';
 import { useProgressStore } from '@/infrastructure/store/progressStore';
-import { Colors, Typography, Motion } from '@/presentation/theme/tokens';
+import { Colors } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
+import { useContentWidth } from '@/infrastructure/platform/useBreakpoint';
 
-const LOGO = require('../../../assets/brand/logo-full.png');
+import LOGO from '../../../assets/brand/logo-full.png';
 const MIN_SPLASH_DURATION = 1800;
 
 /**
@@ -23,7 +23,9 @@ const MIN_SPLASH_DURATION = 1800;
 export function LoadingScreen() {
   const loadProfiles = useProfileStore(s => s.loadProfiles);
   const loadProgress = useProgressStore(s => s.loadProgress);
-  const profiles = useProfileStore(s => s.profiles);
+
+  const contentWidth = useContentWidth();
+  const logoSize = Math.min(160, Math.round(contentWidth * 0.42));
 
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const progressAnim = useRef(new Animated.Value(0)).current;
@@ -89,7 +91,7 @@ export function LoadingScreen() {
       <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
         <Image
           source={LOGO}
-          style={styles.logo}
+          style={[styles.logo, { width: logoSize, height: logoSize }]}
           resizeMode="contain"
           accessibilityLabel="KidSaber Play"
         />
@@ -115,38 +117,36 @@ export function LoadingScreen() {
 }
 
 const styles = StyleSheet.create({
+  appName: {
+    color: Colors.textOnPrimary,
+    fontFamily: nunitoFamily('800'),
+    fontSize: 28,
+    letterSpacing: -0.28,
+  },
   container: {
-    flex: 1,
-    backgroundColor: Colors.brandPrimary,
     alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: Colors.brandPrimary,
+    flex: 1,
     gap: 24,
+    justifyContent: 'center',
   },
   logo: {
-    width: 160,
-    height: 160,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.25,
     shadowRadius: 24,
   },
-  appName: {
-    fontSize: 28,
-    fontFamily: nunitoFamily('800'),
-    color: Colors.textOnPrimary,
-    letterSpacing: -0.28,
-  },
-  progressContainer: {
-    width: 200,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: 'rgba(255,255,255,0.3)',
-    overflow: 'hidden',
-    marginTop: 8,
-  },
   progressBar: {
-    height: 6,
     backgroundColor: Colors.brandSecondary,
     borderRadius: 3,
+    height: 6,
+  },
+  progressContainer: {
+    backgroundColor: 'rgba(255,255,255,0.3)',
+    borderRadius: 3,
+    height: 6,
+    marginTop: 8,
+    overflow: 'hidden',
+    width: 200,
   },
 });

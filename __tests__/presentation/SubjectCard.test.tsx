@@ -21,17 +21,13 @@ describe('SubjectCard', () => {
   });
 
   it('renders star count', () => {
-    const { getByText } = render(
-      <SubjectCard subject="language" stars={2} onPress={() => {}} />,
-    );
+    const { getByText } = render(<SubjectCard subject="language" stars={2} onPress={() => {}} />);
     expect(getByText(/2/)).toBeTruthy();
   });
 
   it('calls onPress when tapped', () => {
     const onPress = jest.fn();
-    const { getByRole } = render(
-      <SubjectCard subject="science" stars={0} onPress={onPress} />,
-    );
+    const { getByRole } = render(<SubjectCard subject="science" stars={0} onPress={onPress} />);
     fireEvent.press(getByRole('button'));
     expect(onPress).toHaveBeenCalledTimes(1);
   });

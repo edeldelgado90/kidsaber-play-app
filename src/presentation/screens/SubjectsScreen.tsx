@@ -10,8 +10,9 @@ import { SubjectCard } from '@/presentation/components/subject/SubjectCard';
 import { ProfileChip } from '@/presentation/components/profile/ProfileChip';
 import { Colors, Spacing, Radii, Typography } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
+import { useContentWidth, useHorizontalPadding } from '@/infrastructure/platform/useBreakpoint';
 
-const CAPYBARA_MATE = require('../../../assets/brand/capybara-mate.png');
+import CAPYBARA_MATE from '../../../assets/brand/capybara-mate.png';
 
 /**
  * Home / Subject Selection screen.
@@ -23,9 +24,14 @@ const CAPYBARA_MATE = require('../../../assets/brand/capybara-mate.png');
  * - Greeting card + subject list (4 cards) + total stars card
  */
 export function SubjectsScreen() {
-  const { getActiveProfile, profiles } = useProfileStore();
+  const { getActiveProfile } = useProfileStore();
   const getStarsForSubject = useProgressStore(s => s.getStarsForSubject);
   const getTotalStars = useProgressStore(s => s.getTotalStars);
+
+  const hPad = useHorizontalPadding();
+  const contentWidth = useContentWidth();
+  const capybaraWidth = Math.min(320, Math.round(contentWidth * 0.82));
+  const capybaraHeight = Math.round(capybaraWidth * (220 / 320));
 
   const activeProfile = getActiveProfile();
   const activeProfileId = useProfileStore(s => s.activeProfileId);
@@ -63,18 +69,9 @@ export function SubjectsScreen() {
       />
 
       <SunBackground>
-        {/* Capybara (behind content, z-index 0) */}
-        <Image
-          source={CAPYBARA_MATE}
-          style={styles.capybara}
-          resizeMode="contain"
-          accessibilityElementsHidden
-          importantForAccessibility="no"
-        />
-
         <ScrollView
           style={styles.scroll}
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[styles.scrollContent, { paddingHorizontal: hPad }]}
           showsVerticalScrollIndicator={false}
         >
           {/* Greeting card */}
@@ -82,9 +79,7 @@ export function SubjectsScreen() {
             <Text style={styles.greetingTitle}>
               {`Hola, ${activeProfile?.name ?? 'amigo/a'} 👋`}
             </Text>
-            <Text style={styles.greetingSubtitle}>
-              {'¿Qué asignatura practicamos hoy?'}
-            </Text>
+            <Text style={styles.greetingSubtitle}>{'¿Qué asignatura practicamos hoy?'}</Text>
           </View>
 
           {/* Subject cards */}
@@ -119,117 +114,129 @@ export function SubjectsScreen() {
           </View>
 
           {/* Bottom padding for capybara */}
-          <View style={{ height: 60 }} />
+          <View style={styles.spacer} />
         </ScrollView>
+
+        {/* Capybara (above content, z-index 10) */}
+        <View pointerEvents="none" style={StyleSheet.absoluteFill}>
+          <Image
+            source={CAPYBARA_MATE}
+            style={[styles.capybara, { width: capybaraWidth, height: capybaraHeight }]}
+            resizeMode="contain"
+            accessibilityElementsHidden
+            importantForAccessibility="no"
+          />
+        </View>
       </SunBackground>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: Colors.brandPrimary,
-  },
   capybara: {
-    position: 'absolute',
-    right: -20,
     bottom: -10,
-    width: 320,
-    height: 220,
-    zIndex: 0,
+    position: 'absolute',
+    right: -60,
+    zIndex: 10,
+  },
+  greetingCard: {
+    backgroundColor: Colors.surface,
+    borderColor: '#eaf0f7',
+    borderRadius: Radii.lg,
+    borderWidth: 1,
+    gap: Spacing.xs,
+    padding: Spacing.lg,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#0050b4',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 12,
+      },
+      android: { elevation: 3 },
+      web: { boxShadow: '0 4px 12px rgba(0, 80, 180, 0.10)' } as Record<string, unknown>,
+    }),
+    zIndex: 1,
+  },
+  greetingSubtitle: {
+    color: Colors.textSecondary,
+    fontFamily: nunitoFamily('600'),
+    fontSize: Typography.scale.body.size - 2,
+    lineHeight: 20,
+  },
+  greetingTitle: {
+    color: Colors.textPrimary,
+    fontFamily: nunitoFamily('800'),
+    fontSize: 24,
+    lineHeight: 30,
+  },
+  progressBar: {
+    backgroundColor: Colors.borderSubtle,
+    borderRadius: 4,
+    height: 8,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    backgroundColor: Colors.brandSecondary,
+    borderRadius: 4,
+    height: 8,
+  },
+  root: {
+    backgroundColor: Colors.brandPrimary,
+    flex: 1,
   },
   scroll: {
     flex: 1,
   },
   scrollContent: {
-    padding: Spacing.lg,
     gap: Spacing.md,
     paddingBottom: Spacing['3xl'],
+    paddingVertical: Spacing.lg,
     zIndex: 1,
   },
-  greetingCard: {
-    backgroundColor: Colors.surface,
-    borderRadius: Radii.lg,
-    padding: Spacing.lg,
-    gap: Spacing.xs,
-    borderWidth: 1,
-    borderColor: '#eaf0f7',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#0050b4',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 12,
-      },
-      android: { elevation: 3 },
-      web: { boxShadow: '0 4px 12px rgba(0, 80, 180, 0.10)' } as Record<string, unknown>,
-    }),
-    zIndex: 1,
-  },
-  greetingTitle: {
-    fontSize: 24,
-    fontFamily: nunitoFamily('800'),
-    color: Colors.textPrimary,
-    lineHeight: 30,
-  },
-  greetingSubtitle: {
-    fontSize: Typography.scale.body.size - 2,
-    fontFamily: nunitoFamily('600'),
-    color: Colors.textSecondary,
-    lineHeight: 20,
-  },
-  subjectList: {
-    gap: Spacing.sm,
-    zIndex: 1,
-  },
-  starsCard: {
-    backgroundColor: Colors.surface,
-    borderRadius: Radii.lg,
-    padding: Spacing.lg,
-    gap: Spacing.sm,
-    borderWidth: 1,
-    borderColor: '#eaf0f7',
-    zIndex: 1,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#0050b4',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 12,
-      },
-      android: { elevation: 3 },
-      web: { boxShadow: '0 4px 12px rgba(0, 80, 180, 0.10)' } as Record<string, unknown>,
-    }),
-  },
-  starsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
+  spacer: {
+    height: 60,
   },
   starIcon: {
     fontSize: 20,
   },
+  starsCaption: {
+    color: Colors.textSecondary,
+    fontFamily: nunitoFamily('400'),
+    fontSize: Typography.scale.caption.size,
+  },
+  starsCard: {
+    backgroundColor: Colors.surface,
+    borderColor: '#eaf0f7',
+    borderRadius: Radii.lg,
+    borderWidth: 1,
+    gap: Spacing.sm,
+    padding: Spacing.lg,
+    zIndex: 1,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#0050b4',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 12,
+      },
+      android: { elevation: 3 },
+      web: { boxShadow: '0 4px 12px rgba(0, 80, 180, 0.10)' } as Record<string, unknown>,
+    }),
+  },
   starsLabel: {
-    fontSize: Typography.scale.bodyStrong.size,
-    fontFamily: nunitoFamily('700'),
     color: Colors.textPrimary,
     flex: 1,
+    fontFamily: nunitoFamily('700'),
+    fontSize: Typography.scale.bodyStrong.size,
   },
-  progressBar: {
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.borderSubtle,
-    overflow: 'hidden',
+  starsRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: Spacing.sm,
   },
-  progressFill: {
-    height: 8,
-    backgroundColor: Colors.brandSecondary,
-    borderRadius: 4,
-  },
-  starsCaption: {
-    fontSize: Typography.scale.caption.size,
-    fontFamily: nunitoFamily('400'),
-    color: Colors.textSecondary,
+  subjectList: {
+    gap: Spacing.sm,
+    zIndex: 1,
   },
 });

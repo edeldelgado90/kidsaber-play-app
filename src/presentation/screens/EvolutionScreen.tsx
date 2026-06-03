@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, Image } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import { useProfileStore } from '@/infrastructure/store/profileStore';
 import { useProgressStore } from '@/infrastructure/store/progressStore';
@@ -11,8 +11,9 @@ import { SubjectProgressRow } from '@/presentation/components/evolution/SubjectP
 import { Colors, Spacing, Radii, Typography } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useContentWidth, useHorizontalPadding } from '@/infrastructure/platform/useBreakpoint';
 
-const CAPYBARA_MUSCLE = require('../../../assets/brand/capybara-muscle.png');
+import CAPYBARA_MUSCLE from '../../../assets/brand/capybara-muscle.png';
 
 /**
  * Evolution / Progress screen.
@@ -34,17 +35,37 @@ export function EvolutionScreen() {
   const activeProfile = getActiveProfile();
   const totalStars = activeProfileId ? getTotalStars(activeProfileId) : 0;
 
+  const hPad = useHorizontalPadding();
+  const contentWidth = useContentWidth();
+  const capybaraWidth = Math.min(260, Math.round(contentWidth * 0.67));
+  const capybaraHeight = Math.round(capybaraWidth * (180 / 260));
+
   const handleBack = () => router.back();
+  const handleHome = () => router.replace('/(main)/subjects');
 
   return (
     <View style={styles.root}>
-      <AppHeader title="Mi progreso" onBack={handleBack} />
+      <AppHeader
+        title="Mi progreso"
+        onBack={handleBack}
+        rightSlot={
+          <TouchableOpacity
+            onPress={handleHome}
+            style={styles.homeButton}
+            accessibilityLabel="Ir a inicio"
+            accessibilityRole="button"
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            <MaterialCommunityIcons name="home-outline" size={24} color={Colors.textOnPrimary} />
+          </TouchableOpacity>
+        }
+      />
 
       <SunBackground>
         {/* Capybara muscle bottom-right */}
         <Image
           source={CAPYBARA_MUSCLE}
-          style={styles.capybara}
+          style={[styles.capybara, { width: capybaraWidth, height: capybaraHeight }]}
           resizeMode="contain"
           accessibilityElementsHidden
           importantForAccessibility="no"
@@ -52,22 +73,16 @@ export function EvolutionScreen() {
 
         <ScrollView
           style={styles.scroll}
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[styles.scrollContent, { paddingHorizontal: hPad }]}
           showsVerticalScrollIndicator={false}
         >
           {/* Profile card */}
           {activeProfile && (
             <View style={styles.profileCard}>
-              <MaterialCommunityIcons
-                name="account-circle"
-                size={48}
-                color={Colors.brandPrimary}
-              />
+              <MaterialCommunityIcons name="account-circle" size={48} color={Colors.brandPrimary} />
               <View>
                 <Text style={styles.profileName}>{activeProfile.name}</Text>
-                <Text style={styles.profileGrade}>
-                  {GRADE_LABELS[activeProfile.grade]}
-                </Text>
+                <Text style={styles.profileGrade}>{GRADE_LABELS[activeProfile.grade]}</Text>
               </View>
             </View>
           )}
@@ -81,13 +96,10 @@ export function EvolutionScreen() {
               <View key={subject}>
                 <SubjectProgressRow
                   subject={subject}
-                  stars={
-                    activeProfileId ? getStarsForSubject(activeProfileId, subject) : 0
-                  }
+                  stars={activeProfileId ? getStarsForSubject(activeProfileId, subject) : 0}
+                  onPress={() => router.push(`/(main)/games/${subject}`)}
                 />
-                {index < SUBJECTS_ORDER.length - 1 && (
-                  <View style={styles.divider} />
-                )}
+                {index < SUBJECTS_ORDER.length - 1 && <View style={styles.divider} />}
               </View>
             ))}
           </View>
@@ -100,7 +112,7 @@ export function EvolutionScreen() {
           </View>
 
           {/* Bottom padding for capybara */}
-          <View style={{ height: 80 }} />
+          <View style={styles.spacer} />
         </ScrollView>
       </SunBackground>
     </View>
@@ -108,92 +120,99 @@ export function EvolutionScreen() {
 }
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: Colors.brandPrimary,
-  },
   capybara: {
+    bottom: -8,
     position: 'absolute',
     right: -20,
-    bottom: -8,
-    width: 260,
-    height: 180,
     zIndex: 0,
+  },
+  divider: {
+    backgroundColor: Colors.borderSubtle,
+    height: 1,
+    marginHorizontal: Spacing.lg,
+  },
+  homeButton: {
+    alignItems: 'center',
+    height: 44,
+    justifyContent: 'center',
+    width: 44,
+  },
+  profileCard: {
+    alignItems: 'center',
+    backgroundColor: Colors.surface,
+    borderColor: '#eaf0f7',
+    borderRadius: Radii.lg,
+    borderWidth: 1,
+    elevation: 3,
+    flexDirection: 'row',
+    gap: Spacing.md,
+    padding: Spacing.lg,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    zIndex: 1,
+  },
+  profileGrade: {
+    color: Colors.textSecondary,
+    fontFamily: nunitoFamily('400'),
+    fontSize: Typography.scale.body.size - 2,
+    lineHeight: 20,
+  },
+  profileName: {
+    color: Colors.textPrimary,
+    fontFamily: nunitoFamily('800'),
+    fontSize: Typography.scale.h3.size,
+    lineHeight: 24,
+  },
+  root: {
+    backgroundColor: Colors.brandPrimary,
+    flex: 1,
   },
   scroll: {
     flex: 1,
   },
   scrollContent: {
-    padding: Spacing.lg,
     gap: Spacing.lg,
     paddingBottom: Spacing['3xl'],
+    paddingVertical: Spacing.lg,
     zIndex: 2,
   },
-  profileCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.md,
-    backgroundColor: Colors.surface,
-    borderRadius: Radii.lg,
-    padding: Spacing.lg,
-    borderWidth: 1,
-    borderColor: '#eaf0f7',
-    zIndex: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  profileName: {
-    fontSize: Typography.scale.h3.size,
-    fontFamily: nunitoFamily('800'),
-    color: Colors.textPrimary,
-    lineHeight: 24,
-  },
-  profileGrade: {
-    fontSize: Typography.scale.body.size - 2,
-    fontFamily: nunitoFamily('400'),
-    color: Colors.textSecondary,
-    lineHeight: 20,
-  },
   sectionLabel: {
-    fontSize: 13,
-    fontFamily: nunitoFamily('700'),
     color: Colors.textSecondary,
-    textTransform: 'uppercase',
+    fontFamily: nunitoFamily('700'),
+    fontSize: 13,
     letterSpacing: 0.52,
     paddingHorizontal: Spacing.xs,
+    textTransform: 'uppercase',
+  },
+  spacer: {
+    height: 80,
   },
   subjectCard: {
     backgroundColor: Colors.surface,
+    borderColor: Colors.borderSubtle,
     borderRadius: Radii.lg,
     borderWidth: 1,
-    borderColor: Colors.borderSubtle,
+    elevation: 3,
     overflow: 'hidden',
-    zIndex: 1,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 8,
-    elevation: 3,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: Colors.borderSubtle,
-    marginHorizontal: Spacing.lg,
+    zIndex: 1,
   },
   totalCard: {
+    alignItems: 'center',
     backgroundColor: Colors.brandPrimary,
     borderRadius: Radii.lg,
     padding: Spacing.xl,
-    alignItems: 'center',
     zIndex: 1,
   },
   totalText: {
-    fontSize: Typography.scale.h2.size,
-    fontFamily: nunitoFamily('800'),
     color: Colors.textOnPrimary,
+    fontFamily: nunitoFamily('800'),
+    fontSize: Typography.scale.h2.size,
     lineHeight: Typography.scale.h2.lineHeight,
   },
 });

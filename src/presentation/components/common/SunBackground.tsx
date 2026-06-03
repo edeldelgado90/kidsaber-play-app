@@ -1,8 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
-import Svg, { Circle, Line, Defs, RadialGradient, Stop, Rect } from 'react-native-svg';
-
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+import { View, StyleSheet } from 'react-native';
+import Svg, { Circle, Line } from 'react-native-svg';
 
 /**
  * The "sun + green floor" background pattern.
@@ -52,7 +50,7 @@ function SunSvg() {
   });
 
   return (
-    <Svg width={SCREEN_WIDTH} height={160} viewBox={`0 0 390 160`}>
+    <Svg width="100%" height={160} viewBox="0 0 390 160">
       {/* Outer halo (r=62, 22% opacity) */}
       <Circle cx={cx} cy={cy} r={62} fill="#f5c400" fillOpacity={0.22} />
       {/* Inner halo (r=46, 32% opacity) */}
@@ -72,7 +70,15 @@ function SunSvg() {
         />
       ))}
       {/* Sun body */}
-      <Circle cx={cx} cy={cy} r={32} fill="#f5c400" stroke="#e8b800" strokeWidth={1.5} strokeOpacity={0.5} />
+      <Circle
+        cx={cx}
+        cy={cy}
+        r={32}
+        fill="#f5c400"
+        stroke="#e8b800"
+        strokeWidth={1.5}
+        strokeOpacity={0.5}
+      />
     </Svg>
   );
 }
@@ -82,29 +88,29 @@ const styles = StyleSheet.create({
     flex: 1,
     position: 'relative',
   },
+  content: {
+    flex: 1,
+    zIndex: 1,
+  },
+  floorStrip: {
+    backgroundColor: '#b3d894', // solid approximation of the gradient
+    bottom: 0,
+    height: 50,
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    zIndex: 0,
+  },
   gradientBg: {
     ...StyleSheet.absoluteFillObject,
     // Approximate the radial gradient with a warm off-white/yellow tint
     backgroundColor: '#fffef5',
   },
   sunContainer: {
+    left: 0,
     position: 'absolute',
+    right: 0,
     top: 0,
-    right: 0,
-    left: 0,
-    zIndex: 0,
-  },
-  content: {
-    flex: 1,
-    zIndex: 1,
-  },
-  floorStrip: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 50,
-    backgroundColor: '#b3d894', // solid approximation of the gradient
     zIndex: 0,
   },
 });

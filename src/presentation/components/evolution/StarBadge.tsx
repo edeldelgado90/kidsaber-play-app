@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from 'react';
 import { Animated, Text, StyleSheet } from 'react-native';
-import { Colors, Motion } from '@/presentation/theme/tokens';
 
 interface StarBadgeProps {
   earned: boolean;
@@ -26,17 +25,13 @@ export function StarBadge({ earned, size = 96, animate = false }: StarBadgeProps
     }
   }, [animate, earned, scaleAnim]);
 
+  const animatedStyle = { transform: [{ scale: scaleAnim }] };
+  const textStyle = { fontSize: size, lineHeight: size + 8, opacity: earned ? 1 : 0.3 };
+
   return (
-    <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+    <Animated.View style={animatedStyle}>
       <Text
-        style={[
-          styles.star,
-          {
-            fontSize: size,
-            lineHeight: size + 8,
-            opacity: earned ? 1 : 0.3,
-          },
-        ]}
+        style={[styles.star, textStyle]}
         accessibilityLabel={earned ? 'Estrella ganada' : 'Sin estrella'}
       >
         {'⭐'}

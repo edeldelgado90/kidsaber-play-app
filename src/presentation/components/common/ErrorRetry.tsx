@@ -36,25 +36,25 @@ export function ErrorRetry({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: Spacing.xl,
-    gap: Spacing.lg,
-  },
-  message: {
-    fontSize: Typography.scale.body.size,
-    fontFamily: nunitoFamily('400'),
-    color: Colors.textSecondary,
-    textAlign: 'center',
-    lineHeight: Typography.scale.body.lineHeight,
-  },
   button: {
     marginTop: Spacing.sm,
   },
   buttonLabel: {
     fontFamily: nunitoFamily('700'),
     fontSize: Typography.scale.button.size,
+  },
+  container: {
+    alignItems: 'center',
+    flex: 1,
+    gap: Spacing.lg,
+    justifyContent: 'center',
+    padding: Spacing.xl,
+  },
+  message: {
+    color: Colors.textSecondary,
+    fontFamily: nunitoFamily('400'),
+    fontSize: Typography.scale.body.size,
+    lineHeight: Typography.scale.body.lineHeight,
+    textAlign: 'center',
   },
 });

@@ -40,9 +40,7 @@ export function MatchingColumn({
     if (disabled || !selectedLeft) return;
 
     // Remove any existing pair for this left or right item
-    const cleaned = userAnswers.filter(
-      a => a.leftId !== selectedLeft && a.rightId !== rightId,
-    );
+    const cleaned = userAnswers.filter(a => a.leftId !== selectedLeft && a.rightId !== rightId);
     const newAnswers: MatchingAnswer[] = [...cleaned, { leftId: selectedLeft, rightId }];
     onAnswersChange(newAnswers);
     setSelectedLeft(null);
@@ -126,70 +124,70 @@ export function MatchingColumn({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    gap: Spacing.md,
-    paddingHorizontal: Spacing.lg,
-  },
   column: {
     flex: 1,
     gap: Spacing.sm,
   },
   columnLabel: {
-    fontSize: Typography.scale.caption.size,
-    fontFamily: nunitoFamily('700'),
     color: Colors.textSecondary,
-    textTransform: 'uppercase',
+    fontFamily: nunitoFamily('700'),
+    fontSize: Typography.scale.caption.size,
     letterSpacing: 0.44,
     marginBottom: Spacing.xs,
     textAlign: 'center',
+    textTransform: 'uppercase',
   },
   connector: {
-    width: 2,
+    alignSelf: 'stretch',
     backgroundColor: Colors.borderSubtle,
     marginVertical: 30,
-    alignSelf: 'stretch',
+    width: 2,
+  },
+  container: {
+    flexDirection: 'row',
+    gap: Spacing.md,
+    paddingHorizontal: Spacing.lg,
   },
   item: {
-    flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.xs,
-    padding: Spacing.md,
-    borderRadius: Radii.sm,
     backgroundColor: Colors.surfaceMuted,
-    borderWidth: 1.5,
     borderColor: Colors.borderSubtle,
+    borderRadius: Radii.sm,
+    borderWidth: 1.5,
+    flexDirection: 'row',
+    gap: Spacing.xs,
     minHeight: 44,
-  },
-  itemSelected: {
-    backgroundColor: Colors.surfaceHighlight,
-    borderColor: Colors.brandPrimary,
+    padding: Spacing.md,
   },
   itemMatched: {
     backgroundColor: Colors.successSurface,
     borderColor: Colors.success,
+  },
+  itemSelected: {
+    backgroundColor: Colors.surfaceHighlight,
+    borderColor: Colors.brandPrimary,
   },
   itemTarget: {
     borderColor: Colors.brandPrimary,
     borderStyle: 'dashed',
   },
   itemText: {
-    flex: 1,
-    fontSize: Typography.scale.caption.size + 2,
-    fontFamily: nunitoFamily('600'),
     color: Colors.textPrimary,
+    flex: 1,
+    fontFamily: nunitoFamily('600'),
+    fontSize: Typography.scale.body.size,
   },
   pairBadge: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: Colors.brandPrimary,
     alignItems: 'center',
+    backgroundColor: Colors.brandPrimary,
+    borderRadius: 10,
+    height: 20,
     justifyContent: 'center',
+    width: 20,
   },
   pairBadgeText: {
-    fontSize: 10,
-    fontFamily: nunitoFamily('800'),
     color: 'white',
+    fontFamily: nunitoFamily('800'),
+    fontSize: 10,
   },
 });

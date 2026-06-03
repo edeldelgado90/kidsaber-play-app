@@ -33,14 +33,7 @@ export function SkeletonCard({ height = 88, borderRadius = Radii.md }: SkeletonC
     return () => animation.stop();
   }, [opacity]);
 
-  return (
-    <Animated.View
-      style={[
-        styles.skeleton,
-        { height, borderRadius, opacity },
-      ]}
-    />
-  );
+  return <Animated.View style={[styles.skeleton, { height, borderRadius, opacity }]} />;
 }
 
 export function SkeletonList({ count = 4 }: { count?: number }) {
@@ -54,11 +47,11 @@ export function SkeletonList({ count = 4 }: { count?: number }) {
 }
 
 const styles = StyleSheet.create({
+  list: {
+    gap: Spacing.sm,
+  },
   skeleton: {
     backgroundColor: Colors.borderSubtle,
     width: '100%',
-  },
-  list: {
-    gap: Spacing.sm,
   },
 });

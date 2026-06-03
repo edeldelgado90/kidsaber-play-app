@@ -25,7 +25,9 @@ function mockFetchSuccess(token: string, ttlSeconds = 3600): void {
     ok: true,
     status: 200,
     json: async () => makeTokenResponse(token, ttlSeconds),
-    clone: function () { return this; },
+    clone: function () {
+      return this;
+    },
   } as unknown as Response);
 }
 
@@ -34,7 +36,9 @@ function mockFetchError(status = 404): void {
     ok: false,
     status,
     json: async () => ({ message: 'not found' }),
-    clone: function () { return this; },
+    clone: function () {
+      return this;
+    },
   } as unknown as Response);
 }
 
@@ -68,9 +72,12 @@ describe('DeviceTokenService.getToken()', () => {
 
     await service.getToken();
 
-    expect(mockSetItem).toHaveBeenCalledWith(DEVICE_ID_KEY, expect.stringMatching(
-      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
-    ));
+    expect(mockSetItem).toHaveBeenCalledWith(
+      DEVICE_ID_KEY,
+      expect.stringMatching(
+        /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+      ),
+    );
   });
 
   it('reuses existing deviceId from storage', async () => {
@@ -81,7 +88,9 @@ describe('DeviceTokenService.getToken()', () => {
     await service.getToken();
 
     expect(mockSetItem).not.toHaveBeenCalled();
-    const body = JSON.parse((global.fetch as jest.Mock).mock.calls[0][1].body as string) as { deviceId: string };
+    const body = JSON.parse((global.fetch as jest.Mock).mock.calls[0][1].body as string) as {
+      deviceId: string;
+    };
     expect(body.deviceId).toBe('existing-device-id');
   });
 
@@ -121,18 +130,23 @@ describe('DeviceTokenService.getToken()', () => {
 
   it('re-fetches when the cached token is about to expire', async () => {
     // Set up a single mock that returns different values on consecutive calls
-    const fetchMock = jest.fn()
+    const fetchMock = jest
+      .fn()
       .mockResolvedValueOnce({
         ok: true,
         status: 200,
         json: async () => makeTokenResponse('expiring-token', 30), // expires in 30 s
-        clone: function () { return this; },
+        clone: function () {
+          return this;
+        },
       } as unknown as Response)
       .mockResolvedValueOnce({
         ok: true,
         status: 200,
         json: async () => makeTokenResponse('fresh-token', 3600),
-        clone: function () { return this; },
+        clone: function () {
+          return this;
+        },
       } as unknown as Response);
     global.fetch = fetchMock;
 

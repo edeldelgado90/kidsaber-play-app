@@ -4,16 +4,16 @@ React Native + Expo app for KidSaber Play — an educational game-style experien
 
 ## Tech stack
 
-| Layer | Tech |
-|-------|------|
-| Framework | React Native + Expo ~53 |
-| Navigation | Expo Router ~4 |
-| Language | TypeScript 5 (strict) |
-| State | Zustand ^5 |
-| UI | React Native Paper ^5 (MD3) |
-| Persistence | AsyncStorage (local, no auth) |
-| Font | Nunito via @expo-google-fonts |
-| Icons | @expo/vector-icons (MaterialCommunityIcons) |
+| Layer       | Tech                                        |
+| ----------- | ------------------------------------------- |
+| Framework   | React Native + Expo ~53                     |
+| Navigation  | Expo Router ~4                              |
+| Language    | TypeScript 5 (strict)                       |
+| State       | Zustand ^5                                  |
+| UI          | React Native Paper ^5 (MD3)                 |
+| Persistence | AsyncStorage (local, no auth)               |
+| Font        | Nunito via @expo-google-fonts               |
+| Icons       | @expo/vector-icons (MaterialCommunityIcons) |
 
 ## Getting started
 
@@ -140,6 +140,7 @@ Canonical answer field: **`correctAnswers`** (array).
 - **CD**: EAS Build + EAS Submit — Android AAB to Google Play internal track on `main`
 
 Required GitHub secrets:
+
 - `EXPO_TOKEN` — from expo.dev account settings
 - `EXPO_PUBLIC_API_URL` — questions API base URL
 - `GOOGLE_SERVICE_ACCOUNT_KEY` — Google Play API access JSON

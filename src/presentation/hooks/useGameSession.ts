@@ -23,6 +23,10 @@ export function useGameSession() {
     return session.submitAnswer(userAnswer);
   };
 
+  const advanceQuestion = () => {
+    session.advanceQuestion();
+  };
+
   const finishAndSave = async (profileId: string) => {
     await session.finishSession(profileId);
     // Reload progress so UI reflects the new star immediately
@@ -40,6 +44,7 @@ export function useGameSession() {
     score: session.getScore(),
     startSession,
     submitAnswer,
+    advanceQuestion,
     finishAndSave,
     resetSession: session.resetSession,
   };

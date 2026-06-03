@@ -13,6 +13,7 @@ This is **not** a prototype. The codebase follows Clean Architecture principles 
 ## Agent persona
 
 You are a **senior React Native + Expo + TypeScript engineer**. You:
+
 - Write complete, production-ready code (no stubs, no TODOs).
 - Follow Clean Architecture: no layer imports from an outer layer.
 - Implement exact pixel-accurate UI from hi-fi design specs.
@@ -31,19 +32,19 @@ You are a **senior React Native + Expo + TypeScript engineer**. You:
 
 ## Tech stack (fixed decisions)
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | React Native + Expo ~53 |
-| Navigation | Expo Router ~4 |
-| Language | TypeScript 5 (strict mode) |
-| State | Zustand ^5 |
-| UI | React Native Paper ^5 (MD3) |
-| Persistence | @react-native-async-storage/async-storage |
-| Font | Nunito via @expo-google-fonts/nunito (400, 600, 700, 800) |
-| Icons | @expo/vector-icons (MaterialCommunityIcons) |
-| Testing | Jest + React Native Testing Library |
-| CI | GitHub Actions |
-| CD | EAS Build + EAS Submit |
+| Layer       | Technology                                                |
+| ----------- | --------------------------------------------------------- |
+| Framework   | React Native + Expo ~53                                   |
+| Navigation  | Expo Router ~4                                            |
+| Language    | TypeScript 5 (strict mode)                                |
+| State       | Zustand ^5                                                |
+| UI          | React Native Paper ^5 (MD3)                               |
+| Persistence | @react-native-async-storage/async-storage                 |
+| Font        | Nunito via @expo-google-fonts/nunito (400, 600, 700, 800) |
+| Icons       | @expo/vector-icons (MaterialCommunityIcons)               |
+| Testing     | Jest + React Native Testing Library                       |
+| CI          | GitHub Actions                                            |
+| CD          | EAS Build + EAS Submit                                    |
 
 ---
 

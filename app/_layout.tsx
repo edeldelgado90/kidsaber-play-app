@@ -5,17 +5,17 @@ import { StatusBar } from 'expo-status-bar';
 import { useColorScheme } from 'react-native';
 import { ThemeProvider } from '@/presentation/theme/ThemeProvider';
 import { useKidSaberFonts } from '@/presentation/theme/fonts';
+import { AppShell } from '@/presentation/components/common/AppShell';
 
 /**
  * Root layout for the KidSaber Play app.
- * Provides: fonts, safe area, Paper theme, status bar.
+ * Provides: fonts, safe area, Paper theme, status bar, responsive shell.
  */
 export default function RootLayout() {
   const [fontsLoaded] = useKidSaberFonts();
   const colorScheme = useColorScheme();
 
   if (!fontsLoaded) {
-    // Fonts loading — Expo Splash Screen handles the visual until ready
     return null;
   }
 
@@ -23,7 +23,9 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <ThemeProvider>
         <StatusBar style={colorScheme === 'dark' ? 'light' : 'light'} />
-        <Stack screenOptions={{ headerShown: false }} />
+        <AppShell>
+          <Stack screenOptions={{ headerShown: false }} />
+        </AppShell>
       </ThemeProvider>
     </SafeAreaProvider>
   );

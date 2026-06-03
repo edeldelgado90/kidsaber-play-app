@@ -1,27 +1,29 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Animated,
-} from 'react-native';
+import { View, Text, StyleSheet, Animated } from 'react-native';
 import { Button } from 'react-native-paper';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useGameSession } from '@/presentation/hooks/useGameSession';
+import { type SessionStatus } from '@/infrastructure/store/sessionStore';
 import { useProfileStore } from '@/infrastructure/store/profileStore';
-import { type Subject, type GameType, SUBJECT_META, GAME_TYPE_META } from '@/domain/entities/Question';
+import {
+  type Subject,
+  type GameType,
+  SUBJECT_META,
+  GAME_TYPE_META,
+} from '@/domain/entities/Question';
 import { type MatchingAnswer } from '@/domain/entities/Question';
 import { AppHeader } from '@/presentation/components/common/AppHeader';
 import { QuestionProgressBar } from '@/presentation/components/game/QuestionProgressBar';
 import { OptionCard, type OptionState } from '@/presentation/components/game/OptionCard';
 import { GameFeedbackOverlay } from '@/presentation/components/game/GameFeedbackOverlay';
+import { StarCelebrationOverlay } from '@/presentation/components/game/StarCelebrationOverlay';
 import { FillBlankStatement } from '@/presentation/components/game/FillBlankStatement';
 import { MatchingColumn } from '@/presentation/components/game/MatchingColumn';
 import { ErrorRetry } from '@/presentation/components/common/ErrorRetry';
 import { SkeletonList } from '@/presentation/components/common/SkeletonCard';
 import { Colors, Spacing, Radii, Typography } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
+import { useHorizontalPadding } from '@/infrastructure/platform/useBreakpoint';
 
 type AnswerState = 'idle' | 'selected' | 'revealed';
 
@@ -37,8 +39,10 @@ type AnswerState = 'idle' | 'selected' | 'revealed';
  * - After last question: navigate to evolution
  */
 export function GameSessionScreen() {
-  const { subject: subjectParam, gameType: gameTypeParam } =
-    useLocalSearchParams<{ subject: string; gameType: string }>();
+  const { subject: subjectParam, gameType: gameTypeParam } = useLocalSearchParams<{
+    subject: string;
+    gameType: string;
+  }>();
 
   const subject = subjectParam as Subject;
   const gameType = gameTypeParam as GameType;
@@ -52,14 +56,19 @@ export function GameSessionScreen() {
     questions,
     currentIndex,
     currentQuestion,
-    starEarned,
     error,
-    score,
+    starEarned,
     startSession,
     submitAnswer,
+    advanceQuestion,
     finishAndSave,
     resetSession,
   } = useGameSession();
+
+  const [showStarCelebration, setShowStarCelebration] = useState(false);
+  // Tracks the status from the previous render to detect the 'playing' → 'finished'
+  // transition for THIS session. Guards against stale Zustand state on mount.
+  const prevStatusRef = useRef<SessionStatus>('idle');
 
   // Local answer state for the current question
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
@@ -74,6 +83,7 @@ export function GameSessionScreen() {
 
   const subjectMeta = SUBJECT_META[subject];
   const gameTypeMeta = GAME_TYPE_META[gameType];
+  const hPad = useHorizontalPadding();
 
   const initSession = useCallback(async () => {
     if (!activeProfileId || !activeProfile) return;
@@ -89,14 +99,30 @@ export function GameSessionScreen() {
     initSession();
   }, [initSession]);
 
-  // When session finishes, save and navigate to evolution
+  // When session finishes: show star celebration if earned, otherwise go straight to evolution.
+  // Guard: only act if the session actually went through 'playing' in this component instance,
+  // to avoid reacting to stale 'finished' state left in the store from a previous session.
   useEffect(() => {
-    if (status === 'finished' && activeProfileId) {
+    if (status === 'finished' && prevStatusRef.current === 'playing' && activeProfileId) {
+      if (starEarned) {
+        setShowStarCelebration(true);
+      } else {
+        finishAndSave(activeProfileId).then(() => {
+          router.replace('/(main)/evolution');
+        });
+      }
+    }
+    prevStatusRef.current = status;
+  }, [status]); // eslint-disable-line
+
+  const handleStarCelebrationHide = () => {
+    setShowStarCelebration(false);
+    if (activeProfileId) {
       finishAndSave(activeProfileId).then(() => {
         router.replace('/(main)/evolution');
       });
     }
-  }, [status]); // eslint-disable-line
+  };
 
   const handleOptionSelect = (optionId: string) => {
     if (answerState !== 'idle') return;
@@ -120,15 +146,18 @@ export function GameSessionScreen() {
   };
 
   const handleFeedbackHide = () => {
+    setSelectedOptionId(null);
+    setMatchingAnswers([]);
+    setAnswerState('idle');
     setShowFeedback(false);
+    // Advance session index now that the overlay has dismissed, so the next
+    // question never bleeds through behind the overlay while it was visible.
+    advanceQuestion();
     // Animate next question in
     Animated.parallel([
       Animated.timing(fadeAnim, { toValue: 0, duration: 100, useNativeDriver: true }),
       Animated.timing(translateAnim, { toValue: 8, duration: 100, useNativeDriver: true }),
     ]).start(() => {
-      setSelectedOptionId(null);
-      setMatchingAnswers([]);
-      setAnswerState('idle');
       Animated.parallel([
         Animated.timing(fadeAnim, { toValue: 1, duration: 300, useNativeDriver: true }),
         Animated.timing(translateAnim, { toValue: 0, duration: 300, useNativeDriver: true }),
@@ -149,7 +178,7 @@ export function GameSessionScreen() {
     if (answerState === 'revealed') {
       const isCorrect =
         Array.isArray(currentQuestion?.correctAnswers) &&
-        currentQuestion!.correctAnswers.includes(optionId as never);
+        currentQuestion?.correctAnswers.includes(optionId as never);
 
       if (selectedOptionId === optionId) {
         return isCorrect ? 'correct' : 'incorrect';
@@ -212,16 +241,13 @@ export function GameSessionScreen() {
           title={`${subjectMeta?.label ?? ''} · ${gameTypeMeta?.label ?? ''}`}
           onBack={handleBack}
         />
-        <QuestionProgressBar
-          current={currentIndex + 1}
-          total={questions.length}
-        />
+        <QuestionProgressBar current={currentIndex + 1} total={questions.length} />
       </View>
 
       {/* Question content */}
       <Animated.ScrollView
         style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[styles.scrollContent, { paddingHorizontal: hPad }]}
         showsVerticalScrollIndicator={false}
         scrollEnabled={!showFeedback}
       >
@@ -231,10 +257,12 @@ export function GameSessionScreen() {
             transform: [{ translateY: translateAnim }],
           }}
         >
-          {/* Question statement */}
-          <Text style={styles.statement}>
-            {currentQuestion.expression ?? currentQuestion.statement}
-          </Text>
+          {/* Question statement — FillBlankStatement renders its own statement */}
+          {!isFillBlankType && (
+            <Text style={styles.statement}>
+              {currentQuestion.expression ?? currentQuestion.statement}
+            </Text>
+          )}
 
           {/* Render appropriate question UI by type */}
           {isMatchingType && currentQuestion.pairs ? (
@@ -259,7 +287,6 @@ export function GameSessionScreen() {
               {(currentQuestion.options ?? []).map((opt, i) => (
                 <OptionCard
                   key={opt.id}
-                  optionId={opt.id}
                   label={String.fromCharCode(65 + i)} // A, B, C, D
                   text={opt.text}
                   state={getOptionState(opt.id)}
@@ -293,55 +320,59 @@ export function GameSessionScreen() {
         correctAnswerText={correctAnswerText}
         onHide={handleFeedbackHide}
       />
+
+      {/* Star celebration shown when the session ends with a star earned */}
+      <StarCelebrationOverlay visible={showStarCelebration} onHide={handleStarCelebrationHide} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: Colors.surface,
-  },
-  header: {
-    backgroundColor: Colors.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.borderSubtle,
-  },
-  loadingContainer: {
-    padding: Spacing.lg,
-    gap: Spacing.sm,
-  },
-  scroll: {
-    flex: 1,
-  },
-  scrollContent: {
-    padding: Spacing.lg,
-    gap: Spacing.xl,
-    paddingBottom: Spacing['3xl'],
-  },
-  statement: {
-    fontSize: 22,
-    fontFamily: nunitoFamily('700'),
-    color: Colors.textPrimary,
-    lineHeight: 30,
-  },
-  optionList: {
-    gap: Spacing.sm,
-  },
-  footer: {
-    padding: Spacing.lg,
-    borderTopWidth: 1,
-    borderTopColor: Colors.borderSubtle,
-    backgroundColor: Colors.surface,
-  },
   checkButton: {
     borderRadius: Radii.md,
+  },
+  checkButtonContent: {
+    paddingVertical: 6,
   },
   checkButtonLabel: {
     fontFamily: nunitoFamily('700'),
     fontSize: Typography.scale.button.size,
   },
-  checkButtonContent: {
-    paddingVertical: 6,
+  footer: {
+    backgroundColor: Colors.surface,
+    borderTopColor: Colors.borderSubtle,
+    borderTopWidth: 1,
+    padding: Spacing.lg,
+  },
+  header: {
+    backgroundColor: Colors.surface,
+    borderBottomColor: Colors.borderSubtle,
+    borderBottomWidth: 1,
+  },
+  loadingContainer: {
+    gap: Spacing.sm,
+    padding: Spacing.lg,
+  },
+  optionList: {
+    gap: Spacing.sm,
+  },
+  root: {
+    backgroundColor: Colors.surface,
+    flex: 1,
+  },
+  scroll: {
+    flex: 1,
+  },
+  scrollContent: {
+    gap: Spacing.xl,
+    paddingBottom: Spacing['3xl'],
+    paddingVertical: Spacing.lg,
+  },
+  statement: {
+    color: Colors.textPrimary,
+    fontFamily: nunitoFamily('700'),
+    fontSize: Typography.scale.h2.size,
+    lineHeight: 30,
+    marginBottom: Spacing.xl,
   },
 });

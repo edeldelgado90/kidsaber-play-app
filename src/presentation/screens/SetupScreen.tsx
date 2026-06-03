@@ -13,12 +13,19 @@ import {
 } from 'react-native';
 import { Button } from 'react-native-paper';
 import { router } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useProfileStore } from '@/infrastructure/store/profileStore';
-import { ALL_GRADES, GRADE_SHORT_LABELS, validateProfileName, type Grade } from '@/domain/entities/Profile';
+import {
+  ALL_GRADES,
+  GRADE_SHORT_LABELS,
+  validateProfileName,
+  type Grade,
+} from '@/domain/entities/Profile';
 import { Colors, Spacing, Radii, Typography } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
+import { useContentWidth } from '@/infrastructure/platform/useBreakpoint';
 
-const LOGO = require('../../../assets/brand/logo-full.png');
+import LOGO from '../../../assets/brand/logo-full.png';
 
 /**
  * Onboarding / Setup screen — first time only.
@@ -33,6 +40,10 @@ const LOGO = require('../../../assets/brand/logo-full.png');
 export function SetupScreen() {
   const addProfile = useProfileStore(s => s.addProfile);
   const isLoading = useProfileStore(s => s.isLoading);
+
+  const insets = useSafeAreaInsets();
+  const contentWidth = useContentWidth();
+  const logoSize = Math.min(150, Math.round(contentWidth * 0.38));
 
   const [name, setName] = useState('');
   const [grade, setGrade] = useState<Grade | null>(null);
@@ -112,22 +123,19 @@ export function SetupScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       {/* Blue header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top + Spacing.xl }]}>
         <Animated.View
           style={[
             styles.logoWrapper,
             {
-              transform: [
-                { translateY: logoTranslateY },
-                { scale: logoScale },
-              ],
+              transform: [{ translateY: logoTranslateY }, { scale: logoScale }],
               opacity: logoOpacity,
             },
           ]}
         >
           <Image
             source={LOGO}
-            style={styles.logo}
+            style={[styles.logo, { width: logoSize, height: logoSize }]}
             resizeMode="contain"
             accessibilityLabel="KidSaber Play"
           />
@@ -150,9 +158,7 @@ export function SetupScreen() {
           ]}
         >
           <Text style={styles.cardTitle}>{'Cuéntanos sobre ti'}</Text>
-          <Text style={styles.cardSubtitle}>
-            {'Personalizaremos la experiencia para ti.'}
-          </Text>
+          <Text style={styles.cardSubtitle}>{'Personalizaremos la experiencia para ti.'}</Text>
 
           {/* Name input */}
           <View style={styles.fieldGroup}>
@@ -170,9 +176,7 @@ export function SetupScreen() {
               returnKeyType="done"
               accessibilityLabel="Nombre del niño"
             />
-            {nameError ? (
-              <Text style={styles.errorText}>{nameError}</Text>
-            ) : null}
+            {nameError ? <Text style={styles.errorText}>{nameError}</Text> : null}
           </View>
 
           {/* Grade grid */}
@@ -182,21 +186,13 @@ export function SetupScreen() {
               {ALL_GRADES.map(g => (
                 <TouchableOpacity
                   key={g}
-                  style={[
-                    styles.gradeChip,
-                    grade === g && styles.gradeChipSelected,
-                  ]}
+                  style={[styles.gradeChip, grade === g && styles.gradeChipSelected]}
                   onPress={() => setGrade(g)}
                   accessibilityLabel={`${GRADE_SHORT_LABELS[g]} de Primaria`}
                   accessibilityRole="button"
                   accessibilityState={{ selected: grade === g }}
                 >
-                  <Text
-                    style={[
-                      styles.gradeChipText,
-                      grade === g && styles.gradeChipTextSelected,
-                    ]}
-                  >
+                  <Text style={[styles.gradeChipText, grade === g && styles.gradeChipTextSelected]}>
                     {GRADE_SHORT_LABELS[g]}
                   </Text>
                 </TouchableOpacity>
@@ -218,9 +214,7 @@ export function SetupScreen() {
             {'¡Empezar a jugar!'}
           </Button>
 
-          <Text style={styles.caption}>
-            {'Podrás cambiar estos datos más adelante.'}
-          </Text>
+          <Text style={styles.caption}>{'Podrás cambiar estos datos más adelante.'}</Text>
         </Animated.View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -228,16 +222,106 @@ export function SetupScreen() {
 }
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: Colors.brandPrimary,
+  caption: {
+    color: Colors.textSecondary,
+    fontFamily: nunitoFamily('400'),
+    fontSize: Typography.scale.caption.size,
+    lineHeight: Typography.scale.caption.lineHeight,
+    textAlign: 'center',
+  },
+  card: {
+    backgroundColor: Colors.surface,
+    borderRadius: Radii.lg,
+    // elevation
+    elevation: 12,
+    gap: Spacing.xl,
+    marginHorizontal: Spacing.lg,
+    marginTop: -24,
+    padding: Spacing.xl,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.2,
+    shadowRadius: 24,
+  },
+  cardSubtitle: {
+    color: Colors.textSecondary,
+    fontFamily: nunitoFamily('400'),
+    fontSize: Typography.scale.body.size,
+    lineHeight: Typography.scale.body.lineHeight,
+    marginTop: -Spacing.md,
+  },
+  cardTitle: {
+    color: Colors.textPrimary,
+    fontFamily: nunitoFamily('800'),
+    fontSize: Typography.scale.h2.size,
+    lineHeight: Typography.scale.h2.lineHeight,
+  },
+  errorText: {
+    color: Colors.error,
+    fontFamily: nunitoFamily('400'),
+    fontSize: Typography.scale.caption.size,
+    lineHeight: Typography.scale.caption.lineHeight,
+  },
+  fieldGroup: {
+    gap: Spacing.sm,
+  },
+  fieldLabel: {
+    color: Colors.textPrimary,
+    fontFamily: nunitoFamily('700'),
+    fontSize: Typography.scale.bodyStrong.size,
+  },
+  gradeChip: {
+    alignItems: 'center',
+    backgroundColor: Colors.surfaceMuted,
+    borderColor: Colors.borderSubtle,
+    borderRadius: Radii.full,
+    borderWidth: 2,
+    justifyContent: 'center',
+    minHeight: 44,
+    minWidth: 64,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+  },
+  gradeChipSelected: {
+    backgroundColor: Colors.surfaceHighlight,
+    borderColor: Colors.brandPrimary,
+  },
+  gradeChipText: {
+    color: Colors.textPrimary,
+    fontFamily: nunitoFamily('700'),
+    fontSize: Typography.scale.bodyStrong.size,
+  },
+  gradeChipTextSelected: {
+    color: Colors.brandPrimary,
+  },
+  gradeGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.sm,
   },
   header: {
-    paddingTop: 54,
-    paddingBottom: 44,
-    paddingHorizontal: Spacing.xl,
     alignItems: 'center',
     backgroundColor: Colors.brandPrimary,
+    paddingBottom: 44,
+    paddingHorizontal: Spacing.xl,
+  },
+  input: {
+    backgroundColor: Colors.surfaceMuted,
+    borderColor: Colors.borderSubtle,
+    borderRadius: Radii.md,
+    borderWidth: 2,
+    color: Colors.textPrimary,
+    fontFamily: nunitoFamily('400'),
+    fontSize: Typography.scale.body.size,
+    minHeight: 52,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: 14,
+  },
+  inputError: {
+    borderColor: Colors.error,
+  },
+  logo: {
+    // width/height applied dynamically via useContentWidth()
   },
   logoWrapper: {
     // shadow for logo
@@ -246,119 +330,27 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.18,
     shadowRadius: 16,
   },
-  logo: {
-    width: 150,
-    height: 150,
-  },
-  scrollView: {
+  root: {
+    backgroundColor: Colors.brandPrimary,
     flex: 1,
   },
   scrollContent: {
     flexGrow: 1,
     paddingBottom: Spacing['3xl'],
   },
-  card: {
-    marginTop: -24,
-    marginHorizontal: Spacing.lg,
-    backgroundColor: Colors.surface,
-    borderRadius: Radii.lg,
-    padding: Spacing.xl,
-    gap: Spacing.xl,
-    // elevation
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.20,
-    shadowRadius: 24,
-    elevation: 12,
-  },
-  cardTitle: {
-    fontSize: Typography.scale.h2.size,
-    fontFamily: nunitoFamily('800'),
-    color: Colors.textPrimary,
-    lineHeight: Typography.scale.h2.lineHeight,
-  },
-  cardSubtitle: {
-    fontSize: Typography.scale.body.size,
-    fontFamily: nunitoFamily('400'),
-    color: Colors.textSecondary,
-    lineHeight: Typography.scale.body.lineHeight,
-    marginTop: -Spacing.md,
-  },
-  fieldGroup: {
-    gap: Spacing.sm,
-  },
-  fieldLabel: {
-    fontSize: Typography.scale.bodyStrong.size,
-    fontFamily: nunitoFamily('700'),
-    color: Colors.textPrimary,
-  },
-  input: {
-    fontSize: Typography.scale.body.size,
-    fontFamily: nunitoFamily('400'),
-    color: Colors.textPrimary,
-    borderWidth: 2,
-    borderColor: Colors.borderSubtle,
-    borderRadius: Radii.md,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: 14,
-    backgroundColor: Colors.surfaceMuted,
-    minHeight: 52,
-  },
-  inputError: {
-    borderColor: Colors.error,
-  },
-  errorText: {
-    fontSize: Typography.scale.caption.size,
-    fontFamily: nunitoFamily('400'),
-    color: Colors.error,
-    lineHeight: Typography.scale.caption.lineHeight,
-  },
-  gradeGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: Spacing.sm,
-  },
-  gradeChip: {
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-    borderRadius: Radii.full,
-    borderWidth: 2,
-    borderColor: Colors.borderSubtle,
-    backgroundColor: Colors.surfaceMuted,
-    minWidth: 64,
-    alignItems: 'center',
-    minHeight: 44,
-    justifyContent: 'center',
-  },
-  gradeChipSelected: {
-    borderColor: Colors.brandPrimary,
-    backgroundColor: Colors.surfaceHighlight,
-  },
-  gradeChipText: {
-    fontSize: Typography.scale.bodyStrong.size,
-    fontFamily: nunitoFamily('700'),
-    color: Colors.textPrimary,
-  },
-  gradeChipTextSelected: {
-    color: Colors.brandPrimary,
+  scrollView: {
+    flex: 1,
   },
   submitButton: {
     borderRadius: Radii.md,
     marginTop: Spacing.sm,
   },
+  submitContent: {
+    paddingVertical: 6,
+  },
   submitLabel: {
     fontFamily: nunitoFamily('700'),
     fontSize: Typography.scale.button.size,
     lineHeight: Typography.scale.button.lineHeight,
-  },
-  submitContent: {
-    paddingVertical: 6,
-  },
-  caption: {
-    fontSize: Typography.scale.caption.size,
-    fontFamily: nunitoFamily('400'),
-    color: Colors.textSecondary,
-    textAlign: 'center',
-    lineHeight: Typography.scale.caption.lineHeight,
   },
 });
