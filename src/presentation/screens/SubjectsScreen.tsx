@@ -69,15 +69,6 @@ export function SubjectsScreen() {
       />
 
       <SunBackground>
-        {/* Capybara (behind content, z-index 0) */}
-        <Image
-          source={CAPYBARA_MATE}
-          style={[styles.capybara, { width: capybaraWidth, height: capybaraHeight }]}
-          resizeMode="contain"
-          accessibilityElementsHidden
-          importantForAccessibility="no"
-        />
-
         <ScrollView
           style={styles.scroll}
           contentContainerStyle={[styles.scrollContent, { paddingHorizontal: hPad }]}
@@ -127,6 +118,16 @@ export function SubjectsScreen() {
           {/* Bottom padding for capybara */}
           <View style={{ height: 60 }} />
         </ScrollView>
+
+        {/* Capybara (above content, z-index 10) */}
+        <Image
+          source={CAPYBARA_MATE}
+          style={[styles.capybara, { width: capybaraWidth, height: capybaraHeight }]}
+          resizeMode="contain"
+          accessibilityElementsHidden
+          importantForAccessibility="no"
+          pointerEvents="none"
+        />
       </SunBackground>
     </View>
   );
@@ -139,9 +140,9 @@ const styles = StyleSheet.create({
   },
   capybara: {
     position: 'absolute',
-    right: -20,
+    right: -60,
     bottom: -10,
-    zIndex: 0,
+    zIndex: 10,
   },
   scroll: {
     flex: 1,
