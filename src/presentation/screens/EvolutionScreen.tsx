@@ -96,9 +96,7 @@ export function EvolutionScreen() {
               <View key={subject}>
                 <SubjectProgressRow
                   subject={subject}
-                  stars={
-                    activeProfileId ? getStarsForSubject(activeProfileId, subject) : 0
-                  }
+                  stars={activeProfileId ? getStarsForSubject(activeProfileId, subject) : 0}
                   onPress={() => router.push(`/(main)/games/${subject}`)}
                 />
                 {index < SUBJECTS_ORDER.length - 1 && <View style={styles.divider} />}
@@ -122,21 +120,10 @@ export function EvolutionScreen() {
 }
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: Colors.brandPrimary,
-  },
-  homeButton: {
-    width: 44,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   capybara: {
     bottom: -8,
     position: 'absolute',
     right: -20,
-    bottom: -8,
     zIndex: 0,
   },
   divider: {
@@ -144,11 +131,11 @@ const styles = StyleSheet.create({
     height: 1,
     marginHorizontal: Spacing.lg,
   },
-  scrollContent: {
-    paddingVertical: Spacing.lg,
-    paddingBottom: Spacing['3xl'],
-    gap: Spacing.lg,
-    zIndex: 2,
+  homeButton: {
+    alignItems: 'center',
+    height: 44,
+    justifyContent: 'center',
+    width: 44,
   },
   profileCard: {
     alignItems: 'center',
@@ -171,6 +158,25 @@ const styles = StyleSheet.create({
     fontFamily: nunitoFamily('400'),
     fontSize: Typography.scale.body.size - 2,
     lineHeight: 20,
+  },
+  profileName: {
+    color: Colors.textPrimary,
+    fontFamily: nunitoFamily('800'),
+    fontSize: Typography.scale.h3.size,
+    lineHeight: 24,
+  },
+  root: {
+    backgroundColor: Colors.brandPrimary,
+    flex: 1,
+  },
+  scroll: {
+    flex: 1,
+  },
+  scrollContent: {
+    gap: Spacing.lg,
+    paddingBottom: Spacing['3xl'],
+    paddingVertical: Spacing.lg,
+    zIndex: 2,
   },
   profileName: {
     color: Colors.textPrimary,

@@ -128,17 +128,13 @@ export function GamesScreen() {
 const styles = StyleSheet.create({
   capybara: {
     alignSelf: 'center',
+    bottom: -6,
+    position: 'absolute',
     zIndex: 0,
   },
-  scroll: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingVertical: Spacing.lg,
-    paddingTop: Spacing.md,
-    paddingBottom: Spacing['3xl'],
-    gap: Spacing.lg,
-    zIndex: 2,
+  gameList: {
+    gap: Spacing.sm,
+    zIndex: 1,
   },
   pageHeader: {
     gap: Spacing.xs,

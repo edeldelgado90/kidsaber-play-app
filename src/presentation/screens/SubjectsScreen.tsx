@@ -133,19 +133,10 @@ export function SubjectsScreen() {
 
 const styles = StyleSheet.create({
   capybara: {
+    bottom: -10,
     position: 'absolute',
     right: -60,
-    bottom: -10,
     zIndex: 10,
-  },
-  scroll: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingVertical: Spacing.lg,
-    paddingBottom: Spacing['3xl'],
-    gap: Spacing.md,
-    zIndex: 1,
   },
   greetingCard: {
     backgroundColor: Colors.surface,
@@ -201,6 +192,17 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing['3xl'],
     paddingVertical: Spacing.lg,
     zIndex: 1,
+  },
+  spacer: {
+    height: 60,
+  },
+  starIcon: {
+    fontSize: 20,
+  },
+  starsCaption: {
+    color: Colors.textSecondary,
+    fontFamily: nunitoFamily('400'),
+    fontSize: Typography.scale.caption.size,
   },
   spacer: {
     height: 60,

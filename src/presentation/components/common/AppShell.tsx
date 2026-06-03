@@ -18,14 +18,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 }
 
 const styles = StyleSheet.create({
-  outer: {
-    flex: 1,
-    backgroundColor: '#1a3a5c',
-    alignItems: 'center',
-  },
   inner: {
     flex: 1,
-    width: '100%',
     maxWidth: 480,
     overflow: 'hidden',
     width: '100%',

@@ -1,9 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Animated} from 'react-native';
+import { View, Text, StyleSheet, Animated } from 'react-native';
 import { Button } from 'react-native-paper';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useGameSession } from '@/presentation/hooks/useGameSession';
@@ -326,10 +322,7 @@ export function GameSessionScreen() {
       />
 
       {/* Star celebration shown when the session ends with a star earned */}
-      <StarCelebrationOverlay
-        visible={showStarCelebration}
-        onHide={handleStarCelebrationHide}
-      />
+      <StarCelebrationOverlay visible={showStarCelebration} onHide={handleStarCelebrationHide} />
     </View>
   );
 }
@@ -371,30 +364,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingVertical: Spacing.lg,
-    paddingBottom: Spacing['3xl'],
     gap: Spacing.xl,
+    paddingBottom: Spacing['3xl'],
+    paddingVertical: Spacing.lg,
   },
   statement: {
-    fontSize: Typography.scale.h2.size,
-    fontFamily: nunitoFamily('700'),
     color: Colors.textPrimary,
-    lineHeight: 30,
-    marginBottom: Spacing.xl,
-  },
-  optionList: {
-    gap: Spacing.sm,
-  },
-  footer: {
-    padding: Spacing.lg,
-    borderTopWidth: 1,
-    borderTopColor: Colors.borderSubtle,
-    backgroundColor: Colors.surface,
-  },
-  checkButton: {
-    borderRadius: Radii.md,
-  },
-  checkButtonLabel: {
     fontFamily: nunitoFamily('700'),
     fontSize: Typography.scale.h2.size,
     lineHeight: 30,

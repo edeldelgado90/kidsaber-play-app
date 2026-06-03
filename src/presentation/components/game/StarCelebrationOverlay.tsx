@@ -94,14 +94,10 @@ export function StarCelebrationOverlay({ visible, onHide }: StarCelebrationOverl
   return (
     <Animated.View style={[styles.overlay, { opacity }]}>
       {/* Pulsing glow behind star */}
-      <Animated.View
-        style={[styles.glow, { transform: [{ scale: glowScale }] }]}
-      />
+      <Animated.View style={[styles.glow, { transform: [{ scale: glowScale }] }]} />
 
       {/* Spinning star */}
-      <Animated.View
-        style={[styles.starWrapper, { transform: [{ scale }, { rotate: spin }] }]}
-      >
+      <Animated.View style={[styles.starWrapper, { transform: [{ scale }, { rotate: spin }] }]}>
         <Text style={styles.star} accessibilityLabel="Estrella ganada">
           {'⭐'}
         </Text>
@@ -127,26 +123,24 @@ const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
     alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: Colors.textPrimary,
     gap: Spacing.xl,
     justifyContent: 'center',
     zIndex: 200,
   },
-  glow: {
-    position: 'absolute',
-    width: 260,
-    height: 260,
-    borderRadius: 130,
-    backgroundColor: 'rgba(245, 196, 0, 0.18)',
+  star: {
+    fontSize: 110,
+    lineHeight: 130,
+    textAlign: 'center',
   },
   starWrapper: {
     alignItems: 'center',
     justifyContent: 'center',
   },
-  star: {
-    fontSize: 110,
-    lineHeight: 130,
+  subtitle: {
+    color: 'rgba(255,255,255,0.8)',
+    fontFamily: nunitoFamily('600'),
+    fontSize: Typography.scale.h3.size,
     textAlign: 'center',
   },
   starWrapper: {
@@ -165,15 +159,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.xl,
   },
   title: {
-    fontSize: Typography.scale.display.size,
-    fontFamily: nunitoFamily('800'),
     color: Colors.surface,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: Typography.scale.h3.size,
-    fontFamily: nunitoFamily('600'),
-    color: 'rgba(255,255,255,0.8)',
+    fontFamily: nunitoFamily('800'),
+    fontSize: Typography.scale.display.size,
     textAlign: 'center',
   },
 });

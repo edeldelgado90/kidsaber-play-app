@@ -174,7 +174,6 @@ const styles = StyleSheet.create({
   itemText: {
     color: Colors.textPrimary,
     flex: 1,
-    fontSize: Typography.scale.body.size,
     fontFamily: nunitoFamily('600'),
     fontSize: Typography.scale.body.size,
   },

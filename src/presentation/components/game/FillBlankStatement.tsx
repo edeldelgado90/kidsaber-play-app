@@ -67,36 +67,17 @@ export function FillBlankStatement({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    gap: Spacing.xl,
-  },
-  statementContainer: {
-    paddingHorizontal: Spacing.lg,
-  },
-  statementText: {
-    fontSize: Typography.scale.h2.size,
-    fontFamily: nunitoFamily('700'),
-    color: Colors.textPrimary,
-    lineHeight: Typography.scale.h2.lineHeight,
-    flexWrap: 'wrap',
-  },
   blankFilled: {
-    fontFamily: nunitoFamily('800'),
     color: Colors.brandPrimary,
-    textDecorationLine: 'underline',
+    fontFamily: nunitoFamily('800'),
     textDecorationColor: Colors.brandPrimary,
+    textDecorationLine: 'underline',
   },
   blankPlaceholder: {
-    fontFamily: nunitoFamily('700'),
     color: Colors.textDisabled,
-    textDecorationLine: 'underline',
+    fontFamily: nunitoFamily('700'),
     textDecorationColor: Colors.borderSubtle,
-  },
-  optionsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: Spacing.sm,
-    paddingHorizontal: Spacing.lg,
+    textDecorationLine: 'underline',
   },
   chip: {
     backgroundColor: Colors.surfaceMuted,
@@ -123,6 +104,25 @@ const styles = StyleSheet.create({
   chipTextSelected: {
     color: Colors.brandPrimary,
     fontFamily: nunitoFamily('700'),
+  },
+  container: {
+    gap: Spacing.xl,
+  },
+  optionsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.sm,
+    paddingHorizontal: Spacing.lg,
+  },
+  statementContainer: {
+    paddingHorizontal: Spacing.lg,
+  },
+  statementText: {
+    color: Colors.textPrimary,
+    flexWrap: 'wrap',
+    fontFamily: nunitoFamily('700'),
+    fontSize: Typography.scale.h2.size,
+    lineHeight: Typography.scale.h2.lineHeight,
   },
   container: {
     gap: Spacing.xl,
