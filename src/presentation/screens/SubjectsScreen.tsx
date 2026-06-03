@@ -118,14 +118,15 @@ export function SubjectsScreen() {
         </ScrollView>
 
         {/* Capybara (above content, z-index 10) */}
-        <Image
-          source={CAPYBARA_MATE}
-          style={[styles.capybara, { width: capybaraWidth, height: capybaraHeight }]}
-          resizeMode="contain"
-          accessibilityElementsHidden
-          importantForAccessibility="no"
-          pointerEvents="none"
-        />
+        <View pointerEvents="none" style={StyleSheet.absoluteFill}>
+          <Image
+            source={CAPYBARA_MATE}
+            style={[styles.capybara, { width: capybaraWidth, height: capybaraHeight }]}
+            resizeMode="contain"
+            accessibilityElementsHidden
+            importantForAccessibility="no"
+          />
+        </View>
       </SunBackground>
     </View>
   );
