@@ -126,11 +126,6 @@ const styles = StyleSheet.create({
     right: -20,
     zIndex: 0,
   },
-  divider: {
-    backgroundColor: Colors.borderSubtle,
-    height: 1,
-    marginHorizontal: Spacing.lg,
-  },
   homeButton: {
     alignItems: 'center',
     height: 44,
@@ -208,17 +203,24 @@ const styles = StyleSheet.create({
   spacer: {
     height: 80,
   },
+  divider: {
+    backgroundColor: Colors.borderSubtle,
+    height: 1,
+    marginHorizontal: Spacing.lg,
+  },
   subjectCard: {
     backgroundColor: Colors.surface,
     borderColor: Colors.borderSubtle,
     borderRadius: Radii.lg,
     borderWidth: 1,
-    elevation: 3,
+    borderBottomWidth: 4,
+    borderBottomColor: '#cdd8e3',
+    elevation: 4,
     overflow: 'hidden',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.10,
+    shadowRadius: 10,
     zIndex: 1,
   },
   totalCard: {
