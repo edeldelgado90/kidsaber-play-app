@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
 
 jobs:
   build-and-submit:
@@ -26,10 +31,11 @@ jobs:
 
       - name: Build Android (production)
         run: eas build --platform android --profile production --non-interactive
-        env:
-          EXPO_PUBLIC_API_URL: ${{ secrets.EXPO_PUBLIC_API_URL }}
+        # EXPO_PUBLIC_API_URL must be set in the Expo dashboard (Project → Environment Variables)
+        # Setting it here only reaches the CLI process, not the EAS cloud build worker
+
+      - name: Write Google service account key
+        run: echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}' > google-service-account.json
 
       - name: Submit to Google Play (internal track)
-        run: eas submit --platform android --non-interactive
-        env:
-          GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+        run: eas submit --platform android --profile production --non-interactive
