@@ -28,7 +28,7 @@
       "output": "static",
       "favicon": "./assets/brand/logo-full.png"
     },
-    "plugins": ["expo-router", "expo-font", "expo-asset"],
+    "plugins": ["expo-router", "expo-font", "expo-asset", "expo-audio"],
     "experiments": {
       "typedRoutes": true
     },

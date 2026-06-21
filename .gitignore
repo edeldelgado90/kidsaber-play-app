@@ -56,3 +56,6 @@ coverage/
 
 expo-env.d.ts
 # @end expo-cli
+
+# IntelliJ IDEA
+.idea/
