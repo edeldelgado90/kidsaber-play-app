@@ -21,7 +21,11 @@
         "foregroundImage": "./assets/brand/logo-full.png",
         "backgroundColor": "#0071da"
       },
-      "package": "com.kidsaber.play"
+      "package": "com.kidsaber.play",
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
     },
     "web": {
       "bundler": "metro",

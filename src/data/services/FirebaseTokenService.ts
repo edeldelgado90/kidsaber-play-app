@@ -4,10 +4,11 @@ import { type ITokenProvider } from '../../domain/ports/ITokenProvider';
 /**
  * Provides Firebase ID tokens for outbound API calls.
  *
- * On the first call the service signs in anonymously — Firebase issues a
- * persistent UID that survives app restarts (stored via AsyncStorage
- * persistence configured in firebaseApp.ts). Subsequent calls return the
- * cached token; Firebase automatically refreshes it when it nears expiry
+ * On the first call the service signs in anonymously — Firebase issues an
+ * anonymous UID. The session uses inMemoryPersistence (see firebaseApp.ts)
+ * so it does NOT survive process restarts; a new sign-in happens on each
+ * cold start. Subsequent calls within the same process return the cached
+ * token; Firebase automatically refreshes it when it nears expiry
  * (tokens last 1 hour).
  *
  * Returns null on any Firebase error so API calls can still proceed if auth

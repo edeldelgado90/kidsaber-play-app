@@ -14,7 +14,7 @@ if (!API_URL && process.env.NODE_ENV !== 'test') {
 }
 
 // Enforce HTTPS in production to prevent transmitting bearer tokens over plain HTTP.
-if (API_URL && !API_URL.startsWith('https://') && process.env.NODE_ENV === 'production') {
+if (API_URL && !API_URL.startsWith('https://') && !__DEV__) {
   throw new Error('[KidSaber] EXPO_PUBLIC_API_URL must use https:// in production.');
 }
 

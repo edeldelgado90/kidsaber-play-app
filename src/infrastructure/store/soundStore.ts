@@ -1,7 +1,7 @@
 import { create } from 'zustand';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AsyncStorageAdapter } from '../../data/storage/AsyncStorageAdapter';
 
-const STORAGE_KEY = 'kidsaber:sound:muted';
+const STORAGE_KEY = '@kidsaber/sound_muted';
 
 interface SoundState {
   isMuted: boolean;
@@ -13,7 +13,7 @@ export const useSoundStore = create<SoundState>((set, get) => ({
   toggleMute: () => {
     const next = !get().isMuted;
     set({ isMuted: next });
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    AsyncStorageAdapter.setString(STORAGE_KEY, JSON.stringify(next));
   },
 }));
 
@@ -23,7 +23,7 @@ export const useSoundStore = create<SoundState>((set, get) => ({
  */
 export async function rehydrateSoundStore(): Promise<void> {
   try {
-    const val = await AsyncStorage.getItem(STORAGE_KEY);
+    const val = await AsyncStorageAdapter.getString(STORAGE_KEY);
     if (val !== null) {
       useSoundStore.setState({ isMuted: JSON.parse(val) as boolean });
     }
