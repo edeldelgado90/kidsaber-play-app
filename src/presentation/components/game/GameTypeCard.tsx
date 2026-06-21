@@ -85,10 +85,10 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: Colors.surface,
+    borderBottomWidth: 4,
     borderColor: Colors.borderSubtle,
     borderRadius: Radii.md,
     borderWidth: 1,
-    borderBottomWidth: 4,
     minHeight: 84,
     overflow: 'hidden',
     ...Platform.select({
@@ -102,12 +102,6 @@ const styles = StyleSheet.create({
         boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
       } as Record<string, unknown>,
     }),
-  },
-  pressable: {
-    alignItems: 'stretch',
-    flex: 1,
-    flexDirection: 'row',
-    minHeight: 84,
   },
   chevronContainer: {
     alignItems: 'center',
@@ -142,6 +136,12 @@ const styles = StyleSheet.create({
     fontFamily: nunitoFamily('800'),
     fontSize: Typography.scale.bodyStrong.size,
     lineHeight: 20,
+  },
+  pressable: {
+    alignItems: 'stretch',
+    flex: 1,
+    flexDirection: 'row',
+    minHeight: 84,
   },
   stars: {
     fontSize: 11,

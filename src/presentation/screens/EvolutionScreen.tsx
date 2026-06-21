@@ -126,6 +126,11 @@ const styles = StyleSheet.create({
     right: -20,
     zIndex: 0,
   },
+  divider: {
+    backgroundColor: Colors.borderSubtle,
+    height: 1,
+    marginHorizontal: Spacing.lg,
+  },
   homeButton: {
     alignItems: 'center',
     height: 44,
@@ -173,25 +178,6 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.lg,
     zIndex: 2,
   },
-  profileName: {
-    color: Colors.textPrimary,
-    fontFamily: nunitoFamily('800'),
-    fontSize: Typography.scale.h3.size,
-    lineHeight: 24,
-  },
-  root: {
-    backgroundColor: Colors.brandPrimary,
-    flex: 1,
-  },
-  scroll: {
-    flex: 1,
-  },
-  scrollContent: {
-    gap: Spacing.lg,
-    paddingBottom: Spacing['3xl'],
-    paddingVertical: Spacing.lg,
-    zIndex: 2,
-  },
   sectionLabel: {
     color: Colors.textSecondary,
     fontFamily: nunitoFamily('700'),
@@ -203,23 +189,18 @@ const styles = StyleSheet.create({
   spacer: {
     height: 80,
   },
-  divider: {
-    backgroundColor: Colors.borderSubtle,
-    height: 1,
-    marginHorizontal: Spacing.lg,
-  },
   subjectCard: {
     backgroundColor: Colors.surface,
+    borderBottomColor: '#cdd8e3',
+    borderBottomWidth: 4,
     borderColor: Colors.borderSubtle,
     borderRadius: Radii.lg,
     borderWidth: 1,
-    borderBottomWidth: 4,
-    borderBottomColor: '#cdd8e3',
     elevation: 4,
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.10,
+    shadowOpacity: 0.1,
     shadowRadius: 10,
     zIndex: 1,
   },

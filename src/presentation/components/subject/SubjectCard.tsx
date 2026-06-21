@@ -35,9 +35,7 @@ export function SubjectCard({ subject, stars, onPress }: SubjectCardProps) {
   const { handlePressIn, handlePressOut, animatedStyle } = usePressAnimation();
 
   return (
-    <Animated.View
-      style={[styles.card, { borderBottomColor: darkAccent }, animatedStyle]}
-    >
+    <Animated.View style={[styles.card, { borderBottomColor: darkAccent }, animatedStyle]}>
       <Pressable
         style={styles.pressable}
         onPress={onPress}
@@ -85,10 +83,10 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: Colors.surface,
+    borderBottomWidth: 4,
     borderColor: Colors.borderSubtle,
     borderRadius: Radii.md,
     borderWidth: 1,
-    borderBottomWidth: 4,
     minHeight: 88,
     overflow: 'hidden',
     ...Platform.select({
@@ -102,12 +100,6 @@ const styles = StyleSheet.create({
         boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
       } as Record<string, unknown>,
     }),
-  },
-  pressable: {
-    alignItems: 'stretch',
-    flex: 1,
-    flexDirection: 'row',
-    minHeight: 88,
   },
   chevronContainer: {
     alignItems: 'center',
@@ -139,6 +131,12 @@ const styles = StyleSheet.create({
     fontFamily: nunitoFamily('800'),
     fontSize: Typography.scale.h3.size,
     lineHeight: Typography.scale.h3.lineHeight,
+  },
+  pressable: {
+    alignItems: 'stretch',
+    flex: 1,
+    flexDirection: 'row',
+    minHeight: 88,
   },
   stars: {
     color: Colors.textSecondary,

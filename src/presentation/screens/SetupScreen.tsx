@@ -236,7 +236,6 @@ const styles = StyleSheet.create({
     elevation: 12,
     gap: Spacing.xl,
     marginHorizontal: Spacing.lg,
-    marginTop: -24,
     padding: Spacing.xl,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
@@ -340,6 +339,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
+    marginTop: -24,
   },
   submitButton: {
     borderRadius: Radii.md,

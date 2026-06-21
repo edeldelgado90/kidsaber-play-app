@@ -143,16 +143,6 @@ const styles = StyleSheet.create({
     fontSize: Typography.scale.h3.size,
     textAlign: 'center',
   },
-  starWrapper: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  subtitle: {
-    color: 'rgba(255,255,255,0.8)',
-    fontFamily: nunitoFamily('600'),
-    fontSize: Typography.scale.h3.size,
-    textAlign: 'center',
-  },
   textBlock: {
     alignItems: 'center',
     gap: Spacing.sm,

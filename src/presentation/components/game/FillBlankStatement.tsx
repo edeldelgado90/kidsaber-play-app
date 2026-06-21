@@ -124,23 +124,4 @@ const styles = StyleSheet.create({
     fontSize: Typography.scale.h2.size,
     lineHeight: Typography.scale.h2.lineHeight,
   },
-  container: {
-    gap: Spacing.xl,
-  },
-  optionsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: Spacing.sm,
-    paddingHorizontal: Spacing.lg,
-  },
-  statementContainer: {
-    paddingHorizontal: Spacing.lg,
-  },
-  statementText: {
-    color: Colors.textPrimary,
-    flexWrap: 'wrap',
-    fontFamily: nunitoFamily('700'),
-    fontSize: Typography.scale.h2.size,
-    lineHeight: Typography.scale.h2.lineHeight,
-  },
 });

@@ -94,25 +94,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 36,
   },
-  count: {
-    color: Colors.textPrimary,
-    fontFamily: nunitoFamily('800'),
-    fontSize: Typography.scale.h3.size,
-    minWidth: 28,
-    textAlign: 'right',
-  },
-  emoji: {
-    fontSize: 18,
-    lineHeight: 22,
-  },
-  iconCircle: {
-    alignItems: 'center',
-    borderRadius: 18,
-    flexShrink: 0,
-    height: 36,
-    justifyContent: 'center',
-    width: 36,
-  },
   label: {
     color: Colors.textPrimary,
     fontFamily: nunitoFamily('700'),

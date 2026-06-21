@@ -21,6 +21,7 @@ import {
   type Profile,
 } from '@/domain/entities/Profile';
 import { AppHeader } from '@/presentation/components/common/AppHeader';
+import { SunBackground } from '@/presentation/components/common/SunBackground';
 import { ProfileRow } from '@/presentation/components/profile/ProfileRow';
 import { Colors, Spacing, Radii, Typography } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
@@ -131,112 +132,114 @@ export function ProfilesScreen() {
   const hPad = useHorizontalPadding();
 
   return (
-    <KeyboardAvoidingView
-      style={styles.root}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <AppHeader
-        title={mode === 'add' ? 'Nuevo perfil' : mode === 'edit' ? 'Editar perfil' : 'Perfiles'}
-        onBack={handleBack}
-        backgroundColor={Colors.brandPrimary}
-      />
-
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={[styles.scrollContent, { paddingHorizontal: hPad }]}
-        keyboardShouldPersistTaps="handled"
+    <SunBackground>
+      <KeyboardAvoidingView
+        style={styles.root}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        {isFormMode ? (
-          /* Form: add or edit */
-          <View style={styles.form}>
-            <View style={styles.fieldGroup}>
-              <Text style={styles.fieldLabel}>{'Nombre'}</Text>
-              <TextInput
-                style={[styles.input, nameError ? styles.inputError : null]}
-                value={name}
-                onChangeText={text => {
-                  setName(text);
-                  if (nameError) setNameError(null);
-                }}
-                placeholder="Nombre del niño"
-                maxLength={20}
-                autoCapitalize="words"
-                returnKeyType="done"
-                accessibilityLabel="Nombre"
-              />
-              {nameError ? <Text style={styles.errorText}>{nameError}</Text> : null}
-            </View>
+        <AppHeader
+          title={mode === 'add' ? 'Nuevo perfil' : mode === 'edit' ? 'Editar perfil' : 'Perfiles'}
+          onBack={handleBack}
+          backgroundColor={Colors.brandPrimary}
+        />
 
-            <View style={styles.fieldGroup}>
-              <Text style={styles.fieldLabel}>{'Curso'}</Text>
-              <View style={styles.gradeGrid}>
-                {ALL_GRADES.map(g => (
-                  <TouchableOpacity
-                    key={g}
-                    style={[styles.gradeChip, grade === g && styles.gradeChipSelected]}
-                    onPress={() => setGrade(g)}
-                    accessibilityRole="button"
-                    accessibilityState={{ selected: grade === g }}
-                    accessibilityLabel={`${GRADE_SHORT_LABELS[g]} de Primaria`}
-                  >
-                    <Text
-                      style={[styles.gradeChipText, grade === g && styles.gradeChipTextSelected]}
-                    >
-                      {GRADE_SHORT_LABELS[g]}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
+        <ScrollView
+          style={styles.scroll}
+          contentContainerStyle={[styles.scrollContent, { paddingHorizontal: hPad }]}
+          keyboardShouldPersistTaps="handled"
+        >
+          {isFormMode ? (
+            /* Form: add or edit */
+            <View style={styles.form}>
+              <View style={styles.fieldGroup}>
+                <Text style={styles.fieldLabel}>{'Nombre'}</Text>
+                <TextInput
+                  style={[styles.input, nameError ? styles.inputError : null]}
+                  value={name}
+                  onChangeText={text => {
+                    setName(text);
+                    if (nameError) setNameError(null);
+                  }}
+                  placeholder="Nombre del niño"
+                  maxLength={20}
+                  autoCapitalize="words"
+                  returnKeyType="done"
+                  accessibilityLabel="Nombre"
+                />
+                {nameError ? <Text style={styles.errorText}>{nameError}</Text> : null}
               </View>
+
+              <View style={styles.fieldGroup}>
+                <Text style={styles.fieldLabel}>{'Curso'}</Text>
+                <View style={styles.gradeGrid}>
+                  {ALL_GRADES.map(g => (
+                    <TouchableOpacity
+                      key={g}
+                      style={[styles.gradeChip, grade === g && styles.gradeChipSelected]}
+                      onPress={() => setGrade(g)}
+                      accessibilityRole="button"
+                      accessibilityState={{ selected: grade === g }}
+                      accessibilityLabel={`${GRADE_SHORT_LABELS[g]} de Primaria`}
+                    >
+                      <Text
+                        style={[styles.gradeChipText, grade === g && styles.gradeChipTextSelected]}
+                      >
+                        {GRADE_SHORT_LABELS[g]}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+
+              <Button
+                mode="contained"
+                onPress={handleSave}
+                disabled={!canSubmit || isLoading}
+                loading={isLoading}
+                style={styles.saveButton}
+                labelStyle={styles.saveButtonLabel}
+                contentStyle={styles.saveButtonContent}
+              >
+                {'Guardar'}
+              </Button>
             </View>
+          ) : (
+            /* Profile list */
+            <View style={styles.listContainer}>
+              {profiles.map(profile => (
+                <ProfileRow
+                  key={profile.id}
+                  profile={profile}
+                  isActive={profile.id === activeProfileId}
+                  onEdit={openEdit}
+                  onDelete={handleDelete}
+                  onSelect={handleSelect}
+                  canDelete={profiles.length > 1}
+                />
+              ))}
 
-            <Button
-              mode="contained"
-              onPress={handleSave}
-              disabled={!canSubmit || isLoading}
-              loading={isLoading}
-              style={styles.saveButton}
-              labelStyle={styles.saveButtonLabel}
-              contentStyle={styles.saveButtonContent}
-            >
-              {'Guardar'}
-            </Button>
-          </View>
-        ) : (
-          /* Profile list */
-          <View style={styles.listContainer}>
-            {profiles.map(profile => (
-              <ProfileRow
-                key={profile.id}
-                profile={profile}
-                isActive={profile.id === activeProfileId}
-                onEdit={openEdit}
-                onDelete={handleDelete}
-                onSelect={handleSelect}
-                canDelete={profiles.length > 1}
-              />
-            ))}
-
-            <Button
-              mode="outlined"
-              onPress={openAdd}
-              icon="plus"
-              style={styles.addButton}
-              labelStyle={styles.addButtonLabel}
-              contentStyle={styles.addButtonContent}
-              accessibilityLabel="Añadir nuevo perfil"
-            >
-              {'Añadir perfil'}
-            </Button>
-          </View>
-        )}
-      </ScrollView>
-    </KeyboardAvoidingView>
+              <Button
+                mode="contained"
+                onPress={openAdd}
+                icon="plus"
+                style={styles.addButton}
+                labelStyle={styles.addButtonLabel}
+                contentStyle={styles.addButtonContent}
+                accessibilityLabel="Añadir nuevo perfil"
+              >
+                {'Añadir perfil'}
+              </Button>
+            </View>
+          )}
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SunBackground>
   );
 }
 
 const styles = StyleSheet.create({
   addButton: {
-    borderColor: Colors.brandPrimary,
+    backgroundColor: '#1976D2',
     borderRadius: Radii.md,
     marginTop: Spacing.sm,
   },
@@ -244,7 +247,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   addButtonLabel: {
-    color: Colors.brandPrimary,
+    color: '#FFFFFF',
     fontFamily: nunitoFamily('700'),
     fontSize: Typography.scale.button.size,
   },
@@ -315,7 +318,6 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   root: {
-    backgroundColor: Colors.background,
     flex: 1,
   },
   saveButton: {

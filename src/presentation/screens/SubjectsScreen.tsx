@@ -3,6 +3,7 @@ import { View, Text, ScrollView, StyleSheet, Image, Platform } from 'react-nativ
 import { router } from 'expo-router';
 import { useProfileStore } from '@/infrastructure/store/profileStore';
 import { useProgressStore } from '@/infrastructure/store/progressStore';
+import { useSoundStore } from '@/infrastructure/store/soundStore';
 import { SUBJECTS_ORDER, type Subject } from '@/domain/entities/Question';
 import { SunBackground } from '@/presentation/components/common/SunBackground';
 import { AppHeader } from '@/presentation/components/common/AppHeader';
@@ -27,6 +28,8 @@ export function SubjectsScreen() {
   const { getActiveProfile } = useProfileStore();
   const getStarsForSubject = useProgressStore(s => s.getStarsForSubject);
   const getTotalStars = useProgressStore(s => s.getTotalStars);
+  const isMuted = useSoundStore(s => s.isMuted);
+  const toggleMute = useSoundStore(s => s.toggleMute);
 
   const hPad = useHorizontalPadding();
   const contentWidth = useContentWidth();
@@ -66,6 +69,9 @@ export function SubjectsScreen() {
         }
         onEvolution={handleEvolutionPress}
         onPet={handlePetPress}
+        showSoundToggle
+        isMuted={isMuted}
+        onSoundToggle={toggleMute}
       />
 
       <SunBackground>
@@ -193,17 +199,6 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing['3xl'],
     paddingVertical: Spacing.lg,
     zIndex: 1,
-  },
-  spacer: {
-    height: 60,
-  },
-  starIcon: {
-    fontSize: 20,
-  },
-  starsCaption: {
-    color: Colors.textSecondary,
-    fontFamily: nunitoFamily('400'),
-    fontSize: Typography.scale.caption.size,
   },
   spacer: {
     height: 60,
