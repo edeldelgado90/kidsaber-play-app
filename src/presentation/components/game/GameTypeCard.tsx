@@ -1,9 +1,17 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { View, Text, Pressable, Animated, StyleSheet, Platform } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { type GameType, GAME_TYPE_META } from '@/domain/entities/Question';
 import { Colors, Spacing, Radii, Typography, Elevation } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
+import { usePressAnimation } from '@/presentation/hooks/usePressAnimation';
+
+const SOFT_ACCENT: Record<string, string> = {
+  '#0071da': '#99c3eb',
+  '#8b5cf6': '#cdbbfa',
+  '#f59e0b': '#fbd899',
+  '#22c55e': '#a5e3bc',
+};
 
 interface GameTypeCardProps {
   gameType: GameType;
@@ -24,44 +32,49 @@ interface GameTypeCardProps {
  */
 export function GameTypeCard({ gameType, stars, onPress }: GameTypeCardProps) {
   const meta = GAME_TYPE_META[gameType];
+  const softAccent = SOFT_ACCENT[meta.accent] ?? meta.accent;
+  const { handlePressIn, handlePressOut, animatedStyle } = usePressAnimation();
 
   return (
-    <TouchableOpacity
-      style={styles.card}
-      onPress={onPress}
-      accessibilityLabel={`${meta.label}: ${stars} estrella${stars !== 1 ? 's' : ''}. ${meta.description}`}
-      accessibilityRole="button"
-      activeOpacity={0.85}
-    >
-      {/* Left accent stripe */}
-      <View style={[styles.accentStripe, { backgroundColor: meta.accent }]} />
+    <Animated.View style={[styles.card, { borderBottomColor: softAccent }, animatedStyle]}>
+      <Pressable
+        style={styles.pressable}
+        onPress={onPress}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        accessibilityLabel={`${meta.label}: ${stars} estrella${stars !== 1 ? 's' : ''}. ${meta.description}`}
+        accessibilityRole="button"
+      >
+        {/* Left accent stripe */}
+        <View style={[styles.accentStripe, { backgroundColor: meta.accent }]} />
 
-      {/* Icon block */}
-      <View style={[styles.iconBlock, { backgroundColor: meta.pastel }]}>
-        <Text style={styles.emoji} accessibilityElementsHidden>
-          {meta.emoji}
-        </Text>
-      </View>
+        {/* Icon block */}
+        <View style={[styles.iconBlock, { backgroundColor: meta.pastel }]}>
+          <Text style={styles.emoji} accessibilityElementsHidden>
+            {meta.emoji}
+          </Text>
+        </View>
 
-      {/* Text content */}
-      <View style={styles.textContent}>
-        <Text style={styles.label}>{meta.label}</Text>
-        <Text style={styles.description} numberOfLines={1}>
-          {meta.description}
-        </Text>
-        {stars > 0 && <Text style={styles.stars}>{'⭐'.repeat(Math.min(stars, 5))}</Text>}
-      </View>
+        {/* Text content */}
+        <View style={styles.textContent}>
+          <Text style={styles.label}>{meta.label}</Text>
+          <Text style={styles.description} numberOfLines={1}>
+            {meta.description}
+          </Text>
+          {stars > 0 && <Text style={styles.stars}>{'⭐'.repeat(Math.min(stars, 5))}</Text>}
+        </View>
 
-      {/* Chevron */}
-      <View style={styles.chevronContainer}>
-        <MaterialCommunityIcons
-          name="chevron-right"
-          size={22}
-          color={meta.accent}
-          style={styles.chevronIcon}
-        />
-      </View>
-    </TouchableOpacity>
+        {/* Chevron */}
+        <View style={styles.chevronContainer}>
+          <MaterialCommunityIcons
+            name="chevron-right"
+            size={22}
+            color={meta.accent}
+            style={styles.chevronIcon}
+          />
+        </View>
+      </Pressable>
+    </Animated.View>
   );
 }
 
@@ -71,12 +84,11 @@ const styles = StyleSheet.create({
     width: 4,
   },
   card: {
-    alignItems: 'stretch',
     backgroundColor: Colors.surface,
+    borderBottomWidth: 4,
     borderColor: Colors.borderSubtle,
     borderRadius: Radii.md,
     borderWidth: 1,
-    flexDirection: 'row',
     minHeight: 84,
     overflow: 'hidden',
     ...Platform.select({
@@ -124,6 +136,12 @@ const styles = StyleSheet.create({
     fontFamily: nunitoFamily('800'),
     fontSize: Typography.scale.bodyStrong.size,
     lineHeight: 20,
+  },
+  pressable: {
+    alignItems: 'stretch',
+    flex: 1,
+    flexDirection: 'row',
+    minHeight: 84,
   },
   stars: {
     fontSize: 11,

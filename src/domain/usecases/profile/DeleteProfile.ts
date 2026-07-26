@@ -1,10 +1,15 @@
 import { type IProfileRepository } from '../../ports/IProfileRepository';
+import { type IProgressRepository } from '../../ports/IProgressRepository';
 
 /**
- * Deletes a child profile.
+ * Deletes a child profile and all associated progress data.
  * Restriction: at least one profile must always exist.
  */
-export async function deleteProfile(repository: IProfileRepository, id: string): Promise<void> {
+export async function deleteProfile(
+  repository: IProfileRepository,
+  progressRepository: IProgressRepository,
+  id: string,
+): Promise<void> {
   const all = await repository.getAll();
 
   if (all.length <= 1) {
@@ -13,6 +18,7 @@ export async function deleteProfile(repository: IProfileRepository, id: string):
 
   const activeId = await repository.getActiveProfileId();
   await repository.delete(id);
+  await progressRepository.resetProgress(id);
 
   // If the deleted profile was active, switch to another one
   if (activeId === id) {

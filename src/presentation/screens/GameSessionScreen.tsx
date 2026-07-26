@@ -13,6 +13,7 @@ import {
 } from '@/domain/entities/Question';
 import { type MatchingAnswer } from '@/domain/entities/Question';
 import { AppHeader } from '@/presentation/components/common/AppHeader';
+import { SunBackground } from '@/presentation/components/common/SunBackground';
 import { QuestionProgressBar } from '@/presentation/components/game/QuestionProgressBar';
 import { OptionCard, type OptionState } from '@/presentation/components/game/OptionCard';
 import { GameFeedbackOverlay } from '@/presentation/components/game/GameFeedbackOverlay';
@@ -191,25 +192,28 @@ export function GameSessionScreen() {
 
   if (status === 'loading') {
     return (
-      <View style={styles.root}>
-        <AppHeader
-          white
-          title={`${subjectMeta?.label ?? ''} · ${gameTypeMeta?.label ?? ''}`}
-          onBack={handleBack}
-        />
-        <View style={styles.loadingContainer}>
-          <SkeletonList count={4} />
+      <SunBackground showSun={false} showFloor={false} patternOpacity={0.1}>
+        <View style={styles.root}>
+          <AppHeader
+            title={`${subjectMeta?.label ?? ''} · ${gameTypeMeta?.label ?? ''}`}
+            onBack={handleBack}
+          />
+          <View style={styles.loadingContainer}>
+            <SkeletonList count={4} />
+          </View>
         </View>
-      </View>
+      </SunBackground>
     );
   }
 
   if (status === 'error') {
     return (
-      <View style={styles.root}>
-        <AppHeader white onBack={handleBack} />
-        <ErrorRetry message={error ?? undefined} onRetry={initSession} />
-      </View>
+      <SunBackground showSun={false} showFloor={false} patternOpacity={0.1}>
+        <View style={styles.root}>
+          <AppHeader onBack={handleBack} />
+          <ErrorRetry message={error ?? undefined} onRetry={initSession} />
+        </View>
+      </SunBackground>
     );
   }
 
@@ -233,97 +237,98 @@ export function GameSessionScreen() {
       : undefined;
 
   return (
-    <View style={styles.root}>
-      {/* White header with progress */}
-      <View style={styles.header}>
-        <AppHeader
-          white
-          title={`${subjectMeta?.label ?? ''} · ${gameTypeMeta?.label ?? ''}`}
-          onBack={handleBack}
+    <SunBackground showSun={false} showFloor={false} patternOpacity={0.1}>
+      <View style={styles.root}>
+        {/* White header with progress */}
+        <View style={styles.header}>
+          <AppHeader
+            title={`${subjectMeta?.label ?? ''} · ${gameTypeMeta?.label ?? ''}`}
+            onBack={handleBack}
+          />
+          <QuestionProgressBar current={currentIndex + 1} total={questions.length} />
+        </View>
+
+        {/* Question content */}
+        <Animated.ScrollView
+          style={styles.scroll}
+          contentContainerStyle={[styles.scrollContent, { paddingHorizontal: hPad }]}
+          showsVerticalScrollIndicator={false}
+          scrollEnabled={!showFeedback}
+        >
+          <Animated.View
+            style={{
+              opacity: fadeAnim,
+              transform: [{ translateY: translateAnim }],
+            }}
+          >
+            {/* Question statement — FillBlankStatement renders its own statement */}
+            {!isFillBlankType && (
+              <Text style={styles.statement}>
+                {currentQuestion.expression ?? currentQuestion.statement}
+              </Text>
+            )}
+
+            {/* Render appropriate question UI by type */}
+            {isMatchingType && currentQuestion.pairs ? (
+              <MatchingColumn
+                leftItems={currentQuestion.pairs.left}
+                rightItems={currentQuestion.pairs.right}
+                userAnswers={matchingAnswers}
+                onAnswersChange={setMatchingAnswers}
+                disabled={answerState !== 'idle'}
+              />
+            ) : isFillBlankType && currentQuestion.options ? (
+              <FillBlankStatement
+                statement={currentQuestion.statement}
+                options={currentQuestion.options}
+                selectedId={selectedOptionId}
+                onSelect={handleOptionSelect}
+                disabled={answerState !== 'idle'}
+              />
+            ) : (
+              // option_multiple and quick_calculation
+              <View style={styles.optionList}>
+                {(currentQuestion.options ?? []).map((opt, i) => (
+                  <OptionCard
+                    key={opt.id}
+                    label={String.fromCharCode(65 + i)} // A, B, C, D
+                    text={opt.text}
+                    state={getOptionState(opt.id)}
+                    onPress={() => handleOptionSelect(opt.id)}
+                  />
+                ))}
+              </View>
+            )}
+          </Animated.View>
+        </Animated.ScrollView>
+
+        {/* Comprobar button */}
+        <View style={styles.footer}>
+          <Button
+            mode="contained"
+            onPress={handleCheck}
+            disabled={!canSubmit || answerState !== 'idle'}
+            style={styles.checkButton}
+            labelStyle={styles.checkButtonLabel}
+            contentStyle={styles.checkButtonContent}
+            accessibilityLabel="Comprobar respuesta"
+          >
+            {'Comprobar'}
+          </Button>
+        </View>
+
+        {/* Feedback overlay */}
+        <GameFeedbackOverlay
+          visible={showFeedback}
+          isCorrect={lastAnswerCorrect}
+          correctAnswerText={correctAnswerText}
+          onHide={handleFeedbackHide}
         />
-        <QuestionProgressBar current={currentIndex + 1} total={questions.length} />
+
+        {/* Star celebration shown when the session ends with a star earned */}
+        <StarCelebrationOverlay visible={showStarCelebration} onHide={handleStarCelebrationHide} />
       </View>
-
-      {/* Question content */}
-      <Animated.ScrollView
-        style={styles.scroll}
-        contentContainerStyle={[styles.scrollContent, { paddingHorizontal: hPad }]}
-        showsVerticalScrollIndicator={false}
-        scrollEnabled={!showFeedback}
-      >
-        <Animated.View
-          style={{
-            opacity: fadeAnim,
-            transform: [{ translateY: translateAnim }],
-          }}
-        >
-          {/* Question statement — FillBlankStatement renders its own statement */}
-          {!isFillBlankType && (
-            <Text style={styles.statement}>
-              {currentQuestion.expression ?? currentQuestion.statement}
-            </Text>
-          )}
-
-          {/* Render appropriate question UI by type */}
-          {isMatchingType && currentQuestion.pairs ? (
-            <MatchingColumn
-              leftItems={currentQuestion.pairs.left}
-              rightItems={currentQuestion.pairs.right}
-              userAnswers={matchingAnswers}
-              onAnswersChange={setMatchingAnswers}
-              disabled={answerState !== 'idle'}
-            />
-          ) : isFillBlankType && currentQuestion.options ? (
-            <FillBlankStatement
-              statement={currentQuestion.statement}
-              options={currentQuestion.options}
-              selectedId={selectedOptionId}
-              onSelect={handleOptionSelect}
-              disabled={answerState !== 'idle'}
-            />
-          ) : (
-            // option_multiple and quick_calculation
-            <View style={styles.optionList}>
-              {(currentQuestion.options ?? []).map((opt, i) => (
-                <OptionCard
-                  key={opt.id}
-                  label={String.fromCharCode(65 + i)} // A, B, C, D
-                  text={opt.text}
-                  state={getOptionState(opt.id)}
-                  onPress={() => handleOptionSelect(opt.id)}
-                />
-              ))}
-            </View>
-          )}
-        </Animated.View>
-      </Animated.ScrollView>
-
-      {/* Comprobar button */}
-      <View style={styles.footer}>
-        <Button
-          mode="contained"
-          onPress={handleCheck}
-          disabled={!canSubmit || answerState !== 'idle'}
-          style={styles.checkButton}
-          labelStyle={styles.checkButtonLabel}
-          contentStyle={styles.checkButtonContent}
-          accessibilityLabel="Comprobar respuesta"
-        >
-          {'Comprobar'}
-        </Button>
-      </View>
-
-      {/* Feedback overlay */}
-      <GameFeedbackOverlay
-        visible={showFeedback}
-        isCorrect={lastAnswerCorrect}
-        correctAnswerText={correctAnswerText}
-        onHide={handleFeedbackHide}
-      />
-
-      {/* Star celebration shown when the session ends with a star earned */}
-      <StarCelebrationOverlay visible={showStarCelebration} onHide={handleStarCelebrationHide} />
-    </View>
+    </SunBackground>
   );
 }
 
@@ -344,11 +349,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     padding: Spacing.lg,
   },
-  header: {
-    backgroundColor: Colors.surface,
-    borderBottomColor: Colors.borderSubtle,
-    borderBottomWidth: 1,
-  },
+  header: {},
   loadingContainer: {
     gap: Spacing.sm,
     padding: Spacing.lg,
@@ -357,7 +358,6 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
   },
   root: {
-    backgroundColor: Colors.surface,
     flex: 1,
   },
   scroll: {

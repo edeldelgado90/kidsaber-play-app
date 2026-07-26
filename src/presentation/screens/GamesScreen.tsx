@@ -15,6 +15,7 @@ import { GameTypeCard } from '@/presentation/components/game/GameTypeCard';
 import { Colors, Spacing, Radii, Typography } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
 import { useContentWidth, useHorizontalPadding } from '@/infrastructure/platform/useBreakpoint';
+import { useSoundStore } from '@/infrastructure/store/soundStore';
 
 import CAPYBARA_BRAIN from '../../../assets/brand/capybara-brain.png';
 
@@ -42,6 +43,9 @@ export function GamesScreen() {
   const subjectMeta = SUBJECT_META[subject];
   const subjectStars = activeProfileId ? getStarsForSubject(activeProfileId, subject) : 0;
 
+  const isMuted = useSoundStore(s => s.isMuted);
+  const toggleMute = useSoundStore(s => s.toggleMute);
+
   const hPad = useHorizontalPadding();
   const contentWidth = useContentWidth();
   const capybaraWidth = Math.min(290, Math.round(contentWidth * 0.74));
@@ -66,6 +70,9 @@ export function GamesScreen() {
         onBack={handleBack}
         onEvolution={handleEvolutionPress}
         onPet={handlePetPress}
+        showSoundToggle
+        isMuted={isMuted}
+        onSoundToggle={toggleMute}
       />
 
       <SunBackground>

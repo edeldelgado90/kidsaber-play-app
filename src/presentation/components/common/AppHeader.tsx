@@ -16,6 +16,10 @@ interface AppHeaderProps {
   backgroundColor?: string;
   /** If true, use white background (for game session header) */
   white?: boolean;
+  /** Show the mute/unmute sound toggle button */
+  showSoundToggle?: boolean;
+  isMuted?: boolean;
+  onSoundToggle?: () => void;
 }
 
 /**
@@ -34,6 +38,9 @@ export function AppHeader({
   leftSlot,
   backgroundColor,
   white = false,
+  showSoundToggle = false,
+  isMuted = false,
+  onSoundToggle,
 }: AppHeaderProps) {
   const insets = useSafeAreaInsets();
 
@@ -95,6 +102,21 @@ export function AppHeader({
                 hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               >
                 <MaterialCommunityIcons name="paw" size={24} color={iconColor} />
+              </TouchableOpacity>
+            )}
+            {showSoundToggle && (
+              <TouchableOpacity
+                onPress={onSoundToggle}
+                style={styles.iconButton}
+                accessibilityLabel={isMuted ? 'Activar sonido' : 'Silenciar'}
+                accessibilityRole="button"
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <MaterialCommunityIcons
+                  name={isMuted ? 'volume-off' : 'volume-high'}
+                  size={24}
+                  color={iconColor}
+                />
               </TouchableOpacity>
             )}
           </>
