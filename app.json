@@ -4,7 +4,7 @@
     "slug": "kidsaber-play",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/brand/logo-full.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
@@ -18,7 +18,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/brand/logo-full.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0071da"
       },
       "package": "com.kidsaber.play",
@@ -30,7 +30,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/brand/logo-full.png"
+      "favicon": "./assets/icon.png"
     },
     "plugins": ["expo-router", "expo-font", "expo-asset", "expo-audio"],
     "experiments": {
