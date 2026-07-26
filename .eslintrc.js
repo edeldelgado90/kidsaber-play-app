@@ -50,6 +50,9 @@ module.exports = {
       env: { jest: true },
       rules: {
         '@typescript-eslint/no-explicit-any': 'off',
+        // `jest.mock` factories are hoisted above the imports, so they can only
+        // pull in modules with `require`.
+        '@typescript-eslint/no-var-requires': 'off',
       },
     },
   ],
