@@ -7,13 +7,15 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
+    "export:web": "expo export --platform web --clear",
     "lint": "eslint . --ext .ts,.tsx --max-warnings 0",
     "format": "prettier --write \"**/*.{ts,tsx,js,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,json}\"",
     "typecheck": "tsc --noEmit",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "build:web": "expo export -p web --clear && cp dist/+not-found.html dist/404.html"
   },
   "dependencies": {
     "@expo-google-fonts/nunito": "^0.3.0",
@@ -50,6 +52,7 @@
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
     "babel-plugin-module-resolver": "^5.0.0",
+    "babel-plugin-transform-remove-console": "^6.9.4",
     "babel-preset-expo": "~54.0.0",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.0",

@@ -143,33 +143,3 @@ export async function httpGet<T>(url: string, options?: HttpRequestOptions): Pro
 
   return response.json() as Promise<T>;
 }
-
-/**
- * Performs a typed POST request with retry and timeout.
- * Validates the response status before returning.
- *
- * Note: retries are safe here because all POST endpoints in this app are
- * idempotent (e.g. token issuance by deviceId). Do not reuse for write
- * endpoints that are not idempotent.
- */
-export async function httpPost<TBody, TResponse>(
-  url: string,
-  body: TBody,
-  options?: HttpRequestOptions,
-): Promise<TResponse> {
-  const response = await fetchWithRetry(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      ...(options?.headers ?? {}),
-    },
-    body: JSON.stringify(body),
-  });
-
-  if (!response.ok) {
-    await throwApiError(response);
-  }
-
-  return response.json() as Promise<TResponse>;
-}

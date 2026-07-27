@@ -4,6 +4,7 @@
  */
 import { QuestionsApiService } from '../../src/data/services/QuestionsApiService';
 import { type ITokenProvider } from '../../src/domain/ports/ITokenProvider';
+import { type IAppCheckProvider } from '../../src/domain/ports/IAppCheckProvider';
 
 const mockQuestion = {
   id: 'q1',
@@ -133,6 +134,63 @@ describe('QuestionsApiService', () => {
 
     const calledOptions = mockFetch.mock.calls[0][1] as RequestInit;
     expect((calledOptions.headers as Record<string, string>)['Authorization']).toBeUndefined();
+  });
+
+  it('sends X-Firebase-AppCheck header when appCheckProvider returns a token', async () => {
+    const mockFetch = jest.fn().mockResolvedValue(makeOkResponse({ questions: [mockQuestion] }));
+    global.fetch = mockFetch;
+
+    const appCheckProvider: IAppCheckProvider = { getAppCheckToken: async () => 'appcheck-token' };
+    const serviceWithAppCheck = new QuestionsApiService(BASE_URL, undefined, appCheckProvider);
+
+    await serviceWithAppCheck.fetchQuestions({
+      subject: 'mathematics',
+      grade: 3,
+      type: 'option_multiple',
+    });
+
+    const calledOptions = mockFetch.mock.calls[0][1] as RequestInit;
+    expect((calledOptions.headers as Record<string, string>)['X-Firebase-AppCheck']).toBe(
+      'appcheck-token',
+    );
+  });
+
+  it('sends both credentials when both providers return a token', async () => {
+    const mockFetch = jest.fn().mockResolvedValue(makeOkResponse({ questions: [mockQuestion] }));
+    global.fetch = mockFetch;
+
+    const tokenProvider: ITokenProvider = { getToken: async () => 'id-token' };
+    const appCheckProvider: IAppCheckProvider = { getAppCheckToken: async () => 'appcheck-token' };
+    const serviceWithBoth = new QuestionsApiService(BASE_URL, tokenProvider, appCheckProvider);
+
+    await serviceWithBoth.fetchQuestions({
+      subject: 'mathematics',
+      grade: 3,
+      type: 'option_multiple',
+    });
+
+    const headers = (mockFetch.mock.calls[0][1] as RequestInit).headers as Record<string, string>;
+    expect(headers['Authorization']).toBe('Bearer id-token');
+    expect(headers['X-Firebase-AppCheck']).toBe('appcheck-token');
+  });
+
+  it('sends no X-Firebase-AppCheck header when appCheckProvider returns null', async () => {
+    const mockFetch = jest.fn().mockResolvedValue(makeOkResponse({ questions: [mockQuestion] }));
+    global.fetch = mockFetch;
+
+    const appCheckProvider: IAppCheckProvider = { getAppCheckToken: async () => null };
+    const serviceWithNoAppCheck = new QuestionsApiService(BASE_URL, undefined, appCheckProvider);
+
+    await serviceWithNoAppCheck.fetchQuestions({
+      subject: 'mathematics',
+      grade: 3,
+      type: 'option_multiple',
+    });
+
+    const calledOptions = mockFetch.mock.calls[0][1] as RequestInit;
+    expect(
+      (calledOptions.headers as Record<string, string>)['X-Firebase-AppCheck'],
+    ).toBeUndefined();
   });
 
   it('throws when response is not ok (500)', async () => {

@@ -13,7 +13,23 @@ concurrency:
 jobs:
   build-and-submit:
     runs-on: ubuntu-latest
+    env:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
     steps:
+      - name: Verify required secrets
+        run: |
+          missing=()
+          [ -n "$EXPO_TOKEN" ] || missing+=("EXPO_TOKEN")
+          [ -n "$GOOGLE_SERVICE_ACCOUNT_KEY" ] || missing+=("GOOGLE_SERVICE_ACCOUNT_KEY")
+          if [ ${#missing[@]} -gt 0 ]; then
+            echo "::error::Missing repository secrets: ${missing[*]}"
+            echo "Add them at Settings → Secrets and variables → Actions."
+            echo "EXPO_TOKEN: create a robot access token at https://expo.dev/accounts/[account]/settings/access-tokens"
+            exit 1
+          fi
+        env:
+          GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+
       - uses: actions/checkout@v7
 
       - uses: actions/setup-node@v7
@@ -35,7 +51,9 @@ jobs:
         # Setting it here only reaches the CLI process, not the EAS cloud build worker
 
       - name: Write Google service account key
-        run: echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}' > google-service-account.json
+        run: printf '%s' "$GOOGLE_SERVICE_ACCOUNT_KEY" > google-service-account.json
+        env:
+          GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
 
       - name: Submit to Google Play (internal track)
         run: eas submit --platform android --profile production --non-interactive

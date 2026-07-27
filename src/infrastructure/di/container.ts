@@ -7,8 +7,10 @@
 import { LocalProfileRepository } from '../../data/repositories/LocalProfileRepository';
 import { LocalProgressRepository } from '../../data/repositories/LocalProgressRepository';
 import { FirebaseTokenService } from '../../data/services/FirebaseTokenService';
+import { FirebaseAppCheckService } from '../../data/services/FirebaseAppCheckService';
 import { QuestionsApiService } from '../../data/services/QuestionsApiService';
 import { firebaseAuth } from '../firebase/firebaseApp';
+import { firebaseAppCheck } from '../firebase/firebaseAppCheck';
 import { Config } from '../config/env';
 
 // Repositories (singletons — shared across the app)
@@ -20,5 +22,15 @@ export const progressRepository = new LocalProgressRepository();
 // and QuestionsApiService makes unauthenticated requests.
 export const tokenProvider = firebaseAuth ? new FirebaseTokenService(firebaseAuth) : undefined;
 
+// App Check (singleton — web only; undefined on native and when the reCAPTCHA
+// site key is absent). Attests that requests come from a genuine app instance.
+export const appCheckProvider = firebaseAppCheck
+  ? new FirebaseAppCheckService(firebaseAppCheck)
+  : undefined;
+
 // Services (singletons)
-export const questionsService = new QuestionsApiService(Config.API_URL, tokenProvider);
+export const questionsService = new QuestionsApiService(
+  Config.API_URL,
+  tokenProvider,
+  appCheckProvider,
+);
