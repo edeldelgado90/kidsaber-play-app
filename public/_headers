@@ -1,0 +1,16 @@
+# Cloudflare Pages headers. Files in public/ are copied to the export root,
+# where Pages picks this up automatically.
+# Docs: https://developers.cloudflare.com/pages/configuration/headers/
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+
+# Fingerprinted bundles and assets never change under the same name.
+/_expo/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

@@ -137,13 +137,50 @@ Canonical answer field: **`correctAnswers`** (array).
 ## CI/CD
 
 - **CI**: GitHub Actions — lint + typecheck + tests on every push/PR
-- **CD**: EAS Build + EAS Submit — Android AAB to Google Play internal track on `main`
+- **CD (Android)**: EAS Build + EAS Submit — AAB to Google Play internal track on `main`
+- **CD (web)**: Cloudflare Pages builds on every push, straight from the Git integration
 
 Required GitHub secrets:
 
 - `EXPO_TOKEN` — from expo.dev account settings
 - `EXPO_PUBLIC_API_URL` — questions API base URL
 - `GOOGLE_SERVICE_ACCOUNT_KEY` — Google Play API access JSON
+
+## Deploy web (Cloudflare Pages)
+
+The web build is a static export: `npm run build:web` runs `expo export -p web`
+and copies `+not-found.html` to `404.html`, the filename Cloudflare Pages serves
+for unmatched routes. Everything in `public/` (currently `_headers`) is copied to
+the export root.
+
+**One-time setup** — Cloudflare dashboard → Workers & Pages → Create → Connect to Git:
+
+| Setting | Value |
+|---------|-------|
+| Project name | `kidsaber-play` (defines the `*.pages.dev` URL) |
+| Production branch | `main` |
+| Build command | `npm run build:web` |
+| Output directory | `dist` |
+
+Then add the `EXPO_PUBLIC_*` variables under Settings → Environment variables, for
+**both** Production and Preview. Expo inlines them at build time, so a missing
+variable silently ships a broken bundle rather than failing the build — except
+`EXPO_PUBLIC_API_URL`, which must be `https://` or the export aborts.
+
+**The API must allow the origin.** `CORS_ALLOWED_ORIGINS` on the API has to list
+the Pages URLs, or the browser blocks every request:
+
+```
+https://kidsaber-play.pages.dev,https://*.kidsaber-play.pages.dev
+```
+
+The wildcard covers the per-deployment preview hostnames. The app authenticates
+with a Firebase anonymous ID token sent as `Authorization: Bearer <idToken>`;
+the API accepts it when `FIREBASE_PROJECT_ID` is configured there.
+
+Before the first deploy, confirm in Firebase Console → Authentication → Settings
+→ Authorized domains that the Pages domain is allowed, and check whether the web
+API key has HTTP referrer restrictions that would exclude it.
 
 ## Environment variables
 
