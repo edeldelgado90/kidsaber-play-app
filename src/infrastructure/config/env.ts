@@ -23,6 +23,11 @@ const FIREBASE_AUTH_DOMAIN = process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN ?? '';
 const FIREBASE_PROJECT_ID = process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID ?? '';
 const FIREBASE_APP_ID = process.env.EXPO_PUBLIC_FIREBASE_APP_ID ?? '';
 
+// reCAPTCHA Enterprise site key backing App Check on web. Public by design —
+// it only works on the domains registered in Google Cloud. Empty disables
+// App Check, leaving ID-token-only auth.
+const RECAPTCHA_SITE_KEY = process.env.EXPO_PUBLIC_RECAPTCHA_SITE_KEY ?? '';
+
 if (process.env.NODE_ENV !== 'test') {
   const missingFirebase = [
     !FIREBASE_API_KEY && 'EXPO_PUBLIC_FIREBASE_API_KEY',
@@ -46,4 +51,5 @@ export const Config = {
   FIREBASE_AUTH_DOMAIN,
   FIREBASE_PROJECT_ID,
   FIREBASE_APP_ID,
+  RECAPTCHA_SITE_KEY,
 } as const;

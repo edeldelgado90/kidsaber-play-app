@@ -15,7 +15,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "build:web": "expo export -p web && cp dist/+not-found.html dist/404.html"
+    "build:web": "expo export -p web --clear && cp dist/+not-found.html dist/404.html"
   },
   "dependencies": {
     "@expo-google-fonts/nunito": "^0.3.0",

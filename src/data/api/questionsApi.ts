@@ -18,20 +18,27 @@ export interface QuestionsApiParams {
  * Typed API client for the KidSaber questions endpoint.
  * Maps raw API DTOs to domain Question entities and validates the response shape.
  *
- * @param token - Optional short-lived bearer token obtained from DeviceTokenService.
+ * @param token - Optional Firebase ID token, sent as `Authorization: Bearer`.
  *                Required when the server runs with AUTH_ENABLED=true.
  *                Pass undefined (or null) for unauthenticated requests.
+ * @param appCheckToken - Optional Firebase App Check token, sent as
+ *                `X-Firebase-AppCheck`. Attests the request comes from a genuine
+ *                app instance. The API accepts either credential on its own.
  */
 export async function fetchQuestionsFromApi(
   baseUrl: string,
   params: QuestionsApiParams,
   token?: string | null,
+  appCheckToken?: string | null,
 ): Promise<Question[]> {
   const url = buildUrl(baseUrl, params);
 
   const headers: Record<string, string> = {};
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
+  }
+  if (appCheckToken) {
+    headers['X-Firebase-AppCheck'] = appCheckToken;
   }
 
   const data = await httpGet<unknown>(url, { headers });
