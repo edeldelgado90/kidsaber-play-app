@@ -13,11 +13,18 @@
  * this renames the shallowest match, rewrites that exact path prefix, and
  * repeats until none are left. Renaming is safe because nothing derives these
  * paths at runtime — they are string literals in the bundle.
+ *
+ * Editing the bundle invalidates the content hash Metro baked into its
+ * filename, so the last step re-hashes every rewritten bundle and renames it.
+ * `public/_headers` serves `/_expo/*` as `immutable, max-age=31536000`: without
+ * a new name, returning visitors keep a year-old cached bundle that still
+ * points at the old asset paths — a blank page no redeploy can fix.
  */
 
 import { readdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
-import { join, posix } from 'node:path';
+import { createHash } from 'node:crypto';
+import { basename, join, posix } from 'node:path';
 
 const DIST = 'dist';
 const ASSETS = join(DIST, 'assets');
@@ -102,7 +109,43 @@ async function main() {
     process.exit(1);
   }
 
-  console.log(`[assets] done — ${renamed} director${renamed === 1 ? 'y' : 'ies'} renamed`);
+  const rehashed = await rehashBundles();
+
+  console.log(
+    `[assets] done — ${renamed} director${renamed === 1 ? 'y' : 'ies'} renamed, ` +
+      `${rehashed} bundle(s) re-hashed`,
+  );
+}
+
+/**
+ * Renames every `name-<md5>.js` bundle whose content no longer matches its
+ * hash, and updates the references to it.
+ *
+ * Metro computes the hash before this script edits the file, so a rewritten
+ * bundle keeps a name that describes its previous content. Under an immutable
+ * cache policy that name is a promise the file no longer keeps.
+ */
+async function rehashBundles() {
+  const HASHED = /^(.*)-([0-9a-f]{32})\.js$/;
+  let count = 0;
+
+  for await (const file of walkFiles(DIST)) {
+    const match = HASHED.exec(basename(file));
+    if (match === null) continue;
+
+    const contents = await readFile(file);
+    const hash = createHash('md5').update(contents).digest('hex');
+    if (hash === match[2]) continue;
+
+    const from = basename(file);
+    const to = `${match[1]}-${hash}.js`;
+    await rename(file, join(posix.dirname(file), to));
+    await rewriteReferences(from, to);
+    console.log(`[assets] ${from} -> ${to}`);
+    count++;
+  }
+
+  return count;
 }
 
 await main();
