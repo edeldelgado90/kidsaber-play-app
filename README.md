@@ -170,11 +170,20 @@ Cloudflare Git integration is **not** used, so Cloudflare never builds anything 
 it only receives the finished `dist/`. Build settings in the Cloudflare dashboard
 are therefore irrelevant; the pipeline lives entirely in `deploy-web.yml`.
 
-`npm run build:web` runs `expo export -p web --clear` and copies
-`+not-found.html` to `404.html`, the filename Cloudflare Pages serves for
-unmatched routes. `--clear` matters: Metro's transform cache is not keyed on
-`EXPO_PUBLIC_*` values, so a warm cache can silently inline a stale API URL.
-Everything in `public/` (currently `_headers`) is copied to the export root.
+`npm run build:web` runs `expo export -p web --clear`, copies `+not-found.html`
+to `404.html` (the filename Cloudflare Pages serves for unmatched routes), and
+then runs `scripts/rewrite-node-modules-assets.mjs`. `--clear` matters: Metro's
+transform cache is not keyed on `EXPO_PUBLIC_*` values, so a warm cache can
+silently inline a stale API URL. Everything in `public/` (currently `_headers`)
+is copied to the export root.
+
+That last step is not optional. Wrangler skips any file whose path contains a
+`node_modules` segment ([workers-sdk#3615](https://github.com/cloudflare/workers-sdk/issues/3615)),
+and Metro exports packaged dependencies' assets to `dist/assets/node_modules/`
+— including the Nunito fonts. `app/_layout.tsx` returns `null` until
+`useKidSaberFonts()` resolves, so a deploy missing those fonts is a blank page
+that never issues a single API request. The script renames those directories to
+`vendor/`, rewrites the references, and exits non-zero if any survive.
 
 **One-time Cloudflare setup:**
 
