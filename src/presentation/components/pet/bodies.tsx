@@ -39,21 +39,23 @@ function CapybaraBody() {
         </LinearGradient>
       </Defs>
 
-      {/* Pear-shaped sitting body with shoulders narrower than the head */}
+      {/* Chunky low body; the big head sits directly on it (capybaras have
+          no visible neck — see assets/brand). The scarf layer draws on top
+          of the junction, wrapping the base of the head. */}
       <Path
-        d="M 56 150
-           Q 58 114 100 110
-           Q 142 114 144 150
-           Q 144 180 122 184
-           L 78 184
-           Q 56 180 56 150 Z"
+        d="M 48 146
+           Q 48 96 100 92
+           Q 152 96 152 146
+           Q 152 180 126 184
+           L 74 184
+           Q 48 180 48 146 Z"
         fill="url(#capyBody)"
       />
       {/* Soft belly (same hue family, low contrast) */}
-      <Ellipse cx={100} cy={152} rx={28} ry={25} fill={p.belly} opacity={0.5} />
+      <Ellipse cx={100} cy={150} rx={32} ry={27} fill={p.belly} opacity={0.5} />
       {/* Fur texture: short strokes on the flanks */}
       <Path
-        d="M 64 136 L 60 146 M 72 124 L 68 134 M 136 136 L 140 146 M 128 124 L 132 134"
+        d="M 58 134 L 54 144 M 66 120 L 62 130 M 142 134 L 146 144 M 134 120 L 138 130"
         stroke={p.bodyDark}
         strokeWidth={2}
         strokeLinecap="round"
@@ -68,11 +70,6 @@ function CapybaraBody() {
         strokeWidth={2}
         strokeLinecap="round"
       />
-
-      {/* Short, WIDE neck: just enough gap so a scarf reads clearly */}
-      <Path d="M 76 90 L 124 90 L 121 116 Q 100 124 79 116 Z" fill={p.body} />
-      {/* Contact shadow of the head over the chest (depth) */}
-      <Ellipse cx={100} cy={104} rx={30} ry={5} fill="#000000" opacity={0.1} />
 
       {/* Head in 3/4 view (Peppa-style): blunt boxy snout pointing left */}
       <Defs>
