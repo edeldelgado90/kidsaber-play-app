@@ -8,7 +8,8 @@ import {
 import { validateAnswer } from '../../domain/usecases/game/ValidateAnswer';
 import { fetchQuestions } from '../../domain/usecases/game/FetchQuestions';
 import { saveSessionResult } from '../../domain/usecases/game/SaveSessionResult';
-import { questionsService, progressRepository } from '../di/container';
+import { questionsService, progressRepository, economyRepository } from '../di/container';
+import { useEconomyStore } from './economyStore';
 
 export type SessionStatus = 'idle' | 'loading' | 'playing' | 'finished' | 'error';
 
@@ -99,12 +100,15 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
     const { subject, gameType, starEarned } = get();
     if (!subject || !gameType) return;
 
-    await saveSessionResult(progressRepository, {
+    await saveSessionResult(progressRepository, economyRepository, {
       profileId,
       subject,
       gameType,
       starEarned,
     });
+
+    // Wallet balance may have changed — keep the economy store in sync
+    await useEconomyStore.getState().loadEconomy();
   },
 
   resetSession: () => set(initialState),

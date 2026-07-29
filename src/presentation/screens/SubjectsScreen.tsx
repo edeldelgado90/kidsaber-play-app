@@ -9,6 +9,8 @@ import { SunBackground } from '@/presentation/components/common/SunBackground';
 import { AppHeader } from '@/presentation/components/common/AppHeader';
 import { SubjectCard } from '@/presentation/components/subject/SubjectCard';
 import { ProfileChip } from '@/presentation/components/profile/ProfileChip';
+import { PetUnlockModal } from '@/presentation/components/pet/PetUnlockModal';
+import { usePetIntro } from '@/infrastructure/hooks/usePetIntro';
 import { Colors, Spacing, Radii, Typography } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
 import { useContentWidth, useHorizontalPadding } from '@/infrastructure/platform/useBreakpoint';
@@ -38,6 +40,7 @@ export function SubjectsScreen() {
 
   const activeProfile = getActiveProfile();
   const activeProfileId = useProfileStore(s => s.activeProfileId);
+  const { shouldShow: showPetIntro, dismiss: dismissPetIntro } = usePetIntro(activeProfileId);
 
   const totalStars = activeProfileId ? getTotalStars(activeProfileId) : 0;
   const maxStars = SUBJECTS_ORDER.length * 5; // rough display cap
@@ -56,6 +59,15 @@ export function SubjectsScreen() {
 
   const handlePetPress = () => {
     router.push('/(main)/pet');
+  };
+
+  const handlePetIntroChoose = () => {
+    void dismissPetIntro();
+    router.push('/(main)/pet/select');
+  };
+
+  const handlePetIntroLater = () => {
+    void dismissPetIntro();
   };
 
   return (
@@ -134,6 +146,13 @@ export function SubjectsScreen() {
           />
         </View>
       </SunBackground>
+
+      {/* Pet feature announcement (update-unlock flow, once per profile) */}
+      <PetUnlockModal
+        visible={showPetIntro}
+        onChoose={handlePetIntroChoose}
+        onLater={handlePetIntroLater}
+      />
     </View>
   );
 }

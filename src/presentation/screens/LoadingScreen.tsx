@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet, Animated } from 'react-native';
 import { router } from 'expo-router';
 import { useProfileStore } from '@/infrastructure/store/profileStore';
 import { useProgressStore } from '@/infrastructure/store/progressStore';
+import { useEconomyStore } from '@/infrastructure/store/economyStore';
 import { Colors } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
 import { useContentWidth } from '@/infrastructure/platform/useBreakpoint';
@@ -66,6 +67,10 @@ export function LoadingScreen() {
 
     const loadData = async () => {
       await Promise.all([loadProfiles(), loadProgress()]);
+      // v1 → v2 migration: profiles without economy data get their historic
+      // stars as initial spendable balance for the pet shop.
+      const profileIds = useProfileStore.getState().profiles.map(p => p.id);
+      await useEconomyStore.getState().ensureSeededAndLoad(profileIds);
     };
 
     loadData().then(() => {

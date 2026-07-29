@@ -45,6 +45,15 @@ jest.mock('../../src/infrastructure/store/progressStore', () => ({
   }),
 }));
 
+const mockEnsureSeededAndLoad = jest.fn().mockResolvedValue(undefined);
+
+jest.mock('../../src/infrastructure/store/economyStore', () => ({
+  // LoadingScreen uses the economy store imperatively via getState()
+  useEconomyStore: Object.assign(jest.fn(), {
+    getState: () => ({ ensureSeededAndLoad: mockEnsureSeededAndLoad }),
+  }),
+}));
+
 jest.mock('../../src/infrastructure/platform/useBreakpoint', () => ({
   useContentWidth: jest.fn(() => 375),
   useHorizontalPadding: jest.fn(() => 16),
@@ -60,6 +69,7 @@ beforeEach(() => {
   mockProfilesState = { profiles: [] };
   mockLoadProfiles.mockResolvedValue(undefined);
   mockLoadProgress.mockResolvedValue(undefined);
+  mockEnsureSeededAndLoad.mockResolvedValue(undefined);
 });
 
 afterEach(() => {
