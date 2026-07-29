@@ -37,7 +37,7 @@ const TARGET_HEIGHTS: Record<PetSpeciesId, number> = {
 
 export function PetModel({ speciesId }: { speciesId: PetSpeciesId }) {
   const group = useRef<Group>(null);
-  const { scene, animations } = useGLTF(MODEL_SOURCES[speciesId] as unknown as string);
+  const { scene, animations } = useGLTF(MODEL_SOURCES[speciesId]);
   const { actions } = useAnimations(animations, group);
 
   // Play the species idle clip when available
