@@ -111,3 +111,65 @@ describe('validateAnswer — matching', () => {
     expect(validateAnswer(q, 'L1-R3')).toBe(false);
   });
 });
+
+describe('validateAnswer — matching with repeated column B labels', () => {
+  // Classification questions ("is each word masculine or feminine?") repeat a
+  // label in column B. The chips are indistinguishable, so any chip carrying the
+  // expected label must count.
+  const makeClassification = () =>
+    makeQuestion({
+      type: 'matching',
+      pairs: {
+        left: [
+          { id: 'L1', text: 'mesa' },
+          { id: 'L2', text: 'libro' },
+          { id: 'L3', text: 'silla' },
+        ],
+        right: [
+          { id: 'R1', text: 'femenino' },
+          { id: 'R2', text: 'masculino' },
+          { id: 'R3', text: 'femenino' },
+        ],
+      },
+      correctAnswers: [
+        { leftId: 'L1', rightId: 'R1' },
+        { leftId: 'L2', rightId: 'R2' },
+        { leftId: 'L3', rightId: 'R3' },
+      ],
+    });
+
+  it('accepts the twin chip carrying the same label', () => {
+    const answer = [
+      { leftId: 'L1', rightId: 'R3' }, // twin of R1, same label
+      { leftId: 'L2', rightId: 'R2' },
+      { leftId: 'L3', rightId: 'R1' }, // twin of R3, same label
+    ];
+    expect(validateAnswer(makeClassification(), answer)).toBe(true);
+  });
+
+  it('still rejects a genuinely wrong label', () => {
+    const answer = [
+      { leftId: 'L1', rightId: 'R2' }, // masculino for "mesa"
+      { leftId: 'L2', rightId: 'R1' },
+      { leftId: 'L3', rightId: 'R3' },
+    ];
+    expect(validateAnswer(makeClassification(), answer)).toBe(false);
+  });
+
+  it('compares by id when the question carries no pairs', () => {
+    const answers = [
+      { leftId: 'L1', rightId: 'R3' },
+      { leftId: 'L2', rightId: 'R1' },
+      { leftId: 'L3', rightId: 'R2' },
+    ];
+    const q = makeQuestion({ type: 'matching', correctAnswers: answers });
+    expect(validateAnswer(q, [...answers])).toBe(true);
+    expect(
+      validateAnswer(q, [
+        { leftId: 'L1', rightId: 'R1' },
+        { leftId: 'L2', rightId: 'R3' },
+        { leftId: 'L3', rightId: 'R2' },
+      ]),
+    ).toBe(false);
+  });
+});
