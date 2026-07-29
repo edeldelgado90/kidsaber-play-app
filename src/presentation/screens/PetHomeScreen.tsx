@@ -263,6 +263,9 @@ const styles = StyleSheet.create({
   foodRow: {
     flexDirection: 'row',
     gap: Spacing.sm,
+    // Breathing room so the overflowing qty badges aren't clipped by the scroll view
+    paddingHorizontal: Spacing.xs,
+    paddingVertical: 6,
   },
   loadingContent: {
     alignItems: 'center',
@@ -302,8 +305,9 @@ const styles = StyleSheet.create({
     minWidth: 20,
     paddingHorizontal: 4,
     position: 'absolute',
-    right: -4,
-    top: -4,
+    right: -5,
+    top: -5,
+    zIndex: 1,
   },
   qtyText: {
     color: '#ffffff',
