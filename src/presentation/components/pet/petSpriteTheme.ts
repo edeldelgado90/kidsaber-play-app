@@ -46,11 +46,10 @@ export interface EquipOffset {
 }
 
 /** Small per-species nudges so items sit naturally (e.g. above horns/ears). */
-export const EQUIP_OFFSETS: Record<
-  PetSpeciesId,
-  Partial<Record<EquipSlot, EquipOffset>>
-> = {
-  capybara: {},
+export const EQUIP_OFFSETS: Record<PetSpeciesId, Partial<Record<EquipSlot, EquipOffset>>> = {
+  // Capybara head is in profile with a single eye at (84,66): shift the
+  // glasses so the front lens centers on it.
+  capybara: { glasses: { dx: 2, dy: -4 } },
   kitten: { hat: { dx: 0, dy: -4 } },
   dragon: { hat: { dx: 0, dy: -6 }, glasses: { dx: 0, dy: 2 } },
 };

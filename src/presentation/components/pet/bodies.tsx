@@ -160,9 +160,9 @@ function CapybaraBody() {
         opacity={0.6}
       />
 
-      {/* Thin eyebrows following the dome */}
+      {/* Single eyebrow over the visible eye (profile view) */}
       <Path
-        d="M 72 58 Q 80 54 88 58 M 108 56 Q 116 52 124 56"
+        d="M 74 54 Q 83 50 92 54"
         stroke={p.bodyDark}
         strokeWidth={2}
         strokeLinecap="round"
@@ -189,8 +189,11 @@ function CapybaraBody() {
         fill="none"
       />
 
-      {/* Big warm brown eyes, gaze following the snout (both point left) */}
-      <Eyes r={7.5} dx={-2.5} color="#3a2a1c" />
+      {/* Single big warm eye — profile heads show only one (the far eye
+          would be on the other side of the face) */}
+      <Circle cx={84} cy={66} r={8.5} fill="#3a2a1c" />
+      <Circle cx={81.5} cy={63.5} r={2.9} fill="#ffffff" />
+      <Circle cx={87} cy={70} r={1.4} fill="#ffffff" opacity={0.7} />
       <Circle cx={70} cy={86} r={6.5} fill={p.blush} opacity={0.55} />
       <Circle cx={125} cy={87} r={6} fill={p.blush} opacity={0.5} />
     </G>
