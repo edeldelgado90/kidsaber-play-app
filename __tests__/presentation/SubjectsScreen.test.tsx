@@ -20,14 +20,23 @@ jest.mock('react-native-svg', () => {
     __esModule: true,
     default: RN.View,
     Svg: RN.View,
+    G: RN.View,
+    Path: RN.View,
+    Ellipse: RN.View,
     Circle: RN.View,
     Line: RN.View,
     Rect: RN.View,
     Defs: RN.View,
     RadialGradient: RN.View,
+    LinearGradient: RN.View,
     Stop: RN.View,
   };
 });
+
+// Avoid pulling the real DI container (firebase) through the pet intro hook.
+jest.mock('../../src/infrastructure/hooks/usePetIntro', () => ({
+  usePetIntro: () => ({ shouldShow: false, dismiss: jest.fn() }),
+}));
 
 // The factory must be self-contained: jest hoists `jest.mock` above the ESM
 // imports, and those imports run before any module-level `const`, so a factory

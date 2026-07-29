@@ -1,5 +1,6 @@
 import { saveSessionResult } from '../../src/domain/usecases/game/SaveSessionResult';
 import type { IProgressRepository } from '../../src/domain/ports/IProgressRepository';
+import type { IEconomyRepository } from '../../src/domain/ports/IEconomyRepository';
 
 function makeRepo(): jest.Mocked<IProgressRepository> {
   return {
@@ -10,10 +11,21 @@ function makeRepo(): jest.Mocked<IProgressRepository> {
   };
 }
 
+function makeEconomyRepo(): jest.Mocked<IEconomyRepository> {
+  return {
+    getEconomy: jest.fn(),
+    getProfileEconomy: jest.fn(),
+    saveProfileEconomy: jest.fn(),
+    creditStar: jest.fn().mockResolvedValue(undefined),
+    resetEconomy: jest.fn(),
+  };
+}
+
 describe('saveSessionResult', () => {
   it('always calls saveLastSession', async () => {
     const repo = makeRepo();
-    await saveSessionResult(repo, {
+    const economyRepo = makeEconomyRepo();
+    await saveSessionResult(repo, economyRepo, {
       profileId: 'p1',
       subject: 'mathematics',
       gameType: 'option_multiple',
@@ -28,9 +40,10 @@ describe('saveSessionResult', () => {
     );
   });
 
-  it('calls addStar when starEarned is true', async () => {
+  it('calls addStar and creditStar when starEarned is true', async () => {
     const repo = makeRepo();
-    await saveSessionResult(repo, {
+    const economyRepo = makeEconomyRepo();
+    await saveSessionResult(repo, economyRepo, {
       profileId: 'p1',
       subject: 'language',
       gameType: 'matching',
@@ -38,11 +51,13 @@ describe('saveSessionResult', () => {
     });
 
     expect(repo.addStar).toHaveBeenCalledWith('p1', 'language', 'matching');
+    expect(economyRepo.creditStar).toHaveBeenCalledWith('p1');
   });
 
-  it('does NOT call addStar when starEarned is false', async () => {
+  it('does NOT call addStar nor creditStar when starEarned is false', async () => {
     const repo = makeRepo();
-    await saveSessionResult(repo, {
+    const economyRepo = makeEconomyRepo();
+    await saveSessionResult(repo, economyRepo, {
       profileId: 'p1',
       subject: 'science',
       gameType: 'fill_in_the_blanks',
@@ -50,11 +65,13 @@ describe('saveSessionResult', () => {
     });
 
     expect(repo.addStar).not.toHaveBeenCalled();
+    expect(economyRepo.creditStar).not.toHaveBeenCalled();
   });
 
   it('saveLastSession receives an ISO 8601 timestamp', async () => {
     const repo = makeRepo();
-    await saveSessionResult(repo, {
+    const economyRepo = makeEconomyRepo();
+    await saveSessionResult(repo, economyRepo, {
       profileId: 'p1',
       subject: 'mathematics',
       gameType: 'quick_calculation',

@@ -13,7 +13,12 @@ jest.mock('@expo-google-fonts/nunito', () => ({
   Nunito_800ExtraBold: 'Nunito_800ExtraBold',
 }));
 
-const profile: Profile = { id: 'p1', name: 'Luis', grade: 4, createdAt: '2024-01-01T00:00:00.000Z' };
+const profile: Profile = {
+  id: 'p1',
+  name: 'Luis',
+  grade: 4,
+  createdAt: '2024-01-01T00:00:00.000Z',
+};
 
 describe('ProfileRow', () => {
   it('renders profile name and grade', () => {

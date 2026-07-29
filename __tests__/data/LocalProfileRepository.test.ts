@@ -5,8 +5,18 @@ import type { Profile } from '../../src/domain/entities/Profile';
 
 const mockAS = AsyncStorage as jest.Mocked<typeof AsyncStorage>;
 
-const profile1: Profile = { id: 'p1', name: 'Ana', grade: 2, createdAt: '2024-01-01T00:00:00.000Z' };
-const profile2: Profile = { id: 'p2', name: 'Luis', grade: 4, createdAt: '2024-02-01T00:00:00.000Z' };
+const profile1: Profile = {
+  id: 'p1',
+  name: 'Ana',
+  grade: 2,
+  createdAt: '2024-01-01T00:00:00.000Z',
+};
+const profile2: Profile = {
+  id: 'p2',
+  name: 'Luis',
+  grade: 4,
+  createdAt: '2024-02-01T00:00:00.000Z',
+};
 
 function seedProfiles(profiles: Profile[]) {
   mockAS.getItem.mockImplementation(key => {

@@ -7,6 +7,11 @@ export const StorageKeys = {
   ACTIVE_PROFILE_ID: '@kidsaber/active_profile_id',
   PROFILES: '@kidsaber/profiles',
   PROGRESS: '@kidsaber/progress',
+  PETS: '@kidsaber/pets',
+  ECONOMY: '@kidsaber/economy',
+  PET_INTRO_SEEN: '@kidsaber/pet_intro_seen',
 } as const;
 
-export const CURRENT_SCHEMA_VERSION = 1;
+// v2: pet + star economy added (v1.5 feature). Profiles without economy data
+// are seeded from historic stars on first load (EnsureEconomySeeded).
+export const CURRENT_SCHEMA_VERSION = 2;

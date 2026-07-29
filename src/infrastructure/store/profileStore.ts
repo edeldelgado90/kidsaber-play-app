@@ -1,6 +1,11 @@
 import { create } from 'zustand';
 import { type Profile } from '../../domain/entities/Profile';
-import { profileRepository, progressRepository } from '../di/container';
+import {
+  profileRepository,
+  progressRepository,
+  petRepository,
+  economyRepository,
+} from '../di/container';
 import { createProfile } from '../../domain/usecases/profile/CreateProfile';
 import { updateProfile } from '../../domain/usecases/profile/UpdateProfile';
 import { deleteProfile } from '../../domain/usecases/profile/DeleteProfile';
@@ -80,7 +85,13 @@ export const useProfileStore = create<ProfileStore>((set, get) => ({
   deleteProfile: async (id: string) => {
     set({ isLoading: true, error: null });
     try {
-      await deleteProfile(profileRepository, progressRepository, id);
+      await deleteProfile(
+        profileRepository,
+        progressRepository,
+        petRepository,
+        economyRepository,
+        id,
+      );
       const [profiles, activeProfileId] = await Promise.all([
         profileRepository.getAll(),
         profileRepository.getActiveProfileId(),

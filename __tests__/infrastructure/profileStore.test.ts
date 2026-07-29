@@ -19,6 +19,19 @@ jest.mock('../../src/infrastructure/di/container', () => ({
     saveLastSession: jest.fn(),
     resetProgress: jest.fn(),
   },
+  petRepository: {
+    getPets: jest.fn(),
+    getPet: jest.fn(),
+    savePet: jest.fn(),
+    resetPet: jest.fn(),
+  },
+  economyRepository: {
+    getEconomy: jest.fn(),
+    getProfileEconomy: jest.fn(),
+    saveProfileEconomy: jest.fn(),
+    creditStar: jest.fn(),
+    resetEconomy: jest.fn(),
+  },
   questionsService: { fetchQuestions: jest.fn() },
 }));
 

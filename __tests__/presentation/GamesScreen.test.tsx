@@ -92,9 +92,7 @@ describe('GamesScreen', () => {
     // buttons, which navigate elsewhere.
     const { getByLabelText } = render(<GamesScreen />);
     fireEvent.press(getByLabelText(/^Opción múltiple:/));
-    expect(mockRouter.push).toHaveBeenCalledWith(
-      '/(main)/play/mathematics/option_multiple',
-    );
+    expect(mockRouter.push).toHaveBeenCalledWith('/(main)/play/mathematics/option_multiple');
   });
 
   it('calls router.back when back button pressed', () => {

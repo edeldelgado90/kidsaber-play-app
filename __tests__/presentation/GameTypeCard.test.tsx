@@ -22,9 +22,7 @@ describe('GameTypeCard', () => {
 
   it('calls onPress when pressed', () => {
     const onPress = jest.fn();
-    const { getByRole } = render(
-      <GameTypeCard gameType="matching" stars={2} onPress={onPress} />,
-    );
+    const { getByRole } = render(<GameTypeCard gameType="matching" stars={2} onPress={onPress} />);
     fireEvent.press(getByRole('button'));
     expect(onPress).toHaveBeenCalledTimes(1);
   });
