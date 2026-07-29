@@ -26,7 +26,7 @@ export function validateAnswer(question: Question, userAnswer: unknown): boolean
 
     case 'matching':
       // User provides an array of { leftId, rightId } pairs
-      return isMatchingAnswer(correctAnswers, userAnswer);
+      return isMatchingAnswer(correctAnswers, userAnswer, question);
 
     default:
       return false;
@@ -46,12 +46,38 @@ function isNumericAnswer(correctAnswers: CorrectAnswers, userAnswer: unknown): b
   return correct.some(c => c === numAnswer);
 }
 
-function isMatchingAnswer(correctAnswers: CorrectAnswers, userAnswer: unknown): boolean {
+function isMatchingAnswer(
+  correctAnswers: CorrectAnswers,
+  userAnswer: unknown,
+  question: Question,
+): boolean {
   if (!Array.isArray(userAnswer)) return false;
   const correct = correctAnswers as MatchingAnswer[];
   const user = userAnswer as MatchingAnswer[];
 
   if (user.length !== correct.length) return false;
 
-  return correct.every(ca => user.some(ua => ua.leftId === ca.leftId && ua.rightId === ca.rightId));
+  // Classification questions repeat a label in column B ("masculino" twice, say).
+  // Those chips are indistinguishable on screen, so accept any chip carrying the
+  // expected label rather than the one specific ID the question happens to name.
+  const labelOf = buildRightLabelLookup(question);
+
+  return correct.every(ca =>
+    user.some(ua => ua.leftId === ca.leftId && labelOf(ua.rightId) === labelOf(ca.rightId)),
+  );
+}
+
+/**
+ * Maps a column B item ID to its normalised label, falling back to the ID itself
+ * when the question carries no pairs (so validation stays strict).
+ */
+function buildRightLabelLookup(question: Question): (rightId: string) => string {
+  const right = question.pairs?.right;
+  if (!right) return (rightId: string) => rightId;
+
+  const labels = new Map<string, string>();
+  for (const item of right) {
+    labels.set(item.id, item.text.trim().toLowerCase());
+  }
+  return (rightId: string) => labels.get(rightId) ?? rightId;
 }
