@@ -39,19 +39,19 @@ function CapybaraBody() {
         </LinearGradient>
       </Defs>
 
-      {/* Loaf-shaped body (capybaras sit like a bread loaf, no visible tail) */}
+      {/* Loaf-shaped body with narrower shoulders (leaves room for the neck) */}
       <Path
-        d="M 42 152
-           Q 42 108 100 106
-           Q 158 108 158 152
-           Q 158 182 128 184
-           L 72 184
-           Q 42 182 42 152 Z"
+        d="M 46 154
+           Q 46 118 100 114
+           Q 154 118 154 154
+           Q 154 182 126 184
+           L 74 184
+           Q 46 182 46 154 Z"
         fill="url(#capyBody)"
       />
       {/* Fur texture: short strokes on the flanks */}
       <Path
-        d="M 56 132 L 52 142 M 66 122 L 62 132 M 144 132 L 148 142 M 134 122 L 138 132 M 96 114 L 94 122 M 108 114 L 110 122"
+        d="M 58 136 L 54 146 M 68 126 L 64 136 M 142 136 L 146 146 M 132 126 L 136 136 M 96 122 L 94 130 M 108 122 L 110 130"
         stroke={p.bodyDark}
         strokeWidth={2}
         strokeLinecap="round"
@@ -69,6 +69,25 @@ function CapybaraBody() {
       {/* Hind feet peeking at the sides */}
       <Ellipse cx={50} cy={178} rx={10} ry={7} fill={p.bodyDark} />
       <Ellipse cx={150} cy={178} rx={10} ry={7} fill={p.bodyDark} />
+
+      {/* Neck connecting head and shoulders (narrower than both) */}
+      <Path
+        d="M 80 92
+           Q 80 86 100 86
+           Q 120 86 120 92
+           L 120 118
+           Q 100 128 80 118 Z"
+        fill={p.body}
+      />
+      {/* Crease where the neck meets the chest */}
+      <Path
+        d="M 83 117 Q 100 124 117 117"
+        stroke={p.bodyDark}
+        strokeWidth={2}
+        strokeLinecap="round"
+        fill="none"
+        opacity={0.35}
+      />
 
       {/* Head: flat-topped, boxy muzzle — the capybara silhouette */}
       <Path
