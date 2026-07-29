@@ -1,5 +1,7 @@
 import { Asset } from 'expo-asset';
 import { useGLTF as useDreiGLTF, useAnimations } from '@react-three/drei';
+import { type ObjectMap } from '@react-three/fiber';
+import { type GLTF } from 'three-stdlib';
 
 /**
  * Platform split for GLTF helpers:
@@ -10,7 +12,7 @@ import { useGLTF as useDreiGLTF, useAnimations } from '@react-three/drei';
 
 export { useAnimations };
 
-export function useGLTF(source: number | string): ReturnType<typeof useDreiGLTF> {
+export function useGLTF(source: number | string): GLTF & ObjectMap {
   const uri = typeof source === 'number' ? Asset.fromModule(source).uri : source;
-  return useDreiGLTF(uri);
+  return useDreiGLTF(uri) as GLTF & ObjectMap;
 }
