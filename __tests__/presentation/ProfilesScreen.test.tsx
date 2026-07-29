@@ -35,6 +35,14 @@ jest.mock('react-native-svg', () => {
 jest.mock('expo-router', () => ({
   router: { back: jest.fn(), push: jest.fn(), replace: jest.fn() },
 }));
+jest.mock('expo-application', () => ({
+  nativeApplicationVersion: '1.2.0',
+  nativeBuildVersion: '42',
+}));
+jest.mock('expo-constants', () => ({
+  __esModule: true,
+  default: { expoConfig: { version: '1.2.0' } },
+}));
 
 import { router } from 'expo-router';
 
@@ -108,6 +116,22 @@ describe('ProfilesScreen', () => {
     fireEvent.press(getByLabelText('Añadir nuevo perfil'));
     fireEvent.press(getByLabelText('Volver atrás'));
     expect(getByText('Perfiles')).toBeTruthy();
+  });
+
+  it('shows the version footer in list mode and opens /about', () => {
+    const { getByLabelText, getByText } = render(<ProfilesScreen />);
+
+    expect(getByText('KidSaber Play v1.2.0 (42)')).toBeTruthy();
+    fireEvent.press(getByLabelText('Acerca de KidSaber Play'));
+
+    expect(mockRouter.push).toHaveBeenCalledWith('/about');
+  });
+
+  it('hides the version footer in the add form', () => {
+    const { getByLabelText, queryByText } = render(<ProfilesScreen />);
+    fireEvent.press(getByLabelText('Añadir nuevo perfil'));
+
+    expect(queryByText('KidSaber Play v1.2.0 (42)')).toBeNull();
   });
 
   it('calls router.back when back pressed in list mode', () => {

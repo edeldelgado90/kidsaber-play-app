@@ -23,6 +23,7 @@ import {
 import { AppHeader } from '@/presentation/components/common/AppHeader';
 import { SunBackground } from '@/presentation/components/common/SunBackground';
 import { ProfileRow } from '@/presentation/components/profile/ProfileRow';
+import { AppVersionFooter } from '@/presentation/components/common/AppVersionFooter';
 import { Colors, Spacing, Radii, Typography } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
 import { useHorizontalPadding } from '@/infrastructure/platform/useBreakpoint';
@@ -127,6 +128,8 @@ export function ProfilesScreen() {
     router.back();
   };
 
+  const handleAbout = () => router.push('/about');
+
   const isFormMode = mode === 'add' || mode === 'edit';
   const canSubmit = name.trim().length >= 2 && grade !== null;
   const hPad = useHorizontalPadding();
@@ -229,6 +232,8 @@ export function ProfilesScreen() {
               >
                 {'Añadir perfil'}
               </Button>
+
+              <AppVersionFooter onPress={handleAbout} />
             </View>
           )}
         </ScrollView>
