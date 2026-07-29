@@ -17,15 +17,16 @@ interface EyeProps {
   /** Horizontal gaze shift: pupils and highlights move together so the
       eyes look toward the snout on 3/4-view heads (negative = left). */
   dx?: number;
+  color?: string;
 }
 
 /** Shared eyes with highlight (anchor positions fixed by the glasses layer). */
-function Eyes({ r = 6.5, dx = 0 }: EyeProps) {
+function Eyes({ r = 6.5, dx = 0, color = '#2b2b2b' }: EyeProps) {
   const hx = dx === 0 ? r * 0.35 : Math.sign(dx) * r * 0.35;
   return (
     <G>
-      <Circle cx={82 + dx} cy={70} r={r} fill="#2b2b2b" />
-      <Circle cx={118 + dx} cy={70} r={r} fill="#2b2b2b" />
+      <Circle cx={82 + dx} cy={70} r={r} fill={color} />
+      <Circle cx={118 + dx} cy={70} r={r} fill={color} />
       <Circle cx={82 + dx + hx} cy={70 - r * 0.35} r={r * 0.32} fill="#ffffff" />
       <Circle cx={118 + dx + hx} cy={70 - r * 0.35} r={r * 0.32} fill="#ffffff" />
     </G>
@@ -65,47 +66,78 @@ function CapybaraBody() {
         strokeLinecap="round"
         opacity={0.4}
       />
-      {/* Feet with toes, sitting forward like the reference art */}
-      <Ellipse cx={72} cy={180} rx={16} ry={10} fill={p.bodyDark} />
-      <Ellipse cx={128} cy={180} rx={16} ry={10} fill={p.bodyDark} />
+      {/* Little arms curling onto the belly, like holding the mate cup */}
       <Path
-        d="M 66 187 L 66 178 M 72 188 L 72 179 M 78 187 L 78 178 M 122 187 L 122 178 M 128 188 L 128 179 M 134 187 L 134 178"
+        d="M 62 116 Q 54 140 78 148"
+        stroke={p.bodyDark}
+        strokeWidth={13}
+        strokeLinecap="round"
+        fill="none"
+      />
+      <Path
+        d="M 138 116 Q 146 140 122 148"
+        stroke={p.bodyDark}
+        strokeWidth={13}
+        strokeLinecap="round"
+        fill="none"
+      />
+      <Ellipse cx={82} cy={149} rx={9} ry={7} fill={p.bodyDark} />
+      <Ellipse cx={118} cy={149} rx={9} ry={7} fill={p.bodyDark} />
+      <Path
+        d="M 79 154 L 79 146 M 84 154 L 84 147 M 116 154 L 116 147 M 121 154 L 121 146"
+        stroke="#6d4a2c"
+        strokeWidth={1.8}
+        strokeLinecap="round"
+      />
+
+      {/* Feet splayed forward, soles facing the viewer (reference pose) */}
+      <Ellipse cx={68} cy={179} rx={17} ry={11} fill={p.bodyDark} transform="rotate(-10 68 179)" />
+      <Ellipse cx={132} cy={179} rx={17} ry={11} fill={p.bodyDark} transform="rotate(10 132 179)" />
+      <Path
+        d="M 61 186 L 63 176 M 68 188 L 69 177 M 75 186 L 75 177 M 125 186 L 125 177 M 132 188 L 131 177 M 139 186 L 137 176"
         stroke="#6d4a2c"
         strokeWidth={2}
         strokeLinecap="round"
       />
 
-      {/* Head in 3/4 view (Peppa-style): blunt boxy snout pointing left */}
+      {/* Head in 3/4 view like the brand art: high dome at the back-right,
+          snout sloping down-left into a blunt rounded tip */}
       <Defs>
-        <LinearGradient id="capyHead" x1="0" y1="0" x2="0.35" y2="1">
+        <LinearGradient id="capyHead" x1="0.1" y1="0" x2="0.4" y2="1">
           <Stop offset="0" stopColor="#cd9e69" />
           <Stop offset="1" stopColor={p.body} />
         </LinearGradient>
       </Defs>
       <Path
-        d="M 146 70
-           Q 146 38 112 33
-           Q 78 29 56 44
-           Q 40 54 38 74
-           Q 37 88 48 95
-           Q 62 102 86 100
-           Q 122 102 138 94
-           Q 146 88 146 70 Z"
+        d="M 150 72
+           Q 150 33 112 29
+           Q 84 26 64 40
+           Q 50 50 44 66
+           Q 40 74 41 84
+           Q 42 93 54 97
+           Q 72 102 96 100
+           Q 130 102 143 92
+           Q 150 86 150 72 Z"
         fill="url(#capyHead)"
       />
-      {/* Darker plane on the snout side (depth) */}
+      {/* Bridge line hinting the snout slope (depth) */}
       <Path
-        d="M 38 72
-           Q 37 88 48 95
-           Q 56 99 66 98
-           L 64 76
-           Q 52 66 38 72 Z"
-        fill={p.bodyDark}
-        opacity={0.18}
+        d="M 72 56 Q 58 58 50 64"
+        stroke={p.bodyDark}
+        strokeWidth={2.5}
+        strokeLinecap="round"
+        fill="none"
+        opacity={0.3}
       />
-      {/* Highlight along the top-back of the head (depth) */}
+      {/* Soft shading under the jaw (depth) */}
       <Path
-        d="M 92 38 Q 122 36 138 52"
+        d="M 56 94 Q 76 101 100 99 Q 130 101 142 92 Q 132 98 100 97 Q 72 98 56 94 Z"
+        fill={p.bodyDark}
+        opacity={0.25}
+      />
+      {/* Highlight on the dome (depth) */}
+      <Path
+        d="M 94 36 Q 122 34 138 50"
         stroke="#e8c996"
         strokeWidth={6}
         strokeLinecap="round"
@@ -113,14 +145,14 @@ function CapybaraBody() {
         opacity={0.5}
       />
 
-      {/* Small round ears on top (3/4 spacing: front one nearer the center) */}
-      <Circle cx={130} cy={40} r={9} fill={p.bodyDark} />
-      <Circle cx={129} cy={41} r={4.5} fill="#7a5732" />
-      <Circle cx={94} cy={35} r={8} fill={p.bodyDark} />
-      <Circle cx={93} cy={36} r={4} fill="#7a5732" />
-      {/* Crown fur strands */}
+      {/* Small round ears sitting ON the dome outline */}
+      <Circle cx={137} cy={37} r={9} fill={p.bodyDark} />
+      <Circle cx={136} cy={38} r={4.5} fill="#7a5732" />
+      <Circle cx={98} cy={28} r={8.5} fill={p.bodyDark} />
+      <Circle cx={97} cy={29} r={4.2} fill="#7a5732" />
+      {/* Crown fur strands between the ears */}
       <Path
-        d="M 104 32 Q 107 25 113 26 M 113 33 Q 118 28 123 31"
+        d="M 114 29 Q 117 22 123 23 M 122 30 Q 127 25 132 28"
         stroke={p.bodyDark}
         strokeWidth={2}
         strokeLinecap="round"
@@ -128,9 +160,9 @@ function CapybaraBody() {
         opacity={0.6}
       />
 
-      {/* Thin eyebrows like the brand art */}
+      {/* Thin eyebrows following the dome */}
       <Path
-        d="M 74 59 Q 82 55 90 59 M 110 59 Q 118 55 126 59"
+        d="M 72 58 Q 80 54 88 58 M 108 56 Q 116 52 124 56"
         stroke={p.bodyDark}
         strokeWidth={2}
         strokeLinecap="round"
@@ -138,29 +170,29 @@ function CapybaraBody() {
         opacity={0.7}
       />
 
-      {/* Nose patch on the tip of the snout, off to the side */}
+      {/* Small nose patch tucked into the snout tip (inside the outline) */}
       <Path
-        d="M 42 66
-           Q 44 58 56 60
-           Q 64 63 62 71
-           Q 59 78 49 76
-           Q 40 73 42 66 Z"
+        d="M 46 64
+           Q 48 58 56 60
+           Q 61 63 58 69
+           Q 54 73 48 70
+           Q 44 68 46 64 Z"
         fill="#6d4c2e"
       />
-      <Ellipse cx={50} cy={68} rx={2} ry={2.8} fill="#4c3118" transform="rotate(-15 50 68)" />
-      {/* Smile under the snout, pulled to the side */}
+      <Ellipse cx={51} cy={65} rx={1.8} ry={2.5} fill="#4c3118" transform="rotate(-20 51 65)" />
+      {/* Smile under the snout tip */}
       <Path
-        d="M 46 86 Q 56 93 70 90"
+        d="M 45 86 Q 55 92 68 89"
         stroke="#6d4c2e"
         strokeWidth={2.2}
         strokeLinecap="round"
         fill="none"
       />
 
-      {/* Gaze follows the snout (both point left) */}
-      <Eyes r={6} dx={-2.5} />
-      <Circle cx={72} cy={86} r={6} fill={p.blush} opacity={0.5} />
-      <Circle cx={126} cy={86} r={6} fill={p.blush} opacity={0.5} />
+      {/* Big warm brown eyes, gaze following the snout (both point left) */}
+      <Eyes r={7.5} dx={-2.5} color="#3a2a1c" />
+      <Circle cx={70} cy={86} r={6.5} fill={p.blush} opacity={0.55} />
+      <Circle cx={125} cy={87} r={6} fill={p.blush} opacity={0.5} />
     </G>
   );
 }
