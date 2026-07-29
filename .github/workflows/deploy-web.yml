@@ -61,10 +61,14 @@ jobs:
       # the EAS Android build, this runs on the GitHub runner, so secrets set
       # here do reach the bundle. No .env exists in a fresh checkout (it is
       # gitignored), so these are the only source of the values.
+      # EXPO_PUBLIC_SUPPORT_EMAIL is deliberately absent from the required-secrets
+      # check above: it is optional, and the About screen simply hides its contact
+      # row when it is empty. An optional value must not fail the deploy.
       - name: Export static web build
         run: npm run build:web
         env:
           EXPO_PUBLIC_API_URL: ${{ secrets.EXPO_PUBLIC_API_URL }}
+          EXPO_PUBLIC_SUPPORT_EMAIL: ${{ secrets.EXPO_PUBLIC_SUPPORT_EMAIL }}
           EXPO_PUBLIC_FIREBASE_API_KEY: ${{ secrets.EXPO_PUBLIC_FIREBASE_API_KEY }}
           EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN }}
           EXPO_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.EXPO_PUBLIC_FIREBASE_PROJECT_ID }}

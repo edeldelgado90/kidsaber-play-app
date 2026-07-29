@@ -159,6 +159,7 @@ Required GitHub secrets, by workflow:
 | `EXPO_PUBLIC_FIREBASE_PROJECT_ID`  | `deploy-web.yml`                                                       |
 | `EXPO_PUBLIC_FIREBASE_APP_ID`      | `deploy-web.yml`                                                       |
 | `EXPO_PUBLIC_RECAPTCHA_SITE_KEY`   | `deploy-web.yml` — reCAPTCHA Enterprise site key for App Check         |
+| `EXPO_PUBLIC_SUPPORT_EMAIL`        | `deploy-web.yml` — **optional**; contact address on the About screen   |
 
 `deploy-web.yml` fails on its first step if any of its secrets are missing, rather
 than shipping a bundle with a silently empty value.
