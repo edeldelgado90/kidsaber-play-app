@@ -14,16 +14,20 @@ import { SPECIES_PALETTES } from './petSpriteTheme';
 
 interface EyeProps {
   r?: number;
+  /** Horizontal gaze shift: pupils and highlights move together so the
+      eyes look toward the snout on 3/4-view heads (negative = left). */
+  dx?: number;
 }
 
-/** Shared eyes with highlight (positions fixed by the glasses layer). */
-function Eyes({ r = 6.5 }: EyeProps) {
+/** Shared eyes with highlight (anchor positions fixed by the glasses layer). */
+function Eyes({ r = 6.5, dx = 0 }: EyeProps) {
+  const hx = dx === 0 ? r * 0.35 : Math.sign(dx) * r * 0.35;
   return (
     <G>
-      <Circle cx={82} cy={70} r={r} fill="#2b2b2b" />
-      <Circle cx={118} cy={70} r={r} fill="#2b2b2b" />
-      <Circle cx={82 + r * 0.35} cy={70 - r * 0.35} r={r * 0.32} fill="#ffffff" />
-      <Circle cx={118 + r * 0.35} cy={70 - r * 0.35} r={r * 0.32} fill="#ffffff" />
+      <Circle cx={82 + dx} cy={70} r={r} fill="#2b2b2b" />
+      <Circle cx={118 + dx} cy={70} r={r} fill="#2b2b2b" />
+      <Circle cx={82 + dx + hx} cy={70 - r * 0.35} r={r * 0.32} fill="#ffffff" />
+      <Circle cx={118 + dx + hx} cy={70 - r * 0.35} r={r * 0.32} fill="#ffffff" />
     </G>
   );
 }
@@ -153,7 +157,8 @@ function CapybaraBody() {
         fill="none"
       />
 
-      <Eyes r={6} />
+      {/* Gaze follows the snout (both point left) */}
+      <Eyes r={6} dx={-2.5} />
       <Circle cx={72} cy={86} r={6} fill={p.blush} opacity={0.5} />
       <Circle cx={126} cy={86} r={6} fill={p.blush} opacity={0.5} />
     </G>
