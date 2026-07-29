@@ -48,21 +48,24 @@ export function Pet3D({ speciesId, equipped, size }: Pet3DProps) {
   return (
     <View style={{ width: size, height: size }}>
       <Canvas
-        camera={{ position: [0, 1.5, 4.6], fov: 36 }}
+        camera={{ position: [0, 0, 5.4], fov: 38 }}
         gl={{ alpha: true, antialias: true }}
         style={canvasStyle}
       >
         <ambientLight intensity={0.85} />
         <directionalLight position={[3, 5, 4]} intensity={1.3} />
         <directionalLight position={[-3, 2, -2]} intensity={0.35} />
-        <Suspense fallback={null}>
-          <SwayingPet speciesId={speciesId} equipped={equipped} />
-        </Suspense>
-        {/* Soft ground disc so the pet doesn't float */}
-        <mesh position={[0, -0.02, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <circleGeometry args={[1.5, 32]} />
-          <meshBasicMaterial color="#000000" transparent opacity={0.08} />
-        </mesh>
+        {/* Pet spans y 0..~2.4; shift it down so its center faces the camera */}
+        <group position={[0, -1.15, 0]}>
+          <Suspense fallback={null}>
+            <SwayingPet speciesId={speciesId} equipped={equipped} />
+          </Suspense>
+          {/* Soft ground disc so the pet doesn't float */}
+          <mesh position={[0, -0.02, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+            <circleGeometry args={[1.5, 32]} />
+            <meshBasicMaterial color="#000000" transparent opacity={0.08} />
+          </mesh>
+        </group>
       </Canvas>
     </View>
   );
