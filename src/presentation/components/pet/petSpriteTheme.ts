@@ -26,7 +26,7 @@ export const SPECIES_PALETTES: Record<PetSpeciesId, SpeciesPalette> = {
     belly: '#dcbd90',
     blush: '#e89a90',
   },
-  kitten: {
+  shiba: {
     body: '#f2a95c',
     bodyDark: '#d07f33',
     belly: '#fbe3c4',
@@ -50,7 +50,7 @@ export const EQUIP_OFFSETS: Record<PetSpeciesId, Partial<Record<EquipSlot, Equip
   // Capybara head is in profile with a single eye at (84,66): shift the
   // glasses so the front lens centers on it.
   capybara: { glasses: { dx: 2, dy: -4 } },
-  kitten: { hat: { dx: 0, dy: -4 } },
+  shiba: { hat: { dx: 0, dy: -4 } },
   dragon: { hat: { dx: 0, dy: -6 }, glasses: { dx: 0, dy: 2 } },
 };
 

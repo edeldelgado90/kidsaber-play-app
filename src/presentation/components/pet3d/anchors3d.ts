@@ -33,15 +33,15 @@ export const ANCHORS_3D: Record<PetSpeciesId, Anchors3D> = {
       [0.38, 0.1, 0.85],
     ],
   },
-  // Quaternius toon cat (bipedal chibi)
-  kitten: {
-    headTop: [0, 2.16, 0],
-    headR: 0.5,
-    eyes: { y: 1.8, z: 0.44, sep: 0.2 },
-    neck: [0, 1.42, 0],
+  // Quaternius Shiba Inu (standing quadruped, head at the front)
+  shiba: {
+    headTop: [0, 1.88, 0.5],
+    headR: 0.45,
+    eyes: { y: 1.55, z: 0.9, sep: 0.22 },
+    neck: [0, 1.3, 0.28],
     feet: [
-      [-0.24, 0.1, 0.12],
-      [0.24, 0.1, 0.12],
+      [-0.24, 0.1, 0.55],
+      [0.24, 0.1, 0.55],
     ],
   },
   // Quaternius toon dragon (bipedal chibi, hovers on Flying_Idle)

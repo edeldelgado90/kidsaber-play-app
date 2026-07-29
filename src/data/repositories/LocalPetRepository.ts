@@ -30,7 +30,9 @@ function normalizePet(pet: PetState): PetState {
   for (const slot of EQUIP_SLOTS) {
     if (!(slot in equipped)) equipped[slot] = null;
   }
-  return { ...pet, equipped };
+  // Early v1.5 builds stored 'kitten'; the species became the shiba dog
+  const speciesId = (pet.speciesId as string) === 'kitten' ? 'shiba' : pet.speciesId;
+  return { ...pet, speciesId, equipped };
 }
 
 /**

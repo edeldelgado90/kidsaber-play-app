@@ -18,21 +18,21 @@ describe('createPetState', () => {
 
 describe('food inventory', () => {
   it('addFood stacks quantities of the same item', () => {
-    let inv = createPetState('kitten').inventory;
+    let inv = createPetState('shiba').inventory;
     inv = addFood(inv, 'food_apple', 1);
     inv = addFood(inv, 'food_apple', 2);
     expect(inv.food).toEqual([{ itemId: 'food_apple', qty: 3 }]);
   });
 
   it('consumeFood decrements and removes empty stacks', () => {
-    const inv = addFood(createPetState('kitten').inventory, 'food_apple', 1);
+    const inv = addFood(createPetState('shiba').inventory, 'food_apple', 1);
     const consumed = consumeFood(inv, 'food_apple');
     expect(consumed).not.toBeNull();
     expect(consumed?.food).toEqual([]);
   });
 
   it('consumeFood returns null when out of stock', () => {
-    const inv = createPetState('kitten').inventory;
+    const inv = createPetState('shiba').inventory;
     expect(consumeFood(inv, 'food_apple')).toBeNull();
   });
 

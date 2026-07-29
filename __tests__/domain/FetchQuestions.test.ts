@@ -45,7 +45,9 @@ describe('fetchQuestions', () => {
   });
 
   it('throws when service returns something that is not an array', async () => {
-    const service = { fetchQuestions: jest.fn().mockResolvedValue(null) } as unknown as jest.Mocked<IQuestionsService>;
+    const service = {
+      fetchQuestions: jest.fn().mockResolvedValue(null),
+    } as unknown as jest.Mocked<IQuestionsService>;
     await expect(
       fetchQuestions(service, { subject: 'mathematics', grade: 3, gameType: 'option_multiple' }),
     ).rejects.toThrow();

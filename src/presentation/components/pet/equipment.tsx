@@ -12,7 +12,10 @@ import { Colors } from '@/presentation/theme/tokens';
 function HatWool() {
   return (
     <G>
-      <Path d="M 60 46 Q 62 12 100 10 Q 138 12 140 46 Q 100 34 60 46 Z" fill={Colors.brandPrimary} />
+      <Path
+        d="M 60 46 Q 62 12 100 10 Q 138 12 140 46 Q 100 34 60 46 Z"
+        fill={Colors.brandPrimary}
+      />
       <Path d="M 58 46 Q 100 32 142 46 L 142 54 Q 100 42 58 54 Z" fill={Colors.brandPrimaryDark} />
       <Circle cx={100} cy={10} r={8} fill={Colors.brandSecondary} />
     </G>
@@ -34,7 +37,11 @@ function HatParty() {
   return (
     <G>
       <Path d="M 78 48 L 100 4 L 122 48 Q 100 40 78 48 Z" fill={Colors.brandSecondary} />
-      <Path d="M 86 32 L 114 32 L 118 40 Q 100 34 82 40 Z" fill={Colors.brandPrimary} opacity={0.85} />
+      <Path
+        d="M 86 32 L 114 32 L 118 40 Q 100 34 82 40 Z"
+        fill={Colors.brandPrimary}
+        opacity={0.85}
+      />
       <Circle cx={100} cy={6} r={6} fill={Colors.error} />
     </G>
   );
@@ -46,8 +53,24 @@ function GlassesRound() {
       <Circle cx={82} cy={70} r={13} fill="none" stroke="#2b2b2b" strokeWidth={3.5} />
       <Circle cx={118} cy={70} r={13} fill="none" stroke="#2b2b2b" strokeWidth={3.5} />
       <Line x1={95} y1={70} x2={105} y2={70} stroke="#2b2b2b" strokeWidth={3.5} />
-      <Line x1={69} y1={68} x2={58} y2={62} stroke="#2b2b2b" strokeWidth={3.5} strokeLinecap="round" />
-      <Line x1={131} y1={68} x2={142} y2={62} stroke="#2b2b2b" strokeWidth={3.5} strokeLinecap="round" />
+      <Line
+        x1={69}
+        y1={68}
+        x2={58}
+        y2={62}
+        stroke="#2b2b2b"
+        strokeWidth={3.5}
+        strokeLinecap="round"
+      />
+      <Line
+        x1={131}
+        y1={68}
+        x2={142}
+        y2={62}
+        stroke="#2b2b2b"
+        strokeWidth={3.5}
+        strokeLinecap="round"
+      />
     </G>
   );
 }
@@ -58,8 +81,24 @@ function GlassesSun() {
       <Path d="M 68 62 L 96 62 L 94 80 Q 82 86 70 80 Z" fill="#1f2937" />
       <Path d="M 132 62 L 104 62 L 106 80 Q 118 86 130 80 Z" fill="#1f2937" />
       <Line x1={96} y1={66} x2={104} y2={66} stroke="#1f2937" strokeWidth={4} />
-      <Line x1={68} y1={64} x2={58} y2={60} stroke="#1f2937" strokeWidth={4} strokeLinecap="round" />
-      <Line x1={132} y1={64} x2={142} y2={60} stroke="#1f2937" strokeWidth={4} strokeLinecap="round" />
+      <Line
+        x1={68}
+        y1={64}
+        x2={58}
+        y2={60}
+        stroke="#1f2937"
+        strokeWidth={4}
+        strokeLinecap="round"
+      />
+      <Line
+        x1={132}
+        y1={64}
+        x2={142}
+        y2={60}
+        stroke="#1f2937"
+        strokeWidth={4}
+        strokeLinecap="round"
+      />
     </G>
   );
 }
@@ -67,10 +106,7 @@ function GlassesSun() {
 function CoatScarf() {
   return (
     <G>
-      <Path
-        d="M 66 102 Q 100 118 134 102 L 134 114 Q 100 130 66 114 Z"
-        fill={Colors.error}
-      />
+      <Path d="M 66 102 Q 100 118 134 102 L 134 114 Q 100 130 66 114 Z" fill={Colors.error} />
       <Rect x={112} y={110} width={14} height={34} rx={6} fill={Colors.error} />
       <Rect x={112} y={136} width={14} height={8} rx={3} fill="#b91c1c" />
     </G>
@@ -94,9 +130,15 @@ function CoatRain() {
 function ShoesSneakers() {
   return (
     <G>
-      <Path d="M 58 176 Q 58 168 72 168 Q 86 168 86 176 L 86 184 L 58 184 Z" fill={Colors.brandPrimary} />
+      <Path
+        d="M 58 176 Q 58 168 72 168 Q 86 168 86 176 L 86 184 L 58 184 Z"
+        fill={Colors.brandPrimary}
+      />
       <Rect x={58} y={182} width={28} height={6} rx={3} fill="#ffffff" />
-      <Path d="M 114 176 Q 114 168 128 168 Q 142 168 142 176 L 142 184 L 114 184 Z" fill={Colors.brandPrimary} />
+      <Path
+        d="M 114 176 Q 114 168 128 168 Q 142 168 142 176 L 142 184 L 114 184 Z"
+        fill={Colors.brandPrimary}
+      />
       <Rect x={114} y={182} width={28} height={6} rx={3} fill="#ffffff" />
     </G>
   );

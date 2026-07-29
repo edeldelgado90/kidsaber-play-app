@@ -21,7 +21,7 @@ export interface ShopItem {
 
 export const PET_SPECIES: PetSpecies[] = [
   { id: 'capybara', name: 'Capi', description: 'Un capibara bebé muy tranquilo' },
-  { id: 'kitten', name: 'Michi', description: 'Un gatito curioso y juguetón' },
+  { id: 'shiba', name: 'Toby', description: 'Un perrito shiba fiel y juguetón' },
   { id: 'dragon', name: 'Chispa', description: 'Un dragoncito pequeño y valiente' },
 ];
 

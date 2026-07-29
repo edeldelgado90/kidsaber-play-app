@@ -6,32 +6,32 @@ import { useGLTF, useAnimations } from './gltf';
 /**
  * Real 3D pet models (GLB assets, credits in the About screen):
  * - capybara: "Capybara" by Poly by Google (CC-BY 3.0), static
- * - kitten:   "Cat" by Quaternius (CC0), skeletal animations
+ * - shiba:    "Shiba Inu" by Quaternius (CC0), skeletal animations
  * - dragon:   "Dragon" by Quaternius (CC0), skeletal animations
  * Models are normalized at runtime (target height, feet on y=0, centered).
  */
 
 import CAPYBARA_MODEL from '../../../../assets/models/capybara.glb';
-import CAT_MODEL from '../../../../assets/models/cat.glb';
+import SHIBA_MODEL from '../../../../assets/models/shiba.glb';
 import DRAGON_MODEL from '../../../../assets/models/dragon.glb';
 
 const MODEL_SOURCES: Record<PetSpeciesId, number> = {
   capybara: CAPYBARA_MODEL,
-  kitten: CAT_MODEL,
+  shiba: SHIBA_MODEL,
   dragon: DRAGON_MODEL,
 };
 
 /** Idle clip per species (clip names ship inside the GLB files). */
 const IDLE_CLIPS: Record<PetSpeciesId, string | null> = {
   capybara: null, // static model; the viewport sway keeps it alive
-  kitten: 'CharacterArmature|Idle',
+  shiba: 'AnimalArmature|Idle',
   dragon: 'CharacterArmature|Flying_Idle',
 };
 
-/** Target height in scene units (the capybara is long, keep it lower). */
+/** Target height in scene units (quadrupeds are long, keep them lower). */
 const TARGET_HEIGHTS: Record<PetSpeciesId, number> = {
   capybara: 1.7,
-  kitten: 2.2,
+  shiba: 1.9,
   dragon: 2.2,
 };
 

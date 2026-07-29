@@ -100,9 +100,7 @@ describe('SetupScreen', () => {
     await fireEvent.press(getByLabelText('Empezar a jugar'));
 
     expect(mockAddProfile).toHaveBeenCalledWith('María', 1);
-    await waitFor(() =>
-      expect(mockRouter.replace).toHaveBeenCalledWith('/(main)/subjects'),
-    );
+    await waitFor(() => expect(mockRouter.replace).toHaveBeenCalledWith('/(main)/subjects'));
   });
 
   it('keeps submit disabled when name too short', () => {

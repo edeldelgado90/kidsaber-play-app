@@ -200,18 +200,18 @@ function CapybaraBody() {
   );
 }
 
-function KittenBody() {
-  const p = SPECIES_PALETTES.kitten;
+function ShibaBody() {
+  const p = SPECIES_PALETTES.shiba;
   return (
     <G>
       <Defs>
-        <LinearGradient id="kittyBody" x1="0" y1="0" x2="0" y2="1">
+        <LinearGradient id="shibaBody" x1="0" y1="0" x2="0" y2="1">
           <Stop offset="0" stopColor={p.body} />
           <Stop offset="1" stopColor={p.bodyDark} />
         </LinearGradient>
       </Defs>
 
-      {/* Striped tail curling up */}
+      {/* Curled shiba tail (same fur color, cream underside) */}
       <Path
         d="M 152 150 Q 182 142 178 110"
         stroke={p.body}
@@ -220,26 +220,15 @@ function KittenBody() {
         fill="none"
       />
       <Path
-        d="M 168 141 Q 175 137 179 128 M 173 125 Q 177 121 178 113"
-        stroke={p.bodyDark}
-        strokeWidth={5}
+        d="M 170 138 Q 177 130 177 118"
+        stroke={p.belly}
+        strokeWidth={6}
         strokeLinecap="round"
         fill="none"
       />
 
       {/* Body */}
-      <Ellipse cx={100} cy={140} rx={52} ry={46} fill="url(#kittyBody)" />
-      {/* Back stripes */}
-      <Path
-        d="M 58 118 Q 70 124 74 136 L 64 140 Q 58 130 54 126 Z"
-        fill={p.bodyDark}
-        opacity={0.7}
-      />
-      <Path
-        d="M 142 118 Q 130 124 126 136 L 136 140 Q 142 130 146 126 Z"
-        fill={p.bodyDark}
-        opacity={0.7}
-      />
+      <Ellipse cx={100} cy={140} rx={52} ry={46} fill="url(#shibaBody)" />
       {/* Chest fluff */}
       <Path
         d="M 74 132 L 80 142 L 86 132 L 92 142 L 100 130 L 108 142 L 114 132 L 120 142 L 126 132
@@ -270,31 +259,23 @@ function KittenBody() {
       {/* Cheek fluff tufts */}
       <Path d="M 58 78 L 48 74 L 58 86 L 50 86 L 60 93 Z" fill={p.body} />
       <Path d="M 142 78 L 152 74 L 142 86 L 150 86 L 140 93 Z" fill={p.body} />
-      {/* Forehead stripes */}
-      <Path d="M 92 31 L 94 43 L 89 43 Z" fill={p.bodyDark} opacity={0.8} />
-      <Path d="M 100 29 L 102 43 L 97 43 Z" fill={p.bodyDark} opacity={0.8} />
-      <Path d="M 108 31 L 111 43 L 105 43 Z" fill={p.bodyDark} opacity={0.8} />
 
-      {/* Muzzle area */}
+      {/* Cream muzzle and brow dots (shiba markings) */}
       <Ellipse cx={91} cy={87} rx={11} ry={8} fill={p.belly} />
       <Ellipse cx={109} cy={87} rx={11} ry={8} fill={p.belly} />
-      {/* Nose + mouth in "w" */}
-      <Path d="M 95 80 L 105 80 L 100 87 Z" fill="#e0707e" />
+      <Circle cx={82} cy={56} r={3.5} fill={p.belly} />
+      <Circle cx={118} cy={56} r={3.5} fill={p.belly} />
+      {/* Black rounded nose + mouth in "w" */}
+      <Ellipse cx={100} cy={81} rx={5.5} ry={4} fill="#2b2b2b" />
       <Path
-        d="M 100 87 L 100 91 M 100 91 Q 95 96 90 91 M 100 91 Q 105 96 110 91"
+        d="M 100 85 L 100 91 M 100 91 Q 95 96 90 91 M 100 91 Q 105 96 110 91"
         stroke={p.bodyDark}
         strokeWidth={1.8}
         strokeLinecap="round"
         fill="none"
       />
-      {/* Whiskers */}
-      <Path
-        d="M 60 80 L 82 85 M 59 89 L 82 89 M 62 97 L 83 93 M 140 80 L 118 85 M 141 89 L 118 89 M 138 97 L 117 93"
-        stroke={p.bodyDark}
-        strokeWidth={1.5}
-        strokeLinecap="round"
-        opacity={0.8}
-      />
+      {/* Tongue out, happy dog */}
+      <Path d="M 96 94 Q 100 101 104 94 Q 102 92 98 92 Z" fill="#e0707e" />
 
       <Eyes r={6.5} />
       <Circle cx={72} cy={84} r={6} fill={p.blush} opacity={0.5} />
@@ -446,7 +427,7 @@ function DragonBody() {
 
 const BODIES: Record<PetSpeciesId, React.ComponentType> = {
   capybara: CapybaraBody,
-  kitten: KittenBody,
+  shiba: ShibaBody,
   dragon: DragonBody,
 };
 

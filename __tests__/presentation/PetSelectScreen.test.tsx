@@ -82,7 +82,7 @@ describe('PetSelectScreen', () => {
   it('renders the three selectable species', () => {
     const { getByText } = render(<PetSelectScreen />);
     expect(getByText('Capi')).toBeTruthy();
-    expect(getByText('Michi')).toBeTruthy();
+    expect(getByText('Toby')).toBeTruthy();
     expect(getByText('Chispa')).toBeTruthy();
   });
 

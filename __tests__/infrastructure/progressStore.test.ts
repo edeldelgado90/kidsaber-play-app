@@ -57,9 +57,7 @@ describe('progressStore', () => {
     await useProgressStore.getState().addStar('p1', 'science', 'option_multiple');
 
     expect(mockProgressRepo.addStar).toHaveBeenCalledWith('p1', 'science', 'option_multiple');
-    expect(
-      useProgressStore.getState().progress.byProfileId['p1'].starsBySubject.science,
-    ).toBe(1);
+    expect(useProgressStore.getState().progress.byProfileId['p1'].starsBySubject.science).toBe(1);
   });
 
   it('getProfileProgress returns existing profile progress', async () => {

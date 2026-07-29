@@ -4,7 +4,7 @@
  * inventory of purchased items. See 1.Analysis/v1.5/1.Screens/08-mascota-tienda.md.
  */
 
-export type PetSpeciesId = 'capybara' | 'kitten' | 'dragon';
+export type PetSpeciesId = 'capybara' | 'shiba' | 'dragon';
 
 /** Paper-doll layers a cosmetic item can occupy (one item per slot). */
 export type EquipSlot = 'hat' | 'coat' | 'shoes' | 'glasses';

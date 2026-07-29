@@ -8,7 +8,13 @@ import { G, Ellipse, Circle, Path, Rect } from 'react-native-svg';
 function Apple() {
   return (
     <G>
-      <Path d="M 50 30 Q 52 18 62 14" stroke="#6d4520" strokeWidth={5} strokeLinecap="round" fill="none" />
+      <Path
+        d="M 50 30 Q 52 18 62 14"
+        stroke="#6d4520"
+        strokeWidth={5}
+        strokeLinecap="round"
+        fill="none"
+      />
       <Path d="M 62 20 Q 78 12 82 26 Q 68 30 62 20 Z" fill="#4a9e2f" />
       <Circle cx={38} cy={58} r={26} fill="#e5484d" />
       <Circle cx={62} cy={58} r={26} fill="#d93036" />
@@ -23,7 +29,12 @@ function Carrot() {
       <Path d="M 60 18 Q 66 4 74 12 Q 70 22 60 24 Z" fill="#4a9e2f" />
       <Path d="M 74 22 Q 88 16 88 28 Q 78 32 72 28 Z" fill="#5cb83c" />
       <Path d="M 66 30 Q 84 44 62 82 Q 50 92 42 84 Q 12 60 34 42 Q 50 26 66 30 Z" fill="#f97316" />
-      <Path d="M 48 46 L 60 42 M 40 58 L 54 54 M 38 70 L 50 68" stroke="#d95f0e" strokeWidth={3} strokeLinecap="round" />
+      <Path
+        d="M 48 46 L 60 42 M 40 58 L 54 54 M 38 70 L 50 68"
+        stroke="#d95f0e"
+        strokeWidth={3}
+        strokeLinecap="round"
+      />
     </G>
   );
 }

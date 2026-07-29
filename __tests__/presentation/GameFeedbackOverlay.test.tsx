@@ -17,16 +17,12 @@ afterEach(() => jest.useRealTimers());
 
 describe('GameFeedbackOverlay', () => {
   it('returns null when visible is false', () => {
-    const { toJSON } = render(
-      <GameFeedbackOverlay visible={false} isCorrect onHide={() => {}} />,
-    );
+    const { toJSON } = render(<GameFeedbackOverlay visible={false} isCorrect onHide={() => {}} />);
     expect(toJSON()).toBeNull();
   });
 
   it('shows ¡Correcto! when visible and correct', () => {
-    const { getByText } = render(
-      <GameFeedbackOverlay visible isCorrect onHide={() => {}} />,
-    );
+    const { getByText } = render(<GameFeedbackOverlay visible isCorrect onHide={() => {}} />);
     expect(getByText(/Correcto/)).toBeTruthy();
   });
 

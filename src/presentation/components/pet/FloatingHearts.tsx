@@ -35,7 +35,15 @@ const HEARTS: HeartSpec[] = [
   { dx: 0.2, size: 14, delay: 480, color: '#e5484d' },
 ];
 
-function FloatingHeart({ spec, burstKey, height }: { spec: HeartSpec; burstKey: number; height: number }) {
+function FloatingHeart({
+  spec,
+  burstKey,
+  height,
+}: {
+  spec: HeartSpec;
+  burstKey: number;
+  height: number;
+}) {
   const progress = useSharedValue(0);
 
   useEffect(() => {

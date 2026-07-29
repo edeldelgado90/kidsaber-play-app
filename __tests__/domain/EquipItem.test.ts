@@ -4,7 +4,7 @@ import { makeInMemoryPetRepo } from '../../test-utils/petFakes';
 
 describe('equipItem', () => {
   it('equips an owned cosmetic in its slot', async () => {
-    const pet = createPetState('kitten');
+    const pet = createPetState('shiba');
     pet.inventory.cosmetics.push('hat_wool');
     const repo = makeInMemoryPetRepo({ p1: pet });
 
@@ -14,7 +14,7 @@ describe('equipItem', () => {
   });
 
   it('unequips a slot with itemId null', async () => {
-    const pet = createPetState('kitten');
+    const pet = createPetState('shiba');
     pet.inventory.cosmetics.push('hat_wool');
     pet.equipped.hat = 'hat_wool';
     const repo = makeInMemoryPetRepo({ p1: pet });
@@ -25,7 +25,7 @@ describe('equipItem', () => {
   });
 
   it('rejects items not owned', async () => {
-    const repo = makeInMemoryPetRepo({ p1: createPetState('kitten') });
+    const repo = makeInMemoryPetRepo({ p1: createPetState('shiba') });
 
     await expect(
       equipItem(repo, { profileId: 'p1', slot: 'hat', itemId: 'hat_wool' }),
@@ -33,7 +33,7 @@ describe('equipItem', () => {
   });
 
   it('rejects an item equipped in the wrong slot', async () => {
-    const pet = createPetState('kitten');
+    const pet = createPetState('shiba');
     pet.inventory.cosmetics.push('hat_wool');
     const repo = makeInMemoryPetRepo({ p1: pet });
 

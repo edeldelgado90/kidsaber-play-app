@@ -22,7 +22,7 @@ describe('purchaseItem', () => {
   });
 
   it('buys a cosmetic once and adds it to the inventory', async () => {
-    const petRepo = makeInMemoryPetRepo({ p1: createPetState('kitten') });
+    const petRepo = makeInMemoryPetRepo({ p1: createPetState('shiba') });
     const economyRepo = makeInMemoryEconomyRepo({
       p1: { lifetimeStarsEarned: 20, starWalletBalance: 20 },
     });

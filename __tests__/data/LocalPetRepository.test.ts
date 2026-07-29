@@ -42,7 +42,7 @@ describe('LocalPetRepository', () => {
   });
 
   it('fills missing equip slots from older schema versions', async () => {
-    const pet = createPetState('kitten');
+    const pet = createPetState('shiba');
     const legacy = {
       ...pet,
       equipped: { hat: 'hat_wool' }, // stored before coat/shoes/glasses existed
@@ -56,7 +56,7 @@ describe('LocalPetRepository', () => {
 
   it('resetPet removes only that profile', async () => {
     seedPets({
-      byProfileId: { p1: createPetState('capybara'), p2: createPetState('kitten') },
+      byProfileId: { p1: createPetState('capybara'), p2: createPetState('shiba') },
     });
     const repo = new LocalPetRepository();
     await repo.resetPet('p1');
