@@ -1,7 +1,7 @@
 import { type PetSpeciesId } from '@/domain/entities/Pet';
 
 /**
- * 3D anchor points per species, in scene units (pet stands ~2.2 tall on y=0).
+ * 3D anchor points per species, in scene units (pets stand ~2.4 tall on y=0).
  * Equipment meshes attach to these so one item fits every species.
  */
 
@@ -23,37 +23,40 @@ export interface Anchors3D {
 }
 
 export const ANCHORS_3D: Record<PetSpeciesId, Anchors3D> = {
+  // Standing quadruped: long barrel body, boxy head forward
   capybara: {
-    head: [0, 1.62, 0.28],
-    headR: 0.62,
-    headTop: [0, 2.08, 0.22],
-    eyes: { y: 1.74, z: 0.78, sep: 0.3 },
-    neck: [0, 1.18, 0.12],
+    head: [0, 1.5, 0.78],
+    headR: 0.58,
+    headTop: [0, 1.96, 0.66],
+    eyes: { y: 1.62, z: 1.1, sep: 0.3 },
+    neck: [0, 1.2, 0.42],
     feet: [
-      [-0.45, 0.13, 0.55],
-      [0.45, 0.13, 0.55],
+      [-0.3, 0.1, 0.6],
+      [0.3, 0.1, 0.6],
     ],
   },
+  // Sitting cat: haunches + upright torso, round head on top
   kitten: {
-    head: [0, 1.64, 0.2],
-    headR: 0.6,
-    headTop: [0, 2.1, 0.15],
-    eyes: { y: 1.76, z: 0.72, sep: 0.28 },
-    neck: [0, 1.2, 0.08],
+    head: [0, 1.78, 0.25],
+    headR: 0.52,
+    headTop: [0, 2.22, 0.2],
+    eyes: { y: 1.86, z: 0.72, sep: 0.26 },
+    neck: [0, 1.42, 0.25],
     feet: [
-      [-0.42, 0.13, 0.55],
-      [0.42, 0.13, 0.55],
+      [-0.2, 0.1, 0.55],
+      [0.2, 0.1, 0.55],
     ],
   },
+  // Sitting upright dragon
   dragon: {
-    head: [0, 1.66, 0.15],
-    headR: 0.62,
-    headTop: [0, 2.14, 0.1],
-    eyes: { y: 1.78, z: 0.7, sep: 0.28 },
-    neck: [0, 1.2, 0.05],
+    head: [0, 1.85, 0.2],
+    headR: 0.55,
+    headTop: [0, 2.3, 0.14],
+    eyes: { y: 1.95, z: 0.66, sep: 0.26 },
+    neck: [0, 1.48, 0.18],
     feet: [
-      [-0.44, 0.13, 0.55],
-      [0.44, 0.13, 0.55],
+      [-0.32, 0.1, 0.55],
+      [0.32, 0.1, 0.55],
     ],
   },
 };

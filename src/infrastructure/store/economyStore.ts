@@ -3,6 +3,9 @@ import { type Economy, createEmptyProfileEconomy } from '../../domain/entities/E
 import { ensureEconomySeeded } from '../../domain/usecases/economy/EnsureEconomySeeded';
 import { economyRepository, progressRepository } from '../di/container';
 
+/** Wallet balance granted automatically in dev builds (shop testing). */
+const DEV_WALLET_BALANCE = 9999;
+
 interface EconomyStoreState {
   economy: Economy;
   isLoading: boolean;
@@ -36,6 +39,22 @@ export const useEconomyStore = create<EconomyStore>((set, get) => ({
     set({ isLoading: true });
     try {
       await ensureEconomySeeded(economyRepository, progressRepository, profileIds);
+
+      // Dev only: top the wallet up so the shop can be tested without
+      // playing sessions. Never runs in production builds.
+      if (__DEV__) {
+        const current = await economyRepository.getEconomy();
+        for (const profileId of profileIds) {
+          const profileEconomy = current.byProfileId[profileId];
+          if (profileEconomy && profileEconomy.starWalletBalance < DEV_WALLET_BALANCE) {
+            await economyRepository.saveProfileEconomy(profileId, {
+              ...profileEconomy,
+              starWalletBalance: DEV_WALLET_BALANCE,
+            });
+          }
+        }
+      }
+
       const economy = await economyRepository.getEconomy();
       set({ economy, isLoading: false });
     } catch {

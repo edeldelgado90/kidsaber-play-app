@@ -24,7 +24,8 @@ function SwayingPet({ speciesId, equipped }: SceneProps) {
   useFrame(({ clock }) => {
     if (!group.current) return;
     const t = clock.getElapsedTime();
-    group.current.rotation.y = Math.sin(t * 0.6) * 0.22;
+    // Rest at a 3/4 angle (shows the snout/side volume) and sway around it
+    group.current.rotation.y = 0.35 + Math.sin(t * 0.6) * 0.25;
     group.current.position.y = Math.sin(t * 1.4) * 0.03;
   });
 
