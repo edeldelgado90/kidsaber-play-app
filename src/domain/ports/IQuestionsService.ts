@@ -13,4 +13,13 @@ export interface FetchQuestionsParams {
  */
 export interface IQuestionsService {
   fetchQuestions(params: FetchQuestionsParams): Promise<Question[]>;
+
+  /**
+   * Flags a question as wrong so a human can review it.
+   *
+   * Only the id travels: the API reads the question's subject, grade and
+   * statement from its own database, so nothing a child types or sees can end
+   * up in the review queue.
+   */
+  reportQuestion(questionId: string): Promise<void>;
 }

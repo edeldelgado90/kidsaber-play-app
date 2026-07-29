@@ -38,9 +38,21 @@ jest.mock('expo-router', () => ({
   useLocalSearchParams: jest.fn(() => ({ subject: 'mathematics', gameType: 'option_multiple' })),
 }));
 
+// The real container instantiates Firebase, which jest cannot parse. The report
+// link reaches it through useReportQuestion, so it is stubbed here the same way
+// the session store is below.
+jest.mock('@/infrastructure/di/container', () => ({
+  questionsService: { fetchQuestions: jest.fn(), reportQuestion: jest.fn() },
+  progressRepository: {},
+}));
+
 import { router } from 'expo-router';
+import { questionsService } from '@/infrastructure/di/container';
 
 const mockRouter = router as jest.Mocked<typeof router>;
+const mockReportQuestion = questionsService.reportQuestion as jest.MockedFunction<
+  typeof questionsService.reportQuestion
+>;
 
 const activeProfile: Profile = { id: 'p1', name: 'Ana', grade: 3, createdAt: '' };
 const mockQuestion: Question = {
@@ -125,6 +137,27 @@ describe('GameSessionScreen', () => {
 
   it('renders Comprobar button', () => {
     const { getByLabelText } = render(<GameSessionScreen />);
+    expect(getByLabelText('Comprobar respuesta')).toBeTruthy();
+  });
+
+  it('reports the current question and thanks the player', async () => {
+    mockReportQuestion.mockResolvedValue(undefined);
+    const { getByLabelText, findByText } = render(<GameSessionScreen />);
+
+    fireEvent.press(getByLabelText('Reportar un error en esta pregunta'));
+
+    expect(mockReportQuestion).toHaveBeenCalledWith('q1');
+    expect(await findByText('¡Gracias! Lo revisaremos')).toBeTruthy();
+  });
+
+  // A report that cannot be sent must offer a retry, never interrupt the game.
+  it('offers a retry when the report fails', async () => {
+    mockReportQuestion.mockRejectedValue(new Error('offline'));
+    const { getByLabelText, findByText } = render(<GameSessionScreen />);
+
+    fireEvent.press(getByLabelText('Reportar un error en esta pregunta'));
+
+    expect(await findByText('No se pudo enviar. Toca para reintentar')).toBeTruthy();
     expect(getByLabelText('Comprobar respuesta')).toBeTruthy();
   });
 

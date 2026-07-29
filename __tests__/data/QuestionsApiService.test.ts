@@ -216,4 +216,72 @@ describe('QuestionsApiService', () => {
       service.fetchQuestions({ subject: 'mathematics', grade: 3, type: 'option_multiple' }),
     ).rejects.toThrow();
   }, 20000); // extended timeout because of retry backoff
+
+  describe('reportQuestion', () => {
+    const makeAcceptedResponse = (): Response =>
+      ({
+        ok: true,
+        status: 202,
+        json: async () => ({ status: 'received' }),
+        clone: function () {
+          return this;
+        },
+      }) as unknown as Response;
+
+    it('POSTs to the report endpoint for the given question', async () => {
+      const mockFetch = jest.fn().mockResolvedValue(makeAcceptedResponse());
+      global.fetch = mockFetch;
+
+      await service.reportQuestion('q1');
+
+      const [url, init] = mockFetch.mock.calls[0] as [string, RequestInit];
+      expect(url).toBe(`${BASE_URL}/questions/q1/report`);
+      expect(init.method).toBe('POST');
+    });
+
+    // The API takes only the id and reads the rest from its own database, so
+    // nothing a child sees or types can reach the review queue.
+    it('sends no request body', async () => {
+      const mockFetch = jest.fn().mockResolvedValue(makeAcceptedResponse());
+      global.fetch = mockFetch;
+
+      await service.reportQuestion('q1');
+
+      const [, init] = mockFetch.mock.calls[0] as [string, RequestInit];
+      expect(init.body).toBeUndefined();
+    });
+
+    it('escapes the question id in the path', async () => {
+      const mockFetch = jest.fn().mockResolvedValue(makeAcceptedResponse());
+      global.fetch = mockFetch;
+
+      await service.reportQuestion('a/../admin');
+
+      const [url] = mockFetch.mock.calls[0] as [string];
+      expect(url).toBe(`${BASE_URL}/questions/a%2F..%2Fadmin/report`);
+    });
+
+    it('forwards both credentials when the providers supply them', async () => {
+      const mockFetch = jest.fn().mockResolvedValue(makeAcceptedResponse());
+      global.fetch = mockFetch;
+
+      const tokenProvider: ITokenProvider = { getToken: jest.fn().mockResolvedValue('id-token') };
+      const appCheckProvider: IAppCheckProvider = {
+        getAppCheckToken: jest.fn().mockResolvedValue('app-check-token'),
+      };
+
+      await new QuestionsApiService(BASE_URL, tokenProvider, appCheckProvider).reportQuestion('q1');
+
+      const [, init] = mockFetch.mock.calls[0] as [string, RequestInit];
+      const headers = init.headers as Record<string, string>;
+      expect(headers['Authorization']).toBe('Bearer id-token');
+      expect(headers['X-Firebase-AppCheck']).toBe('app-check-token');
+    });
+
+    it('rejects when the API refuses the report', async () => {
+      global.fetch = jest.fn().mockResolvedValue(makeErrorResponse(404));
+
+      await expect(service.reportQuestion('q1')).rejects.toThrow();
+    });
+  });
 });
