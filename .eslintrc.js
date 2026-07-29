@@ -55,6 +55,14 @@ module.exports = {
         '@typescript-eslint/no-var-requires': 'off',
       },
     },
+    {
+      // react-three-fiber scenes use three.js JSX elements whose props
+      // (position, args, intensity…) are unknown to the react plugin.
+      files: ['src/presentation/components/pet3d/**/*.tsx'],
+      rules: {
+        'react/no-unknown-property': 'off',
+      },
+    },
   ],
   ignorePatterns: ['node_modules/', '.expo/', 'coverage/', 'babel.config.js'],
 };

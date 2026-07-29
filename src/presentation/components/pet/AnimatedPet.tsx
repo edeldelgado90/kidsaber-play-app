@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  withRepeat,
   withSequence,
   withTiming,
   withDelay,
@@ -11,7 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import Svg from 'react-native-svg';
 import { type PetSpeciesId, type EquipSlot } from '@/domain/entities/Pet';
-import { PetSprite } from './PetSprite';
+import { Pet3D } from '../pet3d/Pet3D';
 import { FloatingHearts } from './FloatingHearts';
 import { FoodDrawing, FOOD_VIEWBOX } from './foods';
 
@@ -47,27 +46,8 @@ export function AnimatedPet({ speciesId, equipped, size, action }: AnimatedPetPr
   const [heartBurst, setHeartBurst] = useState(0);
   const [visibleFoodId, setVisibleFoodId] = useState<string | null>(null);
 
-  // Idle: gentle bob + breathing
-  useEffect(() => {
-    bob.value = withRepeat(
-      withSequence(
-        withTiming(-4, { duration: 1100, easing: Easing.inOut(Easing.quad) }),
-        withTiming(0, { duration: 1100, easing: Easing.inOut(Easing.quad) }),
-      ),
-      -1,
-      false,
-    );
-    scaleY.value = withRepeat(
-      withSequence(
-        withTiming(1.02, { duration: 1100, easing: Easing.inOut(Easing.quad) }),
-        withTiming(1, { duration: 1100, easing: Easing.inOut(Easing.quad) }),
-      ),
-      -1,
-      false,
-    );
-  }, [bob, scaleY]);
-
-  // One-shot reactions
+  // Idle motion (sway + bob) runs inside the 3D scene; here we only apply
+  // one-shot reactions to the whole viewport.
   useEffect(() => {
     if (!action || action.key === 0) return;
 
@@ -144,7 +124,7 @@ export function AnimatedPet({ speciesId, equipped, size, action }: AnimatedPetPr
   return (
     <View style={{ width: size, height: size }}>
       <Animated.View style={petStyle}>
-        <PetSprite speciesId={speciesId} equipped={equipped} size={size} />
+        <Pet3D speciesId={speciesId} equipped={equipped ?? {}} size={size} />
       </Animated.View>
 
       {visibleFoodId ? (
