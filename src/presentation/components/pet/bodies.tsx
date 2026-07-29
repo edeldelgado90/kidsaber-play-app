@@ -39,107 +39,94 @@ function CapybaraBody() {
         </LinearGradient>
       </Defs>
 
-      {/* Loaf-shaped body with narrower shoulders (leaves room for the neck) */}
+      {/* Pear-shaped sitting body; the head overlaps it (no visible neck),
+          matching the brand capybara illustrations in assets/brand */}
       <Path
-        d="M 46 154
-           Q 46 118 100 114
-           Q 154 118 154 154
-           Q 154 182 126 184
-           L 74 184
-           Q 46 182 46 154 Z"
+        d="M 52 148
+           Q 54 106 100 102
+           Q 146 106 148 148
+           Q 148 180 124 184
+           L 76 184
+           Q 52 180 52 148 Z"
         fill="url(#capyBody)"
       />
+      {/* Soft belly (same hue family, low contrast) */}
+      <Ellipse cx={100} cy={152} rx={30} ry={26} fill={p.belly} opacity={0.5} />
       {/* Fur texture: short strokes on the flanks */}
       <Path
-        d="M 58 136 L 54 146 M 68 126 L 64 136 M 142 136 L 146 146 M 132 126 L 136 136 M 96 122 L 94 130 M 108 122 L 110 130"
+        d="M 62 132 L 58 142 M 70 120 L 66 130 M 138 132 L 142 142 M 130 120 L 134 130"
         stroke={p.bodyDark}
         strokeWidth={2}
         strokeLinecap="round"
-        opacity={0.45}
+        opacity={0.4}
       />
-      {/* Four stubby legs with toe lines */}
-      <Rect x={62} y={166} width={20} height={20} rx={8} fill={p.bodyDark} />
-      <Rect x={118} y={166} width={20} height={20} rx={8} fill={p.bodyDark} />
+      {/* Feet with toes, sitting forward like the reference art */}
+      <Ellipse cx={72} cy={180} rx={16} ry={10} fill={p.bodyDark} />
+      <Ellipse cx={128} cy={180} rx={16} ry={10} fill={p.bodyDark} />
       <Path
-        d="M 69 184 L 69 178 M 75 184 L 75 178 M 125 184 L 125 178 M 131 184 L 131 178"
-        stroke="#7a5732"
+        d="M 66 187 L 66 178 M 72 188 L 72 179 M 78 187 L 78 178 M 122 187 L 122 178 M 128 188 L 128 179 M 134 187 L 134 178"
+        stroke="#6d4a2c"
         strokeWidth={2}
         strokeLinecap="round"
       />
-      {/* Hind feet peeking at the sides */}
-      <Ellipse cx={50} cy={178} rx={10} ry={7} fill={p.bodyDark} />
-      <Ellipse cx={150} cy={178} rx={10} ry={7} fill={p.bodyDark} />
 
-      {/* Neck connecting head and shoulders (narrower than both) */}
+      {/* Head: wide and rounded with a flat-ish top, wider than the shoulders */}
       <Path
-        d="M 80 92
-           Q 80 86 100 86
-           Q 120 86 120 92
-           L 120 118
-           Q 100 128 80 118 Z"
+        d="M 52 68
+           Q 52 34 100 34
+           Q 148 34 148 68
+           Q 148 100 100 100
+           Q 52 100 52 68 Z"
         fill={p.body}
       />
-      {/* Crease where the neck meets the chest */}
+      {/* Small round ears on top of the head */}
+      <Circle cx={68} cy={40} r={9} fill={p.bodyDark} />
+      <Circle cx={132} cy={40} r={9} fill={p.bodyDark} />
+      <Circle cx={69} cy={41} r={4.5} fill="#7a5732" />
+      <Circle cx={131} cy={41} r={4.5} fill="#7a5732" />
+      {/* Crown fur strands */}
       <Path
-        d="M 83 117 Q 100 124 117 117"
+        d="M 95 33 Q 97 26 103 26 M 104 33 Q 108 27 113 29"
         stroke={p.bodyDark}
         strokeWidth={2}
         strokeLinecap="round"
         fill="none"
-        opacity={0.35}
+        opacity={0.6}
       />
 
-      {/* Head: flat-topped, boxy muzzle — the capybara silhouette */}
+      {/* Thin eyebrows like the brand art */}
       <Path
-        d="M 56 64
-           Q 56 38 78 35
-           Q 100 32 122 35
-           Q 144 38 144 64
-           L 144 80
-           Q 144 104 100 104
-           Q 56 104 56 80 Z"
-        fill={p.body}
+        d="M 74 59 Q 82 55 90 59 M 110 59 Q 118 55 126 59"
+        stroke={p.bodyDark}
+        strokeWidth={2}
+        strokeLinecap="round"
+        fill="none"
+        opacity={0.7}
       />
-      {/* Small rounded ears set toward the back corners of the head */}
-      <Path d="M 61 46 Q 56 31 70 31 Q 79 33 74 47 Z" fill={p.bodyDark} />
-      <Path d="M 139 46 Q 144 31 130 31 Q 121 33 126 47 Z" fill={p.bodyDark} />
-      <Path d="M 65 44 Q 63 35 70 35 Q 74 37 71 45 Z" fill="#7a5732" />
-      <Path d="M 135 44 Q 137 35 130 35 Q 126 37 129 45 Z" fill="#7a5732" />
 
-      {/* Big blunt muzzle covering the lower half of the face */}
+      {/* Nose drawn directly on the fur (no light muzzle patch) */}
       <Path
-        d="M 74 88
-           Q 74 74 100 74
-           Q 126 74 126 88
-           Q 126 103 100 103
-           Q 74 103 74 88 Z"
-        fill={p.belly}
+        d="M 92 79
+           Q 100 75 108 79
+           Q 111 83 107 87
+           Q 100 90 93 87
+           Q 89 83 92 79 Z"
+        fill="#6d4c2e"
       />
-      {/* Nostrils high on the snout */}
-      <Ellipse cx={91} cy={83} rx={2.6} ry={4} fill="#5a4632" transform="rotate(-12 91 83)" />
-      <Ellipse cx={109} cy={83} rx={2.6} ry={4} fill="#5a4632" transform="rotate(12 109 83)" />
-      {/* Split upper lip + mouth */}
+      <Ellipse cx={96} cy={82} rx={1.6} ry={2.2} fill="#4c3118" />
+      <Ellipse cx={104} cy={82} rx={1.6} ry={2.2} fill="#4c3118" />
+      {/* Gentle smile under the nose */}
       <Path
-        d="M 100 90 L 100 95 M 94 98 Q 100 102 106 98"
-        stroke="#5a4632"
+        d="M 100 88 L 100 91 M 93 92 Q 100 97 107 92"
+        stroke="#6d4c2e"
         strokeWidth={2}
         strokeLinecap="round"
         fill="none"
       />
-      {/* Vibrissae (whisker dots) */}
-      <G fill="#5a4632" opacity={0.5}>
-        <Circle cx={83} cy={90} r={1.1} />
-        <Circle cx={80} cy={94} r={1.1} />
-        <Circle cx={85} cy={95} r={1.1} />
-        <Circle cx={117} cy={90} r={1.1} />
-        <Circle cx={120} cy={94} r={1.1} />
-        <Circle cx={115} cy={95} r={1.1} />
-      </G>
 
-      {/* Small lateral eyes (capybaras have them high on the head) */}
-      <Eyes r={5} />
-      <Circle cx={72} cy={82} r={5} fill={p.blush} opacity={0.4} />
-      <Circle cx={128} cy={82} r={5} fill={p.blush} opacity={0.4} />
+      <Eyes r={6} />
+      <Circle cx={74} cy={84} r={6} fill={p.blush} opacity={0.5} />
+      <Circle cx={126} cy={84} r={6} fill={p.blush} opacity={0.5} />
     </G>
   );
 }

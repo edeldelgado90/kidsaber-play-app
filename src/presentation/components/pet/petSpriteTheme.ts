@@ -21,10 +21,10 @@ export interface SpeciesPalette {
 
 export const SPECIES_PALETTES: Record<PetSpeciesId, SpeciesPalette> = {
   capybara: {
-    body: '#b58f56',
-    bodyDark: '#8d6a3a',
-    belly: '#d3b183',
-    blush: '#e8a17e',
+    body: '#c08e57',
+    bodyDark: '#8a5f38',
+    belly: '#dcbd90',
+    blush: '#e89a90',
   },
   kitten: {
     body: '#f2a95c',
