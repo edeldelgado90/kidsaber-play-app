@@ -39,22 +39,21 @@ function CapybaraBody() {
         </LinearGradient>
       </Defs>
 
-      {/* Pear-shaped sitting body; the head overlaps it (no visible neck),
-          matching the brand capybara illustrations in assets/brand */}
+      {/* Pear-shaped sitting body with shoulders narrower than the head */}
       <Path
-        d="M 52 148
-           Q 54 106 100 102
-           Q 146 106 148 148
-           Q 148 180 124 184
-           L 76 184
-           Q 52 180 52 148 Z"
+        d="M 56 150
+           Q 58 114 100 110
+           Q 142 114 144 150
+           Q 144 180 122 184
+           L 78 184
+           Q 56 180 56 150 Z"
         fill="url(#capyBody)"
       />
       {/* Soft belly (same hue family, low contrast) */}
-      <Ellipse cx={100} cy={152} rx={30} ry={26} fill={p.belly} opacity={0.5} />
+      <Ellipse cx={100} cy={152} rx={28} ry={25} fill={p.belly} opacity={0.5} />
       {/* Fur texture: short strokes on the flanks */}
       <Path
-        d="M 62 132 L 58 142 M 70 120 L 66 130 M 138 132 L 142 142 M 130 120 L 134 130"
+        d="M 64 136 L 60 146 M 72 124 L 68 134 M 136 136 L 140 146 M 128 124 L 132 134"
         stroke={p.bodyDark}
         strokeWidth={2}
         strokeLinecap="round"
@@ -70,23 +69,57 @@ function CapybaraBody() {
         strokeLinecap="round"
       />
 
-      {/* Head: wide and rounded with a flat-ish top, wider than the shoulders */}
+      {/* Short, WIDE neck: just enough gap so a scarf reads clearly */}
+      <Path d="M 76 90 L 124 90 L 121 116 Q 100 124 79 116 Z" fill={p.body} />
+      {/* Contact shadow of the head over the chest (depth) */}
+      <Ellipse cx={100} cy={104} rx={30} ry={5} fill="#000000" opacity={0.1} />
+
+      {/* Head in 3/4 view (Peppa-style): blunt boxy snout pointing left */}
+      <Defs>
+        <LinearGradient id="capyHead" x1="0" y1="0" x2="0.35" y2="1">
+          <Stop offset="0" stopColor="#cd9e69" />
+          <Stop offset="1" stopColor={p.body} />
+        </LinearGradient>
+      </Defs>
       <Path
-        d="M 52 68
-           Q 52 34 100 34
-           Q 148 34 148 68
-           Q 148 100 100 100
-           Q 52 100 52 68 Z"
-        fill={p.body}
+        d="M 146 70
+           Q 146 38 112 33
+           Q 78 29 56 44
+           Q 40 54 38 74
+           Q 37 88 48 95
+           Q 62 102 86 100
+           Q 122 102 138 94
+           Q 146 88 146 70 Z"
+        fill="url(#capyHead)"
       />
-      {/* Small round ears on top of the head */}
-      <Circle cx={68} cy={40} r={9} fill={p.bodyDark} />
-      <Circle cx={132} cy={40} r={9} fill={p.bodyDark} />
-      <Circle cx={69} cy={41} r={4.5} fill="#7a5732" />
-      <Circle cx={131} cy={41} r={4.5} fill="#7a5732" />
+      {/* Darker plane on the snout side (depth) */}
+      <Path
+        d="M 38 72
+           Q 37 88 48 95
+           Q 56 99 66 98
+           L 64 76
+           Q 52 66 38 72 Z"
+        fill={p.bodyDark}
+        opacity={0.18}
+      />
+      {/* Highlight along the top-back of the head (depth) */}
+      <Path
+        d="M 92 38 Q 122 36 138 52"
+        stroke="#e8c996"
+        strokeWidth={6}
+        strokeLinecap="round"
+        fill="none"
+        opacity={0.5}
+      />
+
+      {/* Small round ears on top (3/4 spacing: front one nearer the center) */}
+      <Circle cx={130} cy={40} r={9} fill={p.bodyDark} />
+      <Circle cx={129} cy={41} r={4.5} fill="#7a5732" />
+      <Circle cx={94} cy={35} r={8} fill={p.bodyDark} />
+      <Circle cx={93} cy={36} r={4} fill="#7a5732" />
       {/* Crown fur strands */}
       <Path
-        d="M 95 33 Q 97 26 103 26 M 104 33 Q 108 27 113 29"
+        d="M 104 32 Q 107 25 113 26 M 113 33 Q 118 28 123 31"
         stroke={p.bodyDark}
         strokeWidth={2}
         strokeLinecap="round"
@@ -104,29 +137,28 @@ function CapybaraBody() {
         opacity={0.7}
       />
 
-      {/* Nose drawn directly on the fur (no light muzzle patch) */}
+      {/* Nose patch on the tip of the snout, off to the side */}
       <Path
-        d="M 92 79
-           Q 100 75 108 79
-           Q 111 83 107 87
-           Q 100 90 93 87
-           Q 89 83 92 79 Z"
+        d="M 42 66
+           Q 44 58 56 60
+           Q 64 63 62 71
+           Q 59 78 49 76
+           Q 40 73 42 66 Z"
         fill="#6d4c2e"
       />
-      <Ellipse cx={96} cy={82} rx={1.6} ry={2.2} fill="#4c3118" />
-      <Ellipse cx={104} cy={82} rx={1.6} ry={2.2} fill="#4c3118" />
-      {/* Gentle smile under the nose */}
+      <Ellipse cx={50} cy={68} rx={2} ry={2.8} fill="#4c3118" transform="rotate(-15 50 68)" />
+      {/* Smile under the snout, pulled to the side */}
       <Path
-        d="M 100 88 L 100 91 M 93 92 Q 100 97 107 92"
+        d="M 46 86 Q 56 93 70 90"
         stroke="#6d4c2e"
-        strokeWidth={2}
+        strokeWidth={2.2}
         strokeLinecap="round"
         fill="none"
       />
 
       <Eyes r={6} />
-      <Circle cx={74} cy={84} r={6} fill={p.blush} opacity={0.5} />
-      <Circle cx={126} cy={84} r={6} fill={p.blush} opacity={0.5} />
+      <Circle cx={72} cy={86} r={6} fill={p.blush} opacity={0.5} />
+      <Circle cx={126} cy={86} r={6} fill={p.blush} opacity={0.5} />
     </G>
   );
 }
