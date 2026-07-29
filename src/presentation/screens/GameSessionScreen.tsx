@@ -20,7 +20,9 @@ import { GameFeedbackOverlay } from '@/presentation/components/game/GameFeedback
 import { StarCelebrationOverlay } from '@/presentation/components/game/StarCelebrationOverlay';
 import { FillBlankStatement } from '@/presentation/components/game/FillBlankStatement';
 import { MatchingColumn } from '@/presentation/components/game/MatchingColumn';
+import { ReportQuestionLink } from '@/presentation/components/game/ReportQuestionLink';
 import { ErrorRetry } from '@/presentation/components/common/ErrorRetry';
+import { useReportQuestion } from '@/presentation/hooks/useReportQuestion';
 import { SkeletonList } from '@/presentation/components/common/SkeletonCard';
 import { Colors, Spacing, Radii, Typography } from '@/presentation/theme/tokens';
 import { nunitoFamily } from '@/presentation/theme/fonts';
@@ -65,6 +67,8 @@ export function GameSessionScreen() {
     finishAndSave,
     resetSession,
   } = useGameSession();
+
+  const { reportQuestion, getReportState } = useReportQuestion();
 
   const [showStarCelebration, setShowStarCelebration] = useState(false);
   // Tracks the status from the previous render to detect the 'playing' → 'finished'
@@ -315,6 +319,11 @@ export function GameSessionScreen() {
           >
             {'Comprobar'}
           </Button>
+
+          <ReportQuestionLink
+            state={getReportState(currentQuestion.id)}
+            onPress={() => reportQuestion(currentQuestion.id)}
+          />
         </View>
 
         {/* Feedback overlay */}

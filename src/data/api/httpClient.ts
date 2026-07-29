@@ -81,6 +81,13 @@ async function fetchWithRetry(url: string, options: RequestInit, retries = 2): P
 
 export interface HttpRequestOptions {
   headers?: Record<string, string>;
+  /**
+   * Retry budget for 5xx, network errors and 429. Defaults to 2.
+   *
+   * Lower it for calls where waiting out the backoff is worse than failing
+   * fast — the 429 path alone sleeps 4s per attempt.
+   */
+  retries?: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -128,18 +135,52 @@ async function throwApiError(response: Response): Promise<never> {
  * On error responses, tries to extract a human-readable message from the API error body.
  */
 export async function httpGet<T>(url: string, options?: HttpRequestOptions): Promise<T> {
-  const response = await fetchWithRetry(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      ...(options?.headers ?? {}),
+  const response = await fetchWithRetry(
+    url,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        ...(options?.headers ?? {}),
+      },
     },
-  });
+    options?.retries,
+  );
 
   if (!response.ok) {
     await throwApiError(response);
   }
 
   return response.json() as Promise<T>;
+}
+
+/**
+ * Performs a POST request with retry and timeout, discarding the response body.
+ *
+ * Retrying a POST is only safe for endpoints that are idempotent by design —
+ * use it for those, not for anything that appends on every call.
+ */
+export async function httpPost(
+  url: string,
+  body?: unknown,
+  options?: HttpRequestOptions,
+): Promise<void> {
+  const response = await fetchWithRetry(
+    url,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        ...(options?.headers ?? {}),
+      },
+      ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+    },
+    options?.retries,
+  );
+
+  if (!response.ok) {
+    await throwApiError(response);
+  }
 }

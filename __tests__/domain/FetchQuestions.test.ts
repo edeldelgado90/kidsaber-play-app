@@ -18,7 +18,10 @@ function makeQuestion(id: string): Question {
 }
 
 function makeService(questions: Question[]): jest.Mocked<IQuestionsService> {
-  return { fetchQuestions: jest.fn().mockResolvedValue(questions) };
+  return {
+    fetchQuestions: jest.fn().mockResolvedValue(questions),
+    reportQuestion: jest.fn().mockResolvedValue(undefined),
+  };
 }
 
 describe('fetchQuestions', () => {
