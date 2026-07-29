@@ -117,10 +117,11 @@ function CoatScarf({ a }: { a: Anchors3D }) {
   );
 }
 
-function CoatRain() {
+function CoatRain({ a }: { a: Anchors3D }) {
+  const [x, y, z] = a.neck;
   return (
-    <mesh position={[0, 0.72, 0]}>
-      <cylinderGeometry args={[0.78, 1.12, 1.05, 24, 1, true]} />
+    <mesh position={[x, y - 0.55, z * 0.5]}>
+      <cylinderGeometry args={[0.72, 1.05, 1.0, 24, 1, true]} />
       <meshToonMaterial color={Colors.brandSecondary} side={DoubleSide} />
     </mesh>
   );
@@ -173,7 +174,7 @@ export function Equipment3D({ speciesId, equipped }: Equipment3DProps) {
       {equipped.glasses === 'glasses_round' && <GlassesRound a={a} />}
       {equipped.glasses === 'glasses_sun' && <GlassesSun a={a} />}
       {equipped.coat === 'coat_scarf' && <CoatScarf a={a} />}
-      {equipped.coat === 'coat_rain' && <CoatRain />}
+      {equipped.coat === 'coat_rain' && <CoatRain a={a} />}
       {equipped.shoes === 'shoes_sneakers' && (
         <group>
           <Shoe pos={a.feet[0]} color={Colors.brandPrimary} />

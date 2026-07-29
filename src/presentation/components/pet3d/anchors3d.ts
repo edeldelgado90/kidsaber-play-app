@@ -1,19 +1,18 @@
 import { type PetSpeciesId } from '@/domain/entities/Pet';
 
 /**
- * 3D anchor points per species, in scene units (pets stand ~2.4 tall on y=0).
- * Equipment meshes attach to these so one item fits every species.
+ * 3D anchor points per species, in scene units. Models are normalized by
+ * PetModel (feet on y=0, centered, species target height), so anchors are
+ * estimated against that normalized frame and tuned visually.
  */
 
 export type Vec3 = [number, number, number];
 
 export interface Anchors3D {
-  /** Center of the head sphere. */
-  head: Vec3;
-  /** Head radius (equipment scales off this). */
-  headR: number;
   /** Top of the head (hats). */
   headTop: Vec3;
+  /** Approximate head radius (hats scale off this). */
+  headR: number;
   /** Eye line: y, z (front surface) and half-separation on x. */
   eyes: { y: number; z: number; sep: number };
   /** Neck ring center (scarves / coats). */
@@ -23,40 +22,37 @@ export interface Anchors3D {
 }
 
 export const ANCHORS_3D: Record<PetSpeciesId, Anchors3D> = {
-  // Standing quadruped: long barrel body, boxy head forward
+  // Standing quadruped, long on z, head at the front
   capybara: {
-    head: [0, 1.5, 0.78],
-    headR: 0.58,
-    headTop: [0, 1.96, 0.66],
-    eyes: { y: 1.62, z: 1.1, sep: 0.3 },
-    neck: [0, 1.2, 0.42],
+    headTop: [0, 1.75, 0.72],
+    headR: 0.42,
+    eyes: { y: 1.38, z: 1.18, sep: 0.26 },
+    neck: [0, 1.1, 0.45],
     feet: [
-      [-0.3, 0.1, 0.6],
-      [0.3, 0.1, 0.6],
+      [-0.38, 0.1, 0.85],
+      [0.38, 0.1, 0.85],
     ],
   },
-  // Sitting cat: haunches + upright torso, round head on top
+  // Quaternius toon cat (bipedal chibi)
   kitten: {
-    head: [0, 1.78, 0.25],
-    headR: 0.52,
-    headTop: [0, 2.22, 0.2],
-    eyes: { y: 1.86, z: 0.72, sep: 0.26 },
-    neck: [0, 1.42, 0.25],
+    headTop: [0, 2.16, 0],
+    headR: 0.5,
+    eyes: { y: 1.8, z: 0.44, sep: 0.2 },
+    neck: [0, 1.42, 0],
     feet: [
-      [-0.2, 0.1, 0.55],
-      [0.2, 0.1, 0.55],
+      [-0.24, 0.1, 0.12],
+      [0.24, 0.1, 0.12],
     ],
   },
-  // Sitting upright dragon
+  // Quaternius toon dragon (bipedal chibi, hovers on Flying_Idle)
   dragon: {
-    head: [0, 1.85, 0.2],
-    headR: 0.55,
-    headTop: [0, 2.3, 0.14],
-    eyes: { y: 1.95, z: 0.66, sep: 0.26 },
-    neck: [0, 1.48, 0.18],
+    headTop: [0, 2.2, 0.05],
+    headR: 0.5,
+    eyes: { y: 1.85, z: 0.46, sep: 0.2 },
+    neck: [0, 1.48, 0.02],
     feet: [
-      [-0.32, 0.1, 0.55],
-      [0.32, 0.1, 0.55],
+      [-0.26, 0.1, 0.12],
+      [0.26, 0.1, 0.12],
     ],
   },
 };

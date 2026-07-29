@@ -27,3 +27,8 @@ declare module '*.mp3' {
   const value: number;
   export default value;
 }
+
+declare module '*.glb' {
+  const value: number;
+  export default value;
+}

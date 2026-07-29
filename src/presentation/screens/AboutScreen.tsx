@@ -78,9 +78,14 @@ export function AboutScreen() {
             </View>
           ) : null}
 
-          <Text
-            style={styles.legal}
-          >{`${AppInfo.copyright} · Licencia ${AppInfo.license}`}</Text>
+          {/* CC-BY attribution required by the capybara model license */}
+          <Text style={styles.legal}>
+            {
+              'Modelos 3D: "Capybara" de Poly by Google (CC-BY 3.0) · "Cat" y "Dragon" de Quaternius (CC0), vía poly.pizza'
+            }
+          </Text>
+
+          <Text style={styles.legal}>{`${AppInfo.copyright} · Licencia ${AppInfo.license}`}</Text>
         </ScrollView>
       </SunBackground>
     </View>
